@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panchmukhi Art - Job Card</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
     --cloth:#f6f1e6;
@@ -69,7 +71,7 @@
   .btn-new{background:#6b6455;}
   .btn-del{background:var(--thread-red);}
   .btn-pdf{background:var(--thread-gold);color:#2b2318;}
-  .btn-whatsapp{background:#25D366;}
+  .btn-whatsapp{background:#25D366;color:#fff;}
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;}
 
   .card{
@@ -81,11 +83,27 @@
     border-bottom:2px dashed var(--line);padding-bottom:6px;
   }
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 14px;}
-  .grid-party{display:flex;flex-wrap:nowrap;gap:10px;}
-  .grid-party .field{box-sizing:border-box;min-width:0;}
-  .grid-party .field input{width:100%;box-sizing:border-box;min-width:0;}
-  @media(max-width:640px){.grid-party{flex-wrap:wrap;}
-    .grid-party .field{width:100% !important;}
+
+  /* Clean Party Grid Layout */
+  .grid-party{
+    display:grid;
+    grid-template-columns:repeat(12, 1fr);
+    gap:10px 12px;
+    align-items:end;
+  }
+  .col-12 { grid-column: span 12; }
+  .col-6  { grid-column: span 6; }
+  .col-4  { grid-column: span 4; }
+  .col-3  { grid-column: span 3; }
+  .col-2  { grid-column: span 2; }
+  .col-1  { grid-column: span 1; }
+
+  @media(max-width:768px){
+    .grid-party{ grid-template-columns: repeat(2, 1fr); }
+    .col-12, .col-6, .col-4, .col-3, .col-2, .col-1 { grid-column: span 2; }
+  }
+
+  @media(max-width:640px){
     table.stitch{table-layout:auto;font-size:.78rem;}
     table.stitch col{width:auto !important;}
     table.stitch input{padding:3px;font-size:.75rem;}
@@ -169,27 +187,51 @@
   .print-corner{display:none;}
   .print-srno-box{display:none;}
 
-  body.pdf-capture-mode .no-print,
-  body.pdf-capture-mode .card.records{display:none !important;}
-  body.pdf-capture-mode .print-header{
-    display:block;position:relative;
-    padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid var(--thread-red);
+  body.pdf-capture-mode header,
+  body.pdf-capture-mode .toolbar,
+  body.pdf-capture-mode .card.records,
+  body.pdf-capture-mode .no-print {
+    display: none !important;
   }
-  body.pdf-capture-mode .print-corner{
-    display:inline-block;position:absolute;top:2px;
-    font-size:15px;font-weight:700;color:var(--thread-red);
+  body.pdf-capture-mode .print-header {
+    display: block !important;
+    position: relative;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--thread-red);
   }
-  body.pdf-capture-mode .print-corner.left{left:0;}
-  body.pdf-capture-mode .print-corner.right{right:0;}
-  body.pdf-capture-mode .print-title{
-    display:block;text-align:center;font-size:1.3rem;font-weight:800;color:var(--thread-red);
+  body.pdf-capture-mode .print-corner {
+    display: inline-block !important;
+    position: absolute;
+    top: 2px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--thread-red);
   }
-  body.pdf-capture-mode .print-srno-box{
-    display:flex;align-items:center;justify-content:center;
-    position:absolute;right:0;top:0;
-    border:2px solid #000;border-radius:6px;
-    min-width:50px;padding:2px 8px;
-    font-size:34px;font-weight:800;color:#000;line-height:1;
+  body.pdf-capture-mode .print-corner.left { left: 0; }
+  body.pdf-capture-mode .print-corner.right { right: 0; }
+  body.pdf-capture-mode .print-title {
+    display: block !important;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--thread-red);
+  }
+  body.pdf-capture-mode .print-srno-box {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 2px solid #000;
+    border-radius: 6px;
+    min-width: 50px;
+    padding: 2px 8px;
+    font-size: 34px;
+    font-weight: 800;
+    color: #000;
+    line-height: 1;
   }
   body.pdf-capture-mode{background:#fff;}
   body.pdf-capture-mode .wrap{max-width:800px;position:relative;}
@@ -272,7 +314,7 @@
     <button class="btn btn-new" id="btnNew">🆕 New</button>
     <button class="btn btn-del" id="btnDelete">🗑 Delete</button>
     <button class="btn btn-pdf" id="btnPdf">🖨 Print / Save PDF</button>
-    <button class="btn btn-whatsapp" id="btnWhatsapp">📲 WhatsApp PDF</button>
+    <button class="btn btn-whatsapp" id="btnWhatsApp">💬 Share WhatsApp</button>
     <button class="btn btn-ghost" id="btnBackup">⬇ Backup JSON</button>
     <button class="btn btn-ghost" id="btnRestore">⬆ Restore</button>
     <button class="btn btn-ghost" id="btnCsvExport">⬇ Export CSV</button>
@@ -282,28 +324,27 @@
   </div>
 
   <div class="card">
-    <h2 style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-      <span>Party Details</span>
-      <button class="btn btn-ghost no-print" id="btnSavePartyMaster" style="font-size:.68rem;padding:5px 9px;">💾 Save Party to Master</button>
-    </h2>
-    <div class="grid grid-party">
-      <div class="field" style="width:50%"><label>Party Name</label><input id="partyName" list="partyNameList" autocomplete="off"><datalist id="partyNameList"></datalist></div>
-      <div class="field" style="width:15%"><label>Arrival Date</label><input type="date" id="avelDate"></div>
-      <div class="field" style="width:20%"><label>P. Challan No.</label><input id="challanNo"></div>
-      <div class="field" style="width:15%"><label>Pcs</label><input type="number" id="pcsSaree"></div>
-    </div>
-    <div class="grid grid-party" style="margin-top:10px;">
-      <div class="field" style="width:20%"><label>Contact No.</label><input id="partyContact"></div>
-      <div class="field" style="width:20%"><label>GST No.</label><input id="partyGst"></div>
-      <div class="field" style="width:60%"><label>Address</label><input id="partyAddress"></div>
+    <h2>Party Details</h2>
+    <div class="grid-party">
+      <div class="field col-3"><label>Party Name</label><input id="partyName" list="partyNameList" placeholder="Select or type party..."><datalist id="partyNameList"></datalist></div>
+      <div class="field col-2"><label>Contact No.</label><input id="partyContact" placeholder="9825012345"></div>
+      <div class="field col-3"><label>GST No.</label><input id="partyGst" placeholder="24AAAAA0000A1Z5"></div>
+      <div class="field col-3"><label>Address</label><input id="partyAddress" placeholder="Surat"></div>
+      <div class="field col-1">
+        <button class="btn btn-ghost" id="btnSavePartyMaster" title="Save Party to Master" style="height:34px;width:100%;padding:0;font-size:1rem;">💾</button>
+      </div>
+      <div class="field col-4"><label>Arrival Date</label><input type="date" id="avelDate"></div>
+      <div class="field col-4"><label>P. Challan No.</label><input id="challanNo"></div>
+      <div class="field col-4"><label>Pcs</label><input type="number" id="pcsSaree"></div>
     </div>
   </div>
 
   <div class="two-col">
   <div class="card">
     <h2>Work Stitch &nbsp; <span style="font-weight:400;font-size:.75rem;color:#6b5f45;"><input type="number" id="rateConst" value="0.45" step="0.01" style="width:60px;display:inline-block"></span>
-      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" list="designNoList" style="width:90px;display:inline-block"><datalist id="designNoList"></datalist></span>
-      &nbsp;<button class="btn btn-ghost no-print" id="btnSaveDesignMaster" style="font-size:.68rem;padding:5px 9px;vertical-align:middle;">💾 Save Design to Master</button></h2>
+      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" list="designNoList" style="width:90px;display:inline-block"><datalist id="designNoList"></datalist>
+        <button class="btn btn-ghost" id="btnSaveDesignMaster" title="Save Design to Master" style="padding:2px 5px;font-size:.75rem;">💾 Master</button>
+      </span></h2>
     <table class="stitch">
       <colgroup>
         <col class="c-type"><col class="c-stitches"><col class="c-hed"><col class="c-price">
@@ -395,8 +436,6 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyA_WCKhG8Jv80UOZLVGReRzrR--xC0crDs",
@@ -430,6 +469,7 @@ function tryLogin(){
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appContent').style.display = 'block';
     renderRecordList('');
+    refreshMasterDatalists();
   } else {
     err.textContent = 'ID athva Password khotu chhe.';
   }
@@ -452,50 +492,83 @@ async function deleteOneRecord(sr){
   await recordsCol.doc(sr).delete();
 }
 
-// ---- Design Master (auto-fill Work Stitch by Design No.) ----
-async function fetchDesignMaster(dno){
-  const doc = await designMasterCol.doc(dno).get();
-  return doc.exists ? doc.data() : null;
-}
-async function saveDesignMaster(dno, data){
-  await designMasterCol.doc(dno).set(data);
-}
-async function refreshDesignDatalist(){
-  try{
-    const snap = await designMasterCol.get();
-    const dl = document.getElementById('designNoList');
-    dl.innerHTML = '';
-    snap.forEach(doc=>{
+// Master data functions: Design Master & Party Master
+async function refreshMasterDatalists() {
+  try {
+    const dSnap = await designMasterCol.get();
+    const dList = document.getElementById('designNoList');
+    dList.innerHTML = '';
+    dSnap.forEach(doc => {
       const opt = document.createElement('option');
       opt.value = doc.id;
-      dl.appendChild(opt);
+      dList.appendChild(opt);
     });
-  }catch(err){ /* offline - ignore, list just stays empty */ }
-}
 
-// ---- Party Master (auto-fill Contact/GST/Address by Party Name) ----
-function partyKey(name){ return name.trim().toLowerCase().replace(/\s+/g,'_'); }
-async function fetchPartyMaster(key){
-  const doc = await partyMasterCol.doc(key).get();
-  return doc.exists ? doc.data() : null;
-}
-async function savePartyMaster(key, data){
-  await partyMasterCol.doc(key).set(data);
-}
-async function refreshPartyDatalist(){
-  try{
-    const snap = await partyMasterCol.get();
-    const dl = document.getElementById('partyNameList');
-    dl.innerHTML = '';
-    snap.forEach(doc=>{
-      const d = doc.data();
+    const pSnap = await partyMasterCol.get();
+    const pList = document.getElementById('partyNameList');
+    pList.innerHTML = '';
+    pSnap.forEach(doc => {
       const opt = document.createElement('option');
-      opt.value = d.partyName || doc.id;
-      dl.appendChild(opt);
+      opt.value = doc.id;
+      pList.appendChild(opt);
     });
-  }catch(err){ /* offline - ignore, list just stays empty */ }
+  } catch(e) { console.error('Error loading masters', e); }
 }
 
+async function autoFillDesignMaster(dNo) {
+  if(!dNo) return;
+  try {
+    const doc = await designMasterCol.doc(dNo).get();
+    if(doc.exists) {
+      const d = doc.data();
+      ['dno_pcs','dno_hed','pallu_pcs','pallu_hed','skt_pcs','skt_hed','blouse_pcs','blouse_hed'].forEach(k => {
+        if(d[k] !== undefined) document.getElementById(k).value = d[k];
+      });
+      recalc();
+    }
+  } catch(e) { console.error(e); }
+}
+
+async function autoFillPartyMaster(pName) {
+  if(!pName) return;
+  try {
+    const doc = await partyMasterCol.doc(pName).get();
+    if(doc.exists) {
+      const d = doc.data();
+      if(d.partyContact !== undefined) document.getElementById('partyContact').value = d.partyContact;
+      if(d.partyGst !== undefined) document.getElementById('partyGst').value = d.partyGst;
+      if(d.partyAddress !== undefined) document.getElementById('partyAddress').value = d.partyAddress;
+    }
+  } catch(e) { console.error(e); }
+}
+
+document.getElementById('designNo').addEventListener('change', (e) => autoFillDesignMaster(e.target.value.trim()));
+document.getElementById('partyName').addEventListener('change', (e) => autoFillPartyMaster(e.target.value.trim()));
+
+document.getElementById('btnSaveDesignMaster').addEventListener('click', async () => {
+  const dNo = document.getElementById('designNo').value.trim();
+  if(!dNo) { alert('Pehla Design No. lakho.'); return; }
+  const data = {};
+  ['dno_pcs','dno_hed','pallu_pcs','pallu_hed','skt_pcs','skt_hed','blouse_pcs','blouse_hed'].forEach(k => {
+    data[k] = document.getElementById(k).value;
+  });
+  await designMasterCol.doc(dNo).set(data);
+  alert('Design ' + dNo + ' Master ma save thai gayu!');
+  refreshMasterDatalists();
+});
+
+document.getElementById('btnSavePartyMaster').addEventListener('click', async () => {
+  const pName = document.getElementById('partyName').value.trim();
+  if(!pName) { alert('Pehla Party Name lakho.'); return; }
+  const data = {
+    partyContact: document.getElementById('partyContact').value,
+    partyGst: document.getElementById('partyGst').value,
+    partyAddress: document.getElementById('partyAddress').value
+  };
+  await partyMasterCol.doc(pName).set(data);
+  alert('Party ' + pName + ' Master ma save thai gayu!');
+  refreshMasterDatalists();
+});
 
 const ids = ['partyName','avelDate','challanNo','pcsSaree','partyContact','partyGst','partyAddress','rateConst','designNo',
   'dno_pcs','dno_hed',
@@ -523,22 +596,52 @@ function setSlotImage(idx, dataUrl){
   }
 }
 
-[1,2,3].forEach(idx=>{
-  document.getElementById('imgSlot'+idx).addEventListener('click', (e)=>{
-    if(e.target.id === 'imgClear'+idx) return;
-    document.getElementById('imgFile'+idx).click();
+// Auto Compress Images to keep Base64 size well under Firestore 1MB limits
+function compressAndSetImage(idx, file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 800;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > MAX_WIDTH) {
+        height = Math.round((height * MAX_WIDTH) / width);
+        width = MAX_WIDTH;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Compress JPEG quality to 0.6
+      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+      setSlotImage(idx, compressedBase64);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+[1, 2, 3].forEach((idx) => {
+  document.getElementById('imgSlot' + idx).addEventListener('click', (e) => {
+    if (e.target.id === 'imgClear' + idx) return;
+    document.getElementById('imgFile' + idx).click();
   });
-  document.getElementById('imgFile'+idx).addEventListener('change', (e)=>{
+
+  document.getElementById('imgFile' + idx).addEventListener('change', (e) => {
     const f = e.target.files[0];
-    if(!f) return;
-    const reader = new FileReader();
-    reader.onload = ()=> setSlotImage(idx, reader.result);
-    reader.readAsDataURL(f);
+    if (!f) return;
+    compressAndSetImage(idx, f);
   });
-  document.getElementById('imgClear'+idx).addEventListener('click', (e)=>{
+
+  document.getElementById('imgClear' + idx).addEventListener('click', (e) => {
     e.stopPropagation();
     setSlotImage(idx, null);
-    document.getElementById('imgFile'+idx).value = '';
+    document.getElementById('imgFile' + idx).value = '';
   });
 });
 
@@ -637,7 +740,7 @@ document.getElementById('btnSave').addEventListener('click', async ()=>{
     renderRecordList(document.getElementById('recSearch').value);
     alert('Sr No '+sr+' save thai gayu.');
   }catch(err){
-    alert('Save na thayu. Internet check karo, ke image bahu moti hoy to nani karo. ('+err.message+')');
+    alert('Save na thayu. Internet check karo. ('+err.message+')');
   }
 });
 
@@ -681,6 +784,52 @@ document.getElementById('btnPdf').addEventListener('click', ()=>{
   document.getElementById('printSrNoBox').textContent = sr;
   window.print();
   window.onafterprint = ()=>{ document.title = originalTitle; window.onafterprint = null; };
+});
+
+document.getElementById('btnWhatsApp').addEventListener('click', async () => {
+  const sr = document.getElementById('srNo').value.trim();
+  const party = document.getElementById('partyName').value.trim();
+  let contact = document.getElementById('partyContact').value.trim().replace(/\D/g, '');
+  if (contact.length === 10) contact = '91' + contact;
+
+  document.getElementById('printSrNoBox').textContent = sr;
+  document.body.classList.add('pdf-capture-mode');
+
+  try {
+    const element = document.querySelector('.wrap');
+    const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+    document.body.classList.remove('pdf-capture-mode');
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgData = canvas.toDataURL('image/png');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+    const filename = `JobCard_${sr || 'Draft'}_${party || 'Client'}.pdf`;
+    const pdfBlob = pdf.output('blob');
+    const file = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: `Job Card #${sr}`,
+        text: `Panchmukhi Art Job Card #${sr} for ${party}`
+      });
+    } else {
+      pdf.save(filename);
+      const text = encodeURIComponent(`Panchmukhi Art Job Card #${sr} for ${party}`);
+      const url = contact
+        ? `https://wa.me/${contact}?text=${text}`
+        : `https://api.whatsapp.com/send?text=${text}`;
+      window.open(url, '_blank');
+      alert('PDF saved to downloads. Select it manually when WhatsApp opens.');
+    }
+  } catch (err) {
+    document.body.classList.remove('pdf-capture-mode');
+    alert('PDF Generation failed: ' + err.message);
+  }
 });
 
 document.getElementById('btnBackup').addEventListener('click', async ()=>{
