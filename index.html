@@ -347,6 +347,22 @@
 </div>
 
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA_WCKhG8Jv80UOZLVGReRzrR--xC0crDs",
+  authDomain: "panchmukhiart1.firebaseapp.com",
+  projectId: "panchmukhiart1",
+  storageBucket: "panchmukhiart1.firebasestorage.app",
+  messagingSenderId: "974618905593",
+  appId: "1:974618905593:web:c68feb5a94d112f626cb28",
+  measurementId: "G-4QWG0ZZGQ4"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const recordsCol = db.collection('records');
+</script>
 <script>
 // ---- Login gate: change ID/PASSWORD below to whatever you want ----
 const LOGIN_ID = 'JENISH';
@@ -363,18 +379,27 @@ function tryLogin(){
   if(id === LOGIN_ID && pass === LOGIN_PASSWORD){
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appContent').style.display = 'block';
+    renderRecordList('');
   } else {
     err.textContent = 'ID athva Password khotu chhe.';
   }
 }
 
-const STORAGE_KEY = 'panchmukhi_records_v1';
-
-function loadRecords(){
-  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){ return {}; }
+async function fetchAllRecords(){
+  const snap = await recordsCol.get();
+  const recs = {};
+  snap.forEach(doc=> recs[doc.id] = doc.data());
+  return recs;
 }
-function saveRecords(recs){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(recs));
+async function fetchOneRecord(sr){
+  const doc = await recordsCol.doc(sr).get();
+  return doc.exists ? doc.data() : null;
+}
+async function saveOneRecord(sr, data){
+  await recordsCol.doc(sr).set(data);
+}
+async function deleteOneRecord(sr){
+  await recordsCol.doc(sr).delete();
 }
 
 const ids = ['partyName','avelDate','challanNo','pcsSaree','rateConst','designNo',
@@ -471,9 +496,12 @@ function clearForm(){
   recalc();
 }
 
-function renderRecordList(filter){
-  const recs = loadRecords();
+async function renderRecordList(filter){
   const body = document.getElementById('recBody');
+  body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#8a7d5f;">Loading...</td></tr>';
+  let recs;
+  try{ recs = await fetchAllRecords(); }
+  catch(err){ body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--thread-red);">Cloud thi data load na thayu — internet check karo.</td></tr>'; return; }
   body.innerHTML='';
   let keys = Object.keys(recs).sort((a,b)=> b-a || 0);
   if(filter){
@@ -489,40 +517,45 @@ function renderRecordList(filter){
     body.appendChild(tr);
   });
   body.querySelectorAll('button').forEach(b=>{
-    b.addEventListener('click',(ev)=>{
+    b.addEventListener('click', async (ev)=>{
       ev.stopPropagation();
       const k = b.dataset.k;
       if(b.dataset.act==='load'){
         document.getElementById('srNo').value = k;
-        fillForm(loadRecords()[k]);
+        const data = await fetchOneRecord(k);
+        if(data) fillForm(data);
       } else if(b.dataset.act==='del'){
         if(confirm('Sr No '+k+' no record delete karvo chhe?')){
-          const recs2 = loadRecords();
-          delete recs2[k];
-          saveRecords(recs2);
-          renderRecordList(document.getElementById('recSearch').value);
+          try{ await deleteOneRecord(k); renderRecordList(document.getElementById('recSearch').value); }
+          catch(err){ alert('Delete na thayu — internet check karo.'); }
         }
       }
     });
   });
 }
 
-document.getElementById('btnSave').addEventListener('click', ()=>{
+document.getElementById('btnSave').addEventListener('click', async ()=>{
   const sr = document.getElementById('srNo').value.trim();
   if(!sr){ alert('Pehla Sr No lakho.'); return; }
-  const recs = loadRecords();
-  recs[sr] = collectForm();
-  saveRecords(recs);
-  renderRecordList(document.getElementById('recSearch').value);
-  alert('Sr No '+sr+' save thai gayu.');
+  try{
+    await saveOneRecord(sr, collectForm());
+    renderRecordList(document.getElementById('recSearch').value);
+    alert('Sr No '+sr+' save thai gayu.');
+  }catch(err){
+    alert('Save na thayu. Internet check karo, ke image bahu moti hoy to nani karo. ('+err.message+')');
+  }
 });
 
-document.getElementById('btnFetch').addEventListener('click', ()=>{
+document.getElementById('btnFetch').addEventListener('click', async ()=>{
   const sr = document.getElementById('srNo').value.trim();
   if(!sr){ alert('Pehla Sr No lakho.'); return; }
-  const recs = loadRecords();
-  if(!recs[sr]){ alert('Sr No '+sr+' no record made nathi.'); return; }
-  fillForm(recs[sr]);
+  try{
+    const data = await fetchOneRecord(sr);
+    if(!data){ alert('Sr No '+sr+' no record made nathi.'); return; }
+    fillForm(data);
+  }catch(err){
+    alert('Fetch na thayu — internet check karo.');
+  }
 });
 
 document.getElementById('btnNew').addEventListener('click', ()=>{
@@ -530,16 +563,19 @@ document.getElementById('btnNew').addEventListener('click', ()=>{
   clearForm();
 });
 
-document.getElementById('btnDelete').addEventListener('click', ()=>{
+document.getElementById('btnDelete').addEventListener('click', async ()=>{
   const sr = document.getElementById('srNo').value.trim();
   if(!sr){ alert('Sr No lakho jena mate delete karvu chhe.'); return; }
-  const recs = loadRecords();
-  if(!recs[sr]){ alert('Aa Sr No no record nathi.'); return; }
-  if(confirm('Sr No '+sr+' delete karvu chhe?')){
-    delete recs[sr];
-    saveRecords(recs);
-    renderRecordList('');
-    clearForm();
+  try{
+    const data = await fetchOneRecord(sr);
+    if(!data){ alert('Aa Sr No no record nathi.'); return; }
+    if(confirm('Sr No '+sr+' delete karvu chhe?')){
+      await deleteOneRecord(sr);
+      renderRecordList('');
+      clearForm();
+    }
+  }catch(err){
+    alert('Delete na thayu — internet check karo.');
   }
 });
 
@@ -552,8 +588,9 @@ document.getElementById('btnPdf').addEventListener('click', ()=>{
   window.onafterprint = ()=>{ document.title = originalTitle; window.onafterprint = null; };
 });
 
-document.getElementById('btnBackup').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(loadRecords(), null, 2)], {type:'application/json'});
+document.getElementById('btnBackup').addEventListener('click', async ()=>{
+  const recs = await fetchAllRecords();
+  const blob = new Blob([JSON.stringify(recs, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'panchmukhi_backup_'+new Date().toISOString().slice(0,10)+'.json';
@@ -565,15 +602,14 @@ document.getElementById('restoreFile').addEventListener('change', (e)=>{
   const f = e.target.files[0];
   if(!f) return;
   const reader = new FileReader();
-  reader.onload = ()=>{
+  reader.onload = async ()=>{
     try{
       const incoming = JSON.parse(reader.result);
-      const existing = loadRecords();
-      const merged = Object.assign(existing, incoming);
-      saveRecords(merged);
+      const keys = Object.keys(incoming);
+      for(const k of keys){ await saveOneRecord(k, incoming[k]); }
       renderRecordList('');
-      alert('Restore thai gayu.');
-    }catch(err){ alert('File valid JSON nathi.'); }
+      alert(keys.length + ' record(s) restore thai gaya.');
+    }catch(err){ alert('File valid JSON nathi athva save thai nathi shakyu.'); }
   };
   reader.readAsText(f);
 });
@@ -587,8 +623,8 @@ function csvEscape(v){
   return v;
 }
 
-document.getElementById('btnCsvExport').addEventListener('click', ()=>{
-  const recs = loadRecords();
+document.getElementById('btnCsvExport').addEventListener('click', async ()=>{
+  const recs = await fetchAllRecords();
   const rows = [CSV_COLS.join(',')];
   Object.keys(recs).sort((a,b)=> a-b).forEach(sr=>{
     const r = recs[sr];
@@ -625,11 +661,10 @@ document.getElementById('csvFile').addEventListener('change', (e)=>{
   const f = e.target.files[0];
   if(!f) return;
   const reader = new FileReader();
-  reader.onload = ()=>{
+  reader.onload = async ()=>{
     try{
       const lines = reader.result.split(/\r?\n/).filter(l=> l.trim()!=='');
       const header = parseCsvLine(lines[0]).map(h=> h.trim());
-      const recs = loadRecords();
       let count = 0;
       for(let i=1;i<lines.length;i++){
         const vals = parseCsvLine(lines[i]);
@@ -637,13 +672,12 @@ document.getElementById('csvFile').addEventListener('change', (e)=>{
         header.forEach((h,idx)=> row[h] = vals[idx] !== undefined ? vals[idx] : '');
         const sr = (row.srNo || '').trim();
         if(!sr) continue;
-        const rec = recs[sr] || {};
-        ids.forEach(id=>{ if(row[id] !== undefined && row[id] !== '') rec[id] = row[id]; });
-        rec.savedOn = new Date().toLocaleString();
-        recs[sr] = rec;
+        const existing = (await fetchOneRecord(sr)) || {};
+        ids.forEach(id=>{ if(row[id] !== undefined && row[id] !== '') existing[id] = row[id]; });
+        existing.savedOn = new Date().toLocaleString();
+        await saveOneRecord(sr, existing);
         count++;
       }
-      saveRecords(recs);
       renderRecordList('');
       alert(count + ' record(s) CSV thi import thai gaya.');
     }catch(err){ alert('CSV file valid nathi ('+err.message+')'); }
@@ -655,7 +689,6 @@ document.getElementById('csvFile').addEventListener('change', (e)=>{
 document.getElementById('recSearch').addEventListener('input', (e)=> renderRecordList(e.target.value));
 
 recalc();
-renderRecordList('');
 </script>
 </body>
 </html>
