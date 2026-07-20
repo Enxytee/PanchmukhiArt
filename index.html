@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panchmukhi Art - Job Card</title>
+<style>
+  :root{
+    --cloth:#f6f1e6;
+    --cloth-dark:#ece2cc;
+    --ink:#2b2318;
+    --thread-red:#a3352b;
+    --thread-gold:#b8860b;
+    --thread-green:#3c6e47;
+    --line:#c9b98f;
+    --card:#fffdf8;
+    --shadow:0 2px 6px rgba(43,35,24,.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',Tahoma,sans-serif;
+    background:var(--cloth);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,.02) 0 1px, transparent 1px 22px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,.02) 0 1px, transparent 1px 22px);
+    color:var(--ink);
+    padding-bottom:60px;
+  }
+  header{
+    background:linear-gradient(135deg,#fdf8ec,#f7ecd2);
+    color:var(--ink);
+    padding:18px 20px;
+    text-align:center;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  header h1{margin:0;font-size:1.5rem;letter-spacing:.5px;}
+  header .header-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+  header .corner-text{font-size:15px;font-weight:700;letter-spacing:.3px;color:var(--thread-red);}
+  header .corner-text.left{text-align:left;}
+  header .corner-text.right{text-align:right;}
+  header .sub{font-size:28px;font-weight:800;color:var(--thread-red);opacity:1;margin-top:6px;text-align:center;letter-spacing:.5px;}
+  .stitch-rule{height:6px;background:
+    repeating-linear-gradient(90deg,var(--thread-gold) 0 10px, transparent 10px 20px);
+    opacity:.8;
+  }
+
+  .wrap{max-width:960px;margin:20px auto;padding:0 14px;}
+
+  .toolbar{
+    display:flex;flex-wrap:nowrap;gap:6px;align-items:center;
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:8px 10px;box-shadow:var(--shadow);margin-bottom:16px;
+    overflow-x:auto;
+  }
+  .toolbar .btn{flex:1 1 0;text-align:center;}
+  .toolbar label{font-weight:600;font-size:.78rem;white-space:nowrap;}
+  .toolbar input[type=text],.toolbar input[type=number]{
+    padding:6px 7px;border:1px solid var(--line);border-radius:6px;width:65px;font-size:.82rem;flex-shrink:0;
+  }
+  .btn{
+    border:none;border-radius:6px;padding:6px 8px;font-size:.72rem;font-weight:600;
+    cursor:pointer;color:#fff;box-shadow:var(--shadow);transition:transform .08s;white-space:nowrap;flex-shrink:0;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-save{background:var(--thread-green);}
+  .btn-fetch{background:#2c5f8a;}
+  .btn-new{background:#6b6455;}
+  .btn-del{background:var(--thread-red);}
+  .btn-pdf{background:var(--thread-gold);color:#2b2318;}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--shadow);padding:16px;margin-bottom:16px;
+  }
+  .card h2{
+    margin:0 0 12px;font-size:1rem;color:var(--thread-red);
+    border-bottom:2px dashed var(--line);padding-bottom:6px;
+  }
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 14px;}
+  .grid-party{display:flex;flex-wrap:nowrap;gap:10px;}
+  .grid-party .field{box-sizing:border-box;min-width:0;}
+  .grid-party .field input{width:100%;box-sizing:border-box;min-width:0;}
+  @media(max-width:640px){.grid-party{flex-wrap:wrap;}
+    .grid-party .field{width:100% !important;}
+    table.stitch{table-layout:auto;font-size:.78rem;}
+    table.stitch col{width:auto !important;}
+    table.stitch input{padding:3px;font-size:.75rem;}
+    .rec-table-wrap{overflow-x:auto;}
+    .toolbar{gap:5px;padding:6px 8px;}
+  }
+  .grid-5{grid-template-columns:repeat(5,1fr);gap:8px;}
+  @media(max-width:640px){.grid-5{grid-template-columns:repeat(2,1fr);}}
+  .grid-5 input{padding:6px 5px;font-size:.82rem;}
+  .grid-6{grid-template-columns:repeat(6,1fr);gap:6px;}
+  @media(max-width:640px){.grid-6{grid-template-columns:repeat(2,1fr);}}
+  .grid-6 input{padding:5px 4px;font-size:.75rem;}
+  .grid-6 .field label{font-size:.68rem;}
+  .field label{display:block;font-size:.75rem;font-weight:600;color:#6b5f45;margin-bottom:3px;}
+  .field input, .field select{
+    width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;
+    font-size:.9rem;background:#fffef9;
+  }
+
+  table.stitch{width:100%;border-collapse:collapse;font-size:.85rem;table-layout:fixed;}
+  table.stitch th{background:var(--cloth-dark);padding:5px 4px;font-size:.72rem;border:1px solid var(--line);}
+  table.stitch td{padding:3px;border:1px solid var(--line);}
+  table.stitch input{width:100%;border:1px solid var(--line);border-radius:4px;padding:4px;font-size:.82rem;}
+  table.stitch td.amt{font-weight:700;text-align:center;background:#fbf6e7;}
+  table.stitch col.c-type{width:7%;}
+  table.stitch col.c-stitches{width:11%;}
+  table.stitch col.c-hed{width:7%;}
+  table.stitch col.c-price{width:7%;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.two-col{grid-template-columns:1fr;}}
+  .stack-col{display:flex;flex-direction:column;gap:16px;}
+  .bill-box{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fffef9;}
+  .bill-box h3{margin:0 0 4px;font-size:.72rem;color:var(--thread-green);}
+  .bill-box .grid{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px 8px;}
+
+  .img-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media(max-width:640px){.img-row{grid-template-columns:1fr;}}
+  .img-slot{
+    border:2px dashed var(--line);border-radius:8px;height:220px;position:relative;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    color:#8a7d5f;font-size:.8rem;cursor:pointer;background:#fbf6e7;overflow:hidden;text-align:center;padding:0;
+  }
+  .img-slot img{width:100%;height:100%;object-fit:cover;display:block;}
+  .img-slot .slot-label{position:absolute;top:4px;left:6px;font-size:.68rem;font-weight:700;color:var(--thread-red);z-index:2;}
+  .img-slot .slot-clear{position:absolute;top:2px;right:4px;background:var(--thread-red);color:#fff;border:none;border-radius:50%;
+    width:20px;height:20px;font-size:.7rem;cursor:pointer;display:none;}
+
+  .rec-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+  .rec-table th{background:var(--cloth-dark);padding:6px;border:1px solid var(--line);position:sticky;top:0;}
+  .rec-table td{padding:6px;border:1px solid var(--line);}
+  .rec-table tr:hover{background:#fbf6e7;cursor:pointer;}
+  .rec-actions button{font-size:.75rem;padding:3px 7px;margin-right:4px;}
+
+  .total-strip{
+    display:flex;justify-content:flex-end;gap:18px;padding:10px 4px 0;font-weight:700;
+  }
+  .total-strip span.lbl{font-weight:500;color:#6b5f45;margin-right:4px;}
+
+  footer{text-align:center;font-size:.75rem;color:#8a7d5f;padding:20px;}
+
+  @page{ size:A4; margin:10mm; }
+  .login-screen{
+    position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--thread-red),#5c1b16);
+    display:flex;align-items:center;justify-content:center;padding:16px;
+  }
+  .login-box{
+    background:var(--card);border-radius:12px;padding:26px 24px;width:100%;max-width:320px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);text-align:center;
+  }
+  .login-title{font-size:.8rem;color:var(--thread-red);font-weight:700;margin-bottom:6px;}
+  .login-box h2{margin:0 0 16px;font-size:1.15rem;color:var(--ink);}
+  .login-box .field{text-align:left;margin-bottom:10px;}
+  .login-error{color:var(--thread-red);font-size:.8rem;margin-top:8px;min-height:16px;}
+
+  .print-header{display:none;}
+  .print-corner{display:none;}
+  .print-srno-box{display:none;}
+
+  @media print{
+    .print-header{
+      display:block;position:relative;
+      padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid var(--thread-red);
+    }
+    .print-corner{
+      display:inline-block;position:absolute;top:2px;
+      font-size:15px;font-weight:700;color:var(--thread-red);
+    }
+    .print-corner.left{left:0;}
+    .print-corner.right{right:0;}
+    .print-title{
+      display:block;text-align:center;font-size:1.3rem;font-weight:800;color:var(--thread-red);
+    }
+    .print-srno-box{
+      display:flex;align-items:center;justify-content:center;
+      position:fixed;right:0;top:0;
+      border:2px solid #000;border-radius:6px;
+      min-width:70px;padding:2px 10px;
+      font-size:75px;font-weight:800;color:#000;line-height:1;
+    }
+    header,.toolbar,.card.records,.no-print{display:none !important;}
+    html,body{background:#fff;padding:0;margin:0;width:210mm;height:297mm;}
+    .wrap{max-width:200mm;margin:1in auto 0;padding:0;}
+    .card{box-shadow:none;border:1px solid #000;break-inside:avoid;margin-bottom:6px;padding:6px;}
+    h2{font-size:.95rem;margin-bottom:6px;}
+    .grid .field label{font-size:.68rem;}
+    .grid .field input{padding:4px 5px;font-size:.8rem;}
+    table.stitch{font-size:.78rem;}
+    .img-row{grid-template-columns:repeat(3,1fr);gap:6px;page-break-inside:avoid;}
+    .img-slot{height:280px;border:1px solid #000;padding:0;}
+    .img-slot img{width:100%;height:100%;object-fit:cover;}
+    .slot-clear{display:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-title">જય શ્રી કષ્ટભંજન દેવ • જય શ્રી સ્વામિનારાયણ</div>
+    <h2>Panchmukhi Art — Login</h2>
+    <div class="field"><label>User ID</label><input type="text" id="loginId" autocomplete="off"></div>
+    <div class="field"><label>Password</label><input type="password" id="loginPass"></div>
+    <button class="btn btn-save" id="btnLogin" style="width:100%;margin-top:10px;padding:10px;font-size:.95rem;">Login</button>
+    <div id="loginError" class="login-error"></div>
+  </div>
+</div>
+
+<div id="appContent" style="display:none;">
+
+<header>
+  <div class="header-row">
+    <span class="corner-text left">જય શ્રી કષ્ટભંજન દેવ</span>
+    <span class="corner-text right">જય શ્રી સ્વામિનારાયણ</span>
+  </div>
+  <div class="sub">Panchmukhi Art</div>
+</header>
+<div class="stitch-rule"></div>
+
+<div class="wrap">
+
+<span class="print-srno-box" id="printSrNoBox"></span>
+<div class="print-header">
+  <span class="print-corner left">જય શ્રી કષ્ટભંજન દેવ</span>
+  <span class="print-title">Panchmukhi Art — Job Card</span>
+  <span class="print-corner right">જય શ્રી સ્વામિનારાયણ</span>
+</div>
+
+  <div class="toolbar no-print">
+    <label>Sr No :</label>
+    <input type="text" id="srNo" placeholder="e.g. 137">
+    <button class="btn btn-save" id="btnSave">💾 Save</button>
+    <button class="btn btn-fetch" id="btnFetch">🔍 Fetch</button>
+    <button class="btn btn-new" id="btnNew">🆕 New</button>
+    <button class="btn btn-del" id="btnDelete">🗑 Delete</button>
+    <button class="btn btn-pdf" id="btnPdf">🖨 Print / Save PDF</button>
+    <button class="btn btn-ghost" id="btnBackup">⬇ Backup JSON</button>
+    <button class="btn btn-ghost" id="btnRestore">⬆ Restore</button>
+    <button class="btn btn-ghost" id="btnCsvExport">⬇ Export CSV</button>
+    <button class="btn btn-ghost" id="btnCsvImport">⬆ Import CSV</button>
+    <input type="file" id="restoreFile" accept=".json" style="display:none">
+    <input type="file" id="csvFile" accept=".csv" style="display:none">
+  </div>
+
+  <div class="card">
+    <h2>Party Details</h2>
+    <div class="grid grid-party">
+      <div class="field" style="width:50%"><label>Party Name</label><input id="partyName"></div>
+      <div class="field" style="width:15%"><label>Arrival Date</label><input type="date" id="avelDate"></div>
+      <div class="field" style="width:20%"><label>P. Challan No.</label><input id="challanNo"></div>
+      <div class="field" style="width:15%"><label>Pcs</label><input type="number" id="pcsSaree"></div>
+    </div>
+  </div>
+
+  <div class="two-col">
+  <div class="card">
+    <h2>Work Stitch &nbsp; <span style="font-weight:400;font-size:.75rem;color:#6b5f45;"><input type="number" id="rateConst" value="0.45" step="0.01" style="width:60px;display:inline-block"></span>
+      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" style="width:90px;display:inline-block"></span></h2>
+    <table class="stitch">
+      <colgroup>
+        <col class="c-type"><col class="c-stitches"><col class="c-hed"><col class="c-price">
+      </colgroup>
+      <thead><tr><th>Type</th><th>Stitches</th><th>Head</th><th>Total Rate</th></tr></thead>
+      <tbody>
+        <tr><td>C</td><td><input type="number" id="dno_pcs"></td><td><input type="number" id="dno_hed" step="0.01" value="1.5"></td><td class="amt" id="dno_amt">0</td></tr>
+        <tr><td>Pallu</td><td><input type="number" id="pallu_pcs"></td><td><input type="number" id="pallu_hed" step="0.01" value="7"></td><td class="amt" id="pallu_amt">0</td></tr>
+        <tr><td>Skt</td><td><input type="number" id="skt_pcs"></td><td><input type="number" id="skt_hed" step="0.01" value="12"></td><td class="amt" id="skt_amt">0</td></tr>
+        <tr><td>Blouse</td><td><input type="number" id="blouse_pcs"></td><td><input type="number" id="blouse_hed" step="0.01" value="1.5"></td><td class="amt" id="blouse_amt">0</td></tr>
+      </tbody>
+    </table>
+    <div class="total-strip"><span class="lbl">Stitch Total (Total Rate) :</span><span id="stitchTotal">0</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Bill</h2>
+    <div class="bill-box">
+      <div class="grid">
+        <div class="field"><label>Credit Date</label><input type="date" id="dateA"></div>
+        <div class="field"><label>Bill No</label><input id="billNoA"></div>
+        <div class="field"><label>Credit Pcs</label><input type="number" id="creditPcsA"></div>
+        <div class="field"><label>Bill Rate</label><input type="number" id="rateA"></div>
+        <div class="field"><label>GST %</label><input type="number" id="gstA" step="0.01"></div>
+        <div class="field"><label>Amount</label><input type="number" id="amountA" readonly></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="card">
+    <h2>Emd. Work Rate</h2>
+    <div class="grid grid-6">
+      <div class="field"><label>Emd.Work Rate</label><input type="number" id="emdRate" value="0"></div>
+      <div class="field"><label>Reniyu</label><input type="number" id="reniyu" value="0"></div>
+      <div class="field"><label>OverLock</label><input type="number" id="overlock" value="0"></div>
+      <div class="field"><label>Diamond</label><input type="number" id="diamond" value="0"></div>
+      <div class="field"><label>Extra Exp</label><input type="number" id="extraExp" value="0"></div>
+      <div class="field"><label>Final Rate</label><input type="number" id="emdFinalRate" readonly></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Attached Images (3)</h2>
+    <div class="img-row">
+      <div class="img-slot" id="imgSlot1" data-idx="1">
+        <span class="slot-label">1</span>
+        <button class="slot-clear" id="imgClear1">✕</button>
+        <span class="slot-ph">Click / tap - photo 1</span>
+        <img id="imgPreview1" style="display:none">
+      </div>
+      <div class="img-slot" id="imgSlot2" data-idx="2">
+        <span class="slot-label">2</span>
+        <button class="slot-clear" id="imgClear2">✕</button>
+        <span class="slot-ph">Click / tap - photo 2</span>
+        <img id="imgPreview2" style="display:none">
+      </div>
+      <div class="img-slot" id="imgSlot3" data-idx="3">
+        <span class="slot-label">3</span>
+        <button class="slot-clear" id="imgClear3">✕</button>
+        <span class="slot-ph">Click / tap - photo 3</span>
+        <img id="imgPreview3" style="display:none">
+      </div>
+    </div>
+    <input type="file" id="imgFile1" accept="image/*" style="display:none">
+    <input type="file" id="imgFile2" accept="image/*" style="display:none">
+    <input type="file" id="imgFile3" accept="image/*" style="display:none">
+  </div>
+
+  <div class="card records no-print">
+    <h2>Saved Records (<span id="recCount">0</span>)</h2>
+    <input type="text" id="recSearch" placeholder="Search by Sr No, Party Name or Design No..." style="width:100%;padding:8px;margin-bottom:10px;border:1px solid var(--line);border-radius:6px;">
+    <div class="rec-table-wrap" style="max-height:260px;overflow:auto;">
+      <table class="rec-table">
+        <thead><tr><th>Sr No</th><th>Party</th><th>Design No.</th><th>Arrival Date</th><th>Pcs</th><th>Saved On</th><th>Action</th></tr></thead>
+        <tbody id="recBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<script>
+// ---- Login gate: change ID/PASSWORD below to whatever you want ----
+const LOGIN_ID = 'JENISH';
+const LOGIN_PASSWORD = '1254';
+
+document.getElementById('btnLogin').addEventListener('click', tryLogin);
+document.getElementById('loginPass').addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryLogin(); });
+document.getElementById('loginId').addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryLogin(); });
+
+function tryLogin(){
+  const id = document.getElementById('loginId').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginError');
+  if(id === LOGIN_ID && pass === LOGIN_PASSWORD){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+  } else {
+    err.textContent = 'ID athva Password khotu chhe.';
+  }
+}
+
+const STORAGE_KEY = 'panchmukhi_records_v1';
+
+function loadRecords(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){ return {}; }
+}
+function saveRecords(recs){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(recs));
+}
+
+const ids = ['partyName','avelDate','challanNo','pcsSaree','rateConst','designNo',
+  'dno_pcs','dno_hed',
+  'pallu_pcs','pallu_hed',
+  'skt_pcs','skt_hed',
+  'blouse_pcs','blouse_hed',
+  'emdRate','reniyu','overlock','diamond','extraExp',
+  'dateA','billNoA','creditPcsA','rateA','gstA'];
+
+let currentImages = [null, null, null];
+
+function setSlotImage(idx, dataUrl){
+  currentImages[idx-1] = dataUrl;
+  const img = document.getElementById('imgPreview'+idx);
+  const ph = document.querySelector('#imgSlot'+idx+' .slot-ph');
+  const clearBtn = document.getElementById('imgClear'+idx);
+  if(dataUrl){
+    img.src = dataUrl; img.style.display='block';
+    ph.style.display='none';
+    clearBtn.style.display='block';
+  } else {
+    img.style.display='none';
+    ph.style.display='block';
+    clearBtn.style.display='none';
+  }
+}
+
+[1,2,3].forEach(idx=>{
+  document.getElementById('imgSlot'+idx).addEventListener('click', (e)=>{
+    if(e.target.id === 'imgClear'+idx) return;
+    document.getElementById('imgFile'+idx).click();
+  });
+  document.getElementById('imgFile'+idx).addEventListener('change', (e)=>{
+    const f = e.target.files[0];
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ()=> setSlotImage(idx, reader.result);
+    reader.readAsDataURL(f);
+  });
+  document.getElementById('imgClear'+idx).addEventListener('click', (e)=>{
+    e.stopPropagation();
+    setSlotImage(idx, null);
+    document.getElementById('imgFile'+idx).value = '';
+  });
+});
+
+function num(v){ const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+
+function recalc(){
+  const rc = num(document.getElementById('rateConst').value);
+  ['dno','pallu','skt','blouse'].forEach(p=>{
+    const pcs = num(document.getElementById(p+'_pcs').value);
+    const hed = num(document.getElementById(p+'_hed').value);
+    const amt = pcs*hed*rc/1000;
+    document.getElementById(p+'_amt').textContent = amt.toFixed(2);
+  });
+  const stitchTotal = ['dno','pallu','skt','blouse'].reduce((s,p)=> s + parseFloat(document.getElementById(p+'_amt').textContent||0), 0);
+  document.getElementById('stitchTotal').textContent = stitchTotal.toFixed(2);
+
+  const emdSum = num(document.getElementById('emdRate').value)+num(document.getElementById('reniyu').value)+
+                 num(document.getElementById('overlock').value)+num(document.getElementById('diamond').value)+
+                 num(document.getElementById('extraExp').value);
+  document.getElementById('emdFinalRate').value = emdSum.toFixed(2);
+
+  // ---- Bill ----
+  const creditPcsA = num(document.getElementById('creditPcsA').value);
+  const rateA = num(document.getElementById('rateA').value);
+  document.getElementById('amountA').value = (rateA * creditPcsA).toFixed(2);
+}
+
+ids.forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('input', recalc);
+});
+
+function collectForm(){
+  const data = {};
+  ids.forEach(id=> data[id] = document.getElementById(id).value);
+  data.images = currentImages.slice();
+  data.savedOn = new Date().toLocaleString();
+  return data;
+}
+function fillForm(data){
+  ids.forEach(id=>{ if(data[id] !== undefined) document.getElementById(id).value = data[id]; });
+  const imgs = data.images || (data.image ? [data.image, null, null] : [null, null, null]);
+  [1,2,3].forEach(idx=> setSlotImage(idx, imgs[idx-1] || null));
+  recalc();
+}
+function clearForm(){
+  const defaults = {rateConst:'0.45', dno_hed:'1.5', pallu_hed:'7', skt_hed:'12', blouse_hed:'1.5'};
+  ids.forEach(id=> document.getElementById(id).value = (defaults[id] !== undefined ? defaults[id] : ''));
+  [1,2,3].forEach(idx=> setSlotImage(idx, null));
+  recalc();
+}
+
+function renderRecordList(filter){
+  const recs = loadRecords();
+  const body = document.getElementById('recBody');
+  body.innerHTML='';
+  let keys = Object.keys(recs).sort((a,b)=> b-a || 0);
+  if(filter){
+    filter = filter.toLowerCase();
+    keys = keys.filter(k => k.toLowerCase().includes(filter) || (recs[k].partyName||'').toLowerCase().includes(filter) || (recs[k].designNo||'').toLowerCase().includes(filter));
+  }
+  document.getElementById('recCount').textContent = Object.keys(recs).length;
+  keys.forEach(k=>{
+    const r = recs[k];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${k}</td><td>${r.partyName||''}</td><td>${r.designNo||''}</td><td>${r.avelDate||''}</td><td>${r.pcsSaree||''}</td><td>${r.savedOn||''}</td>
+      <td class="rec-actions"><button class="btn-ghost btn" data-act="load" data-k="${k}">Load</button><button class="btn-del btn" data-act="del" data-k="${k}">Del</button></td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',(ev)=>{
+      ev.stopPropagation();
+      const k = b.dataset.k;
+      if(b.dataset.act==='load'){
+        document.getElementById('srNo').value = k;
+        fillForm(loadRecords()[k]);
+      } else if(b.dataset.act==='del'){
+        if(confirm('Sr No '+k+' no record delete karvo chhe?')){
+          const recs2 = loadRecords();
+          delete recs2[k];
+          saveRecords(recs2);
+          renderRecordList(document.getElementById('recSearch').value);
+        }
+      }
+    });
+  });
+}
+
+document.getElementById('btnSave').addEventListener('click', ()=>{
+  const sr = document.getElementById('srNo').value.trim();
+  if(!sr){ alert('Pehla Sr No lakho.'); return; }
+  const recs = loadRecords();
+  recs[sr] = collectForm();
+  saveRecords(recs);
+  renderRecordList(document.getElementById('recSearch').value);
+  alert('Sr No '+sr+' save thai gayu.');
+});
+
+document.getElementById('btnFetch').addEventListener('click', ()=>{
+  const sr = document.getElementById('srNo').value.trim();
+  if(!sr){ alert('Pehla Sr No lakho.'); return; }
+  const recs = loadRecords();
+  if(!recs[sr]){ alert('Sr No '+sr+' no record made nathi.'); return; }
+  fillForm(recs[sr]);
+});
+
+document.getElementById('btnNew').addEventListener('click', ()=>{
+  document.getElementById('srNo').value='';
+  clearForm();
+});
+
+document.getElementById('btnDelete').addEventListener('click', ()=>{
+  const sr = document.getElementById('srNo').value.trim();
+  if(!sr){ alert('Sr No lakho jena mate delete karvu chhe.'); return; }
+  const recs = loadRecords();
+  if(!recs[sr]){ alert('Aa Sr No no record nathi.'); return; }
+  if(confirm('Sr No '+sr+' delete karvu chhe?')){
+    delete recs[sr];
+    saveRecords(recs);
+    renderRecordList('');
+    clearForm();
+  }
+});
+
+document.getElementById('btnPdf').addEventListener('click', ()=>{
+  const sr = document.getElementById('srNo').value.trim();
+  const originalTitle = document.title;
+  document.title = sr ? ('JobCard No.' + sr) : originalTitle;
+  document.getElementById('printSrNoBox').textContent = sr;
+  window.print();
+  window.onafterprint = ()=>{ document.title = originalTitle; window.onafterprint = null; };
+});
+
+document.getElementById('btnBackup').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(loadRecords(), null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'panchmukhi_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+});
+
+document.getElementById('btnRestore').addEventListener('click', ()=> document.getElementById('restoreFile').click());
+document.getElementById('restoreFile').addEventListener('change', (e)=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const incoming = JSON.parse(reader.result);
+      const existing = loadRecords();
+      const merged = Object.assign(existing, incoming);
+      saveRecords(merged);
+      renderRecordList('');
+      alert('Restore thai gayu.');
+    }catch(err){ alert('File valid JSON nathi.'); }
+  };
+  reader.readAsText(f);
+});
+
+// ---- CSV Export (bulk) ----
+const CSV_COLS = ['srNo', ...ids];
+
+function csvEscape(v){
+  v = (v===undefined || v===null) ? '' : String(v);
+  if(/[",\n]/.test(v)) return '"' + v.replace(/"/g,'""') + '"';
+  return v;
+}
+
+document.getElementById('btnCsvExport').addEventListener('click', ()=>{
+  const recs = loadRecords();
+  const rows = [CSV_COLS.join(',')];
+  Object.keys(recs).sort((a,b)=> a-b).forEach(sr=>{
+    const r = recs[sr];
+    const row = CSV_COLS.map(col => col==='srNo' ? sr : csvEscape(r[col]));
+    rows.push(row.join(','));
+  });
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'panchmukhi_records_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+});
+
+// ---- CSV Import (bulk entry) ----
+function parseCsvLine(line){
+  const out = []; let cur=''; let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c = line[i];
+    if(inQ){
+      if(c==='"'){ if(line[i+1]==='"'){ cur+='"'; i++; } else { inQ=false; } }
+      else cur+=c;
+    } else {
+      if(c==='"') inQ=true;
+      else if(c===','){ out.push(cur); cur=''; }
+      else cur+=c;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+
+document.getElementById('btnCsvImport').addEventListener('click', ()=> document.getElementById('csvFile').click());
+document.getElementById('csvFile').addEventListener('change', (e)=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const lines = reader.result.split(/\r?\n/).filter(l=> l.trim()!=='');
+      const header = parseCsvLine(lines[0]).map(h=> h.trim());
+      const recs = loadRecords();
+      let count = 0;
+      for(let i=1;i<lines.length;i++){
+        const vals = parseCsvLine(lines[i]);
+        const row = {};
+        header.forEach((h,idx)=> row[h] = vals[idx] !== undefined ? vals[idx] : '');
+        const sr = (row.srNo || '').trim();
+        if(!sr) continue;
+        const rec = recs[sr] || {};
+        ids.forEach(id=>{ if(row[id] !== undefined && row[id] !== '') rec[id] = row[id]; });
+        rec.savedOn = new Date().toLocaleString();
+        recs[sr] = rec;
+        count++;
+      }
+      saveRecords(recs);
+      renderRecordList('');
+      alert(count + ' record(s) CSV thi import thai gaya.');
+    }catch(err){ alert('CSV file valid nathi ('+err.message+')'); }
+    document.getElementById('csvFile').value = '';
+  };
+  reader.readAsText(f);
+});
+
+document.getElementById('recSearch').addEventListener('input', (e)=> renderRecordList(e.target.value));
+
+recalc();
+renderRecordList('');
+</script>
+</body>
+</html>
