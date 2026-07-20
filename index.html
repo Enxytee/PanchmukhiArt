@@ -69,6 +69,7 @@
   .btn-new{background:#6b6455;}
   .btn-del{background:var(--thread-red);}
   .btn-pdf{background:var(--thread-gold);color:#2b2318;}
+  .btn-whatsapp{background:#25D366;}
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;}
 
   .card{
@@ -102,6 +103,10 @@
   .field input, .field select{
     width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;
     font-size:.9rem;background:#fffef9;
+    height:34px;box-sizing:border-box;
+  }
+  .field input[type=date]{
+    padding:6px 8px;line-height:normal;
   }
 
   table.stitch{width:100%;border-collapse:collapse;font-size:.85rem;table-layout:fixed;}
@@ -163,6 +168,32 @@
   .print-header{display:none;}
   .print-corner{display:none;}
   .print-srno-box{display:none;}
+
+  body.pdf-capture-mode .no-print,
+  body.pdf-capture-mode .card.records{display:none !important;}
+  body.pdf-capture-mode .print-header{
+    display:block;position:relative;
+    padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid var(--thread-red);
+  }
+  body.pdf-capture-mode .print-corner{
+    display:inline-block;position:absolute;top:2px;
+    font-size:15px;font-weight:700;color:var(--thread-red);
+  }
+  body.pdf-capture-mode .print-corner.left{left:0;}
+  body.pdf-capture-mode .print-corner.right{right:0;}
+  body.pdf-capture-mode .print-title{
+    display:block;text-align:center;font-size:1.3rem;font-weight:800;color:var(--thread-red);
+  }
+  body.pdf-capture-mode .print-srno-box{
+    display:flex;align-items:center;justify-content:center;
+    position:absolute;right:0;top:0;
+    border:2px solid #000;border-radius:6px;
+    min-width:50px;padding:2px 8px;
+    font-size:34px;font-weight:800;color:#000;line-height:1;
+  }
+  body.pdf-capture-mode{background:#fff;}
+  body.pdf-capture-mode .wrap{max-width:800px;position:relative;}
+  body.pdf-capture-mode .card{box-shadow:none;border:1px solid #000;}
 
   @media print{
     .print-header{
@@ -241,6 +272,7 @@
     <button class="btn btn-new" id="btnNew">🆕 New</button>
     <button class="btn btn-del" id="btnDelete">🗑 Delete</button>
     <button class="btn btn-pdf" id="btnPdf">🖨 Print / Save PDF</button>
+    <button class="btn btn-whatsapp" id="btnWhatsapp">📲 WhatsApp PDF</button>
     <button class="btn btn-ghost" id="btnBackup">⬇ Backup JSON</button>
     <button class="btn btn-ghost" id="btnRestore">⬆ Restore</button>
     <button class="btn btn-ghost" id="btnCsvExport">⬇ Export CSV</button>
@@ -250,19 +282,28 @@
   </div>
 
   <div class="card">
-    <h2>Party Details</h2>
+    <h2 style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <span>Party Details</span>
+      <button class="btn btn-ghost no-print" id="btnSavePartyMaster" style="font-size:.68rem;padding:5px 9px;">💾 Save Party to Master</button>
+    </h2>
     <div class="grid grid-party">
-      <div class="field" style="width:50%"><label>Party Name</label><input id="partyName"></div>
+      <div class="field" style="width:50%"><label>Party Name</label><input id="partyName" list="partyNameList" autocomplete="off"><datalist id="partyNameList"></datalist></div>
       <div class="field" style="width:15%"><label>Arrival Date</label><input type="date" id="avelDate"></div>
       <div class="field" style="width:20%"><label>P. Challan No.</label><input id="challanNo"></div>
       <div class="field" style="width:15%"><label>Pcs</label><input type="number" id="pcsSaree"></div>
+    </div>
+    <div class="grid grid-party" style="margin-top:10px;">
+      <div class="field" style="width:20%"><label>Contact No.</label><input id="partyContact"></div>
+      <div class="field" style="width:20%"><label>GST No.</label><input id="partyGst"></div>
+      <div class="field" style="width:60%"><label>Address</label><input id="partyAddress"></div>
     </div>
   </div>
 
   <div class="two-col">
   <div class="card">
     <h2>Work Stitch &nbsp; <span style="font-weight:400;font-size:.75rem;color:#6b5f45;"><input type="number" id="rateConst" value="0.45" step="0.01" style="width:60px;display:inline-block"></span>
-      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" style="width:90px;display:inline-block"></span></h2>
+      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" list="designNoList" style="width:90px;display:inline-block"><datalist id="designNoList"></datalist></span>
+      &nbsp;<button class="btn btn-ghost no-print" id="btnSaveDesignMaster" style="font-size:.68rem;padding:5px 9px;vertical-align:middle;">💾 Save Design to Master</button></h2>
     <table class="stitch">
       <colgroup>
         <col class="c-type"><col class="c-stitches"><col class="c-hed"><col class="c-price">
@@ -294,7 +335,12 @@
   </div>
 
   <div class="card">
-    <h2>Emd. Work Rate</h2>
+    <h2 style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <span>Emd. Work Rate</span>
+      <span style="display:flex;align-items:center;flex:1;min-width:200px;max-width:600px;">
+        <input type="text" id="emdRemark" placeholder="Remark" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:.8rem;font-weight:400;font-style:italic;color:#6b5f45;background:#fffef9;">
+      </span>
+    </h2>
     <div class="grid grid-6">
       <div class="field"><label>Emd.Work Rate</label><input type="number" id="emdRate" value="0"></div>
       <div class="field"><label>Reniyu</label><input type="number" id="reniyu" value="0"></div>
@@ -349,6 +395,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyA_WCKhG8Jv80UOZLVGReRzrR--xC0crDs",
@@ -362,6 +410,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const recordsCol = db.collection('records');
+const designMasterCol = db.collection('designMaster');
+const partyMasterCol = db.collection('partyMaster');
 </script>
 <script>
 // ---- Login gate: change ID/PASSWORD below to whatever you want ----
@@ -402,12 +452,57 @@ async function deleteOneRecord(sr){
   await recordsCol.doc(sr).delete();
 }
 
-const ids = ['partyName','avelDate','challanNo','pcsSaree','rateConst','designNo',
+// ---- Design Master (auto-fill Work Stitch by Design No.) ----
+async function fetchDesignMaster(dno){
+  const doc = await designMasterCol.doc(dno).get();
+  return doc.exists ? doc.data() : null;
+}
+async function saveDesignMaster(dno, data){
+  await designMasterCol.doc(dno).set(data);
+}
+async function refreshDesignDatalist(){
+  try{
+    const snap = await designMasterCol.get();
+    const dl = document.getElementById('designNoList');
+    dl.innerHTML = '';
+    snap.forEach(doc=>{
+      const opt = document.createElement('option');
+      opt.value = doc.id;
+      dl.appendChild(opt);
+    });
+  }catch(err){ /* offline - ignore, list just stays empty */ }
+}
+
+// ---- Party Master (auto-fill Contact/GST/Address by Party Name) ----
+function partyKey(name){ return name.trim().toLowerCase().replace(/\s+/g,'_'); }
+async function fetchPartyMaster(key){
+  const doc = await partyMasterCol.doc(key).get();
+  return doc.exists ? doc.data() : null;
+}
+async function savePartyMaster(key, data){
+  await partyMasterCol.doc(key).set(data);
+}
+async function refreshPartyDatalist(){
+  try{
+    const snap = await partyMasterCol.get();
+    const dl = document.getElementById('partyNameList');
+    dl.innerHTML = '';
+    snap.forEach(doc=>{
+      const d = doc.data();
+      const opt = document.createElement('option');
+      opt.value = d.partyName || doc.id;
+      dl.appendChild(opt);
+    });
+  }catch(err){ /* offline - ignore, list just stays empty */ }
+}
+
+
+const ids = ['partyName','avelDate','challanNo','pcsSaree','partyContact','partyGst','partyAddress','rateConst','designNo',
   'dno_pcs','dno_hed',
   'pallu_pcs','pallu_hed',
   'skt_pcs','skt_hed',
   'blouse_pcs','blouse_hed',
-  'emdRate','reniyu','overlock','diamond','extraExp',
+  'emdRate','reniyu','overlock','diamond','extraExp','emdRemark',
   'dateA','billNoA','creditPcsA','rateA','gstA'];
 
 let currentImages = [null, null, null];
