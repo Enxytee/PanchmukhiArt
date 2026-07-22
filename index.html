@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Panchmukhi Art - Job Card</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
     --cloth:#f6f1e6;
@@ -71,81 +69,93 @@
   .btn-new{background:#6b6455;}
   .btn-del{background:var(--thread-red);}
   .btn-pdf{background:var(--thread-gold);color:#2b2318;}
-  .btn-whatsapp{background:#25D366;color:#fff;}
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none;}
 
   .card{
     background:var(--card);border:1px solid var(--line);border-radius:10px;
-    box-shadow:var(--shadow);padding:14px;margin-bottom:12px;
+    box-shadow:var(--shadow);padding:16px;margin-bottom:16px;
   }
   .card h2{
-    margin:0 0 10px;font-size:.95rem;color:var(--thread-red);
-    border-bottom:2px dashed var(--line);padding-bottom:4px;
+    margin:0 0 12px;font-size:1rem;color:var(--thread-red);
+    border-bottom:2px dashed var(--line);padding-bottom:6px;
   }
-
-  /* Clean Grid for Party Details */
-  .grid-party-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 14px;}
+  .grid-party{display:flex;flex-wrap:nowrap;gap:10px;}
+  .grid-party .field{box-sizing:border-box;min-width:0;}
+  .grid-party .field input{width:100%;box-sizing:border-box;min-width:0;}
+  @media(max-width:640px){.grid-party{flex-wrap:wrap;}
+    .grid-party .field{width:100% !important;}
+    table.stitch{table-layout:auto;font-size:.78rem;}
+    table.stitch col{width:auto !important;}
+    table.stitch input{padding:3px;font-size:.75rem;}
+    .rec-table-wrap{overflow-x:auto;}
+    .toolbar{gap:5px;padding:6px 8px;}
   }
-  .party-row {
-    display: flex;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px 12px;}
+  .grid-5{grid-template-columns:repeat(5,1fr);gap:8px;}
+  @media(max-width:640px){.grid-5{grid-template-columns:repeat(2,1fr);}}
+  .grid-5 input{padding:6px 5px;font-size:.82rem;}
   .grid-6{grid-template-columns:repeat(6,1fr);gap:6px;}
-
-  .field label{display:block;font-size:.72rem;font-weight:600;color:#6b5f45;margin-bottom:2px;}
+  @media(max-width:640px){.grid-6{grid-template-columns:repeat(2,1fr);}}
+  .grid-6 input{padding:5px 4px;font-size:.75rem;}
+  .grid-6 .field label{font-size:.68rem;}
+  .field label{display:block;font-size:.75rem;font-weight:600;color:#6b5f45;margin-bottom:3px;}
   .field input, .field select{
-    width:100%;padding:5px 7px;border:1px solid var(--line);border-radius:6px;
-    font-size:.85rem;background:#fffef9;
-    height:32px;box-sizing:border-box;
-  }
-  .field input[type=date]{
-    padding:4px 6px;line-height:normal;
+    width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;
+    font-size:.9rem;background:#fffef9;
   }
 
-  table.stitch{width:100%;border-collapse:collapse;font-size:.82rem;table-layout:fixed;}
-  table.stitch th{background:var(--cloth-dark);padding:4px 3px;font-size:.7rem;border:1px solid var(--line);}
-  table.stitch td{padding:2px 3px;border:1px solid var(--line);}
-  table.stitch input{width:100%;border:1px solid var(--line);border-radius:4px;padding:3px;font-size:.8rem;height:28px;}
+  table.stitch{width:100%;border-collapse:collapse;font-size:.85rem;table-layout:fixed;}
+  table.stitch th{background:var(--cloth-dark);padding:5px 4px;font-size:.72rem;border:1px solid var(--line);}
+  table.stitch td{padding:3px;border:1px solid var(--line);}
+  table.stitch input{width:100%;border:1px solid var(--line);border-radius:4px;padding:4px;font-size:.82rem;}
   table.stitch td.amt{font-weight:700;text-align:center;background:#fbf6e7;}
-  table.stitch col.c-type{width:18%;}
-  table.stitch col.c-stitches{width:32%;}
-  table.stitch col.c-hed{width:22%;}
-  table.stitch col.c-price{width:28%;}
+  table.stitch col.c-type{width:7%;}
+  table.stitch col.c-stitches{width:11%;}
+  table.stitch col.c-hed{width:7%;}
+  table.stitch col.c-price{width:7%;}
 
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
   @media(max-width:640px){.two-col{grid-template-columns:1fr;}}
+  .stack-col{display:flex;flex-direction:column;gap:16px;}
+  .bill-box{border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fffef9;}
+  .bill-box h3{margin:0 0 4px;font-size:.72rem;color:var(--thread-green);}
+  .bill-box .grid{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px 8px;}
 
-  .bill-box{border:1px solid var(--line);border-radius:8px;padding:6px;background:#fffef9;}
-
-  .img-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .img-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media(max-width:640px){.img-row{grid-template-columns:1fr;}}
   .img-slot{
-    border:2px dashed var(--line);border-radius:8px;height:200px;position:relative;
+    border:2px dashed var(--line);border-radius:8px;height:220px;position:relative;
     display:flex;align-items:center;justify-content:center;flex-direction:column;
-    color:#8a7d5f;font-size:.78rem;cursor:pointer;background:#fbf6e7;overflow:hidden;text-align:center;padding:0;
+    color:#8a7d5f;font-size:.8rem;cursor:pointer;background:#fbf6e7;overflow:hidden;text-align:center;padding:0;
   }
   .img-slot img{width:100%;height:100%;object-fit:cover;display:block;}
   .img-slot .slot-label{position:absolute;top:4px;left:6px;font-size:.68rem;font-weight:700;color:var(--thread-red);z-index:2;}
   .img-slot .slot-clear{position:absolute;top:2px;right:4px;background:var(--thread-red);color:#fff;border:none;border-radius:50%;
     width:20px;height:20px;font-size:.7rem;cursor:pointer;display:none;}
 
-  .rec-table{width:100%;border-collapse:collapse;font-size:.8rem;}
-  .rec-table th{background:var(--cloth-dark);padding:5px;border:1px solid var(--line);position:sticky;top:0;}
-  .rec-table td{padding:5px;border:1px solid var(--line);}
+  .rec-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+  .rec-table th{background:var(--cloth-dark);padding:6px;border:1px solid var(--line);position:sticky;top:0;}
+  .rec-table td{padding:6px;border:1px solid var(--line);}
   .rec-table tr:hover{background:#fbf6e7;cursor:pointer;}
-  .rec-actions button{font-size:.72rem;padding:2px 6px;margin-right:4px;}
+  .rec-actions button{font-size:.75rem;padding:3px 7px;margin-right:4px;}
+
+  .master-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:6px 8px;border:1px solid var(--line);border-radius:6px;margin-bottom:6px;
+    background:#fbf6e7;font-size:.85rem;cursor:pointer;
+  }
+  .master-row:hover{background:#f3e9c9;}
+  .master-row .del{color:var(--thread-red);font-weight:700;padding:0 4px;flex-shrink:0;}
+  .master-empty{color:#8a7d5f;font-size:.8rem;padding:6px 2px;}
 
   .total-strip{
-    display:flex;justify-content:flex-end;gap:12px;padding:8px 4px 0;font-weight:700;font-size:.85rem;
+    display:flex;justify-content:flex-end;gap:18px;padding:10px 4px 0;font-weight:700;
   }
   .total-strip span.lbl{font-weight:500;color:#6b5f45;margin-right:4px;}
 
-  @page{ size:A4; margin:8mm; }
+  footer{text-align:center;font-size:.75rem;color:#8a7d5f;padding:20px;}
+
+  @page{ size:A4; margin:10mm; }
   .login-screen{
     position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--thread-red),#5c1b16);
     display:flex;align-items:center;justify-content:center;padding:16px;
@@ -163,88 +173,37 @@
   .print-corner{display:none;}
   .print-srno-box{display:none;}
 
-  body.pdf-capture-mode header,
-  body.pdf-capture-mode .toolbar,
-  body.pdf-capture-mode .card.records,
-  body.pdf-capture-mode .no-print {
-    display: none !important;
-  }
-  body.pdf-capture-mode .print-header {
-    display: block !important;
-    position: relative;
-    padding-bottom: 4px;
-    margin-bottom: 6px;
-    border-bottom: 2px solid var(--thread-red);
-  }
-  body.pdf-capture-mode .print-corner {
-    display: inline-block !important;
-    position: absolute;
-    top: 2px;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--thread-red);
-  }
-  body.pdf-capture-mode .print-corner.left { left: 0; }
-  body.pdf-capture-mode .print-corner.right { right: 0; }
-  body.pdf-capture-mode .print-title {
-    display: block !important;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: var(--thread-red);
-  }
-  body.pdf-capture-mode .print-srno-box {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    right: 0;
-    top: 0;
-    border: 2px solid #000;
-    border-radius: 6px;
-    min-width: 50px;
-    padding: 2px 8px;
-    font-size: 34px;
-    font-weight: 800;
-    color: #000;
-    line-height: 1;
-  }
-  body.pdf-capture-mode{background:#fff;padding:0;}
-  body.pdf-capture-mode .wrap{max-width:800px;margin:0.7in auto 0;position:relative;}
-  body.pdf-capture-mode .card{box-shadow:none;border:1px solid #000;padding:8px;margin-bottom:8px;}
-
   @media print{
     .print-header{
       display:block;position:relative;
-      padding-bottom:4px;margin-bottom:6px;border-bottom:2px solid var(--thread-red);
+      padding-bottom:6px;margin-bottom:8px;border-bottom:2px solid var(--thread-red);
     }
     .print-corner{
       display:inline-block;position:absolute;top:2px;
-      font-size:13px;font-weight:700;color:var(--thread-red);
+      font-size:15px;font-weight:700;color:var(--thread-red);
     }
     .print-corner.left{left:0;}
     .print-corner.right{right:0;}
     .print-title{
-      display:block;text-align:center;font-size:1.2rem;font-weight:800;color:var(--thread-red);
+      display:block;text-align:center;font-size:1.3rem;font-weight:800;color:var(--thread-red);
     }
     .print-srno-box{
       display:flex;align-items:center;justify-content:center;
       position:fixed;right:0;top:0;
       border:2px solid #000;border-radius:6px;
-      min-width:60px;padding:2px 8px;
-      font-size:60px;font-weight:800;color:#000;line-height:1;
-      z-index: 9999;
+      min-width:70px;padding:2px 10px;
+      font-size:75px;font-weight:800;color:#000;line-height:1;
     }
     header,.toolbar,.card.records,.no-print{display:none !important;}
     html,body{background:#fff;padding:0;margin:0;width:210mm;height:297mm;}
-    .wrap{max-width:195mm;margin:0.7in auto 0;padding:0;}
-    .card{box-shadow:none;border:1px solid #000;break-inside:avoid;margin-bottom:6px;padding:8px;}
-    h2{font-size:.85rem;margin-bottom:6px;}
-    .grid .field label, .party-row .field label{font-size:.65rem;}
-    .grid .field input, .party-row .field input{padding:2px 4px;font-size:.75rem;height:26px;}
-    table.stitch{font-size:.75rem;}
+    .wrap{max-width:200mm;margin:1in auto 0;padding:0;}
+    .card{box-shadow:none;border:1px solid #000;break-inside:avoid;margin-bottom:6px;padding:6px;}
+    h2{font-size:.95rem;margin-bottom:6px;}
+    .grid .field label{font-size:.68rem;}
+    .grid .field input{padding:4px 5px;font-size:.8rem;}
+    table.stitch{font-size:.78rem;}
     .img-row{grid-template-columns:repeat(3,1fr);gap:6px;page-break-inside:avoid;}
-    .img-slot{height:200px;border:1px solid #000;padding:0;}
+    .img-slot{height:280px;border:1px solid #000;padding:0;}
     .img-slot img{width:100%;height:100%;object-fit:cover;}
     .slot-clear{display:none !important;}
   }
@@ -291,7 +250,6 @@
     <button class="btn btn-new" id="btnNew">🆕 New</button>
     <button class="btn btn-del" id="btnDelete">🗑 Delete</button>
     <button class="btn btn-pdf" id="btnPdf">🖨 Print / Save PDF</button>
-    <button class="btn btn-whatsapp" id="btnWhatsApp">💬 Share WhatsApp</button>
     <button class="btn btn-ghost" id="btnBackup">⬇ Backup JSON</button>
     <button class="btn btn-ghost" id="btnRestore">⬆ Restore</button>
     <button class="btn btn-ghost" id="btnCsvExport">⬇ Export CSV</button>
@@ -301,30 +259,19 @@
   </div>
 
   <div class="card">
-    <h2 style="display:flex;align-items:center;justify-content:space-between;">
-      <span>Party Details</span>
-      <button class="btn btn-ghost no-print" id="btnSavePartyMaster" style="font-size:.68rem;padding:3px 8px;">💾 Save Party to Master</button>
-    </h2>
-    <div class="grid-party-container">
-      <div class="party-row">
-        <div class="field" style="flex:2;"><label>Party Name</label><input id="partyName" list="partyNameList" placeholder="Select or type party..."><datalist id="partyNameList"></datalist></div>
-        <div class="field" style="flex:1;"><label>Arrival Date</label><input type="date" id="avelDate"></div>
-        <div class="field" style="flex:1.2;"><label>P. Challan No.</label><input id="challanNo"></div>
-        <div class="field" style="flex:0.8;"><label>Pcs</label><input type="number" id="pcsSaree"></div>
-      </div>
-      <div class="party-row">
-        <div class="field" style="flex:1.2;"><label>Contact No.</label><input id="partyContact" placeholder="9825012345"></div>
-        <div class="field" style="flex:1.5;"><label>GST No.</label><input id="partyGst" placeholder="24AAAAA0000A1Z5"></div>
-        <div class="field" style="flex:2.3;"><label>Address</label><input id="partyAddress" placeholder="Surat"></div>
-      </div>
+    <h2>Party Details</h2>
+    <div class="grid grid-party">
+      <div class="field" style="width:50%"><label>Party Name</label><input id="partyName"></div>
+      <div class="field" style="width:15%"><label>Arrival Date</label><input type="date" id="avelDate"></div>
+      <div class="field" style="width:20%"><label>P. Challan No.</label><input id="challanNo"></div>
+      <div class="field" style="width:15%"><label>Pcs</label><input type="number" id="pcsSaree"></div>
     </div>
   </div>
 
   <div class="two-col">
   <div class="card">
-    <h2>Work Stitch &nbsp; <span style="font-weight:400;font-size:.75rem;color:#6b5f45;"><input type="number" id="rateConst" value="0.45" step="0.01" style="width:55px;display:inline-block;height:26px;"></span>
-      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" list="designNoList" style="width:80px;display:inline-block;height:26px;"><datalist id="designNoList"></datalist></span>
-      &nbsp;<button class="btn btn-ghost no-print" id="btnSaveDesignMaster" style="font-size:.65rem;padding:2px 6px;">💾 Master</button></h2>
+    <h2>Work Stitch &nbsp; <span style="font-weight:400;font-size:.75rem;color:#6b5f45;"><input type="number" id="rateConst" value="0.45" step="0.01" style="width:60px;display:inline-block"></span>
+      &nbsp;&nbsp;<span style="font-weight:400;font-size:.75rem;color:#6b5f45;">Design No.: <input type="text" id="designNo" style="width:90px;display:inline-block"></span></h2>
     <table class="stitch">
       <colgroup>
         <col class="c-type"><col class="c-stitches"><col class="c-hed"><col class="c-price">
@@ -355,13 +302,28 @@
   </div>
   </div>
 
+  <div class="two-col no-print">
   <div class="card">
-    <h2 style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-      <span>Emd. Work Rate</span>
-      <span style="display:flex;align-items:center;flex:1;max-width:500px;">
-        <input type="text" id="emdRemark" placeholder="Remark" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:.78rem;font-style:italic;color:#6b5f45;background:#fffef9;height:28px;">
-      </span>
-    </h2>
+    <h2>Party Master</h2>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <input type="text" id="partyMasterInput" placeholder="Party name lakho" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:6px;">
+      <button class="btn btn-save" id="btnAddParty" style="flex-shrink:0;">+ Add</button>
+    </div>
+    <div id="partyMasterList" style="max-height:180px;overflow:auto;"></div>
+  </div>
+
+  <div class="card">
+    <h2>Design Master</h2>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <input type="text" id="designMasterInput" placeholder="Design No. lakho" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:6px;">
+      <button class="btn btn-save" id="btnAddDesign" style="flex-shrink:0;">+ Add</button>
+    </div>
+    <div id="designMasterList" style="max-height:180px;overflow:auto;"></div>
+  </div>
+  </div>
+
+  <div class="card">
+    <h2>Emd. Work Rate</h2>
     <div class="grid grid-6">
       <div class="field"><label>Emd.Work Rate</label><input type="number" id="emdRate" value="0"></div>
       <div class="field"><label>Reniyu</label><input type="number" id="reniyu" value="0"></div>
@@ -414,24 +376,6 @@
 </div>
 
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA_WCKhG8Jv80UOZLVGReRzrR--xC0crDs",
-  authDomain: "panchmukhiart1.firebaseapp.com",
-  projectId: "panchmukhiart1",
-  storageBucket: "panchmukhiart1.firebasestorage.app",
-  messagingSenderId: "974618905593",
-  appId: "1:974618905593:web:c68feb5a94d112f626cb28",
-  measurementId: "G-4QWG0ZZGQ4"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const recordsCol = db.collection('records');
-const designMasterCol = db.collection('designMaster');
-const partyMasterCol = db.collection('partyMaster');
-</script>
 <script>
 // ---- Login gate: change ID/PASSWORD below to whatever you want ----
 const LOGIN_ID = 'JENISH';
@@ -448,114 +392,26 @@ function tryLogin(){
   if(id === LOGIN_ID && pass === LOGIN_PASSWORD){
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appContent').style.display = 'block';
-    renderRecordList('');
-    refreshMasterDatalists();
   } else {
     err.textContent = 'ID athva Password khotu chhe.';
   }
 }
 
-async function fetchAllRecords(){
-  const snap = await recordsCol.get();
-  const recs = {};
-  snap.forEach(doc=> recs[doc.id] = doc.data());
-  return recs;
+const STORAGE_KEY = 'panchmukhi_records_v1';
+
+function loadRecords(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }catch(e){ return {}; }
 }
-async function fetchOneRecord(sr){
-  const doc = await recordsCol.doc(sr).get();
-  return doc.exists ? doc.data() : null;
-}
-async function saveOneRecord(sr, data){
-  await recordsCol.doc(sr).set(data);
-}
-async function deleteOneRecord(sr){
-  await recordsCol.doc(sr).delete();
+function saveRecords(recs){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(recs));
 }
 
-// Master data functions: Design Master & Party Master
-async function refreshMasterDatalists() {
-  try {
-    const dSnap = await designMasterCol.get();
-    const dList = document.getElementById('designNoList');
-    dList.innerHTML = '';
-    dSnap.forEach(doc => {
-      const opt = document.createElement('option');
-      opt.value = doc.id;
-      dList.appendChild(opt);
-    });
-
-    const pSnap = await partyMasterCol.get();
-    const pList = document.getElementById('partyNameList');
-    pList.innerHTML = '';
-    pSnap.forEach(doc => {
-      const opt = document.createElement('option');
-      opt.value = doc.id;
-      pList.appendChild(opt);
-    });
-  } catch(e) { console.error('Error loading masters', e); }
-}
-
-async function autoFillDesignMaster(dNo) {
-  if(!dNo) return;
-  try {
-    const doc = await designMasterCol.doc(dNo).get();
-    if(doc.exists) {
-      const d = doc.data();
-      ['dno_pcs','dno_hed','pallu_pcs','pallu_hed','skt_pcs','skt_hed','blouse_pcs','blouse_hed'].forEach(k => {
-        if(d[k] !== undefined) document.getElementById(k).value = d[k];
-      });
-      recalc();
-    }
-  } catch(e) { console.error(e); }
-}
-
-async function autoFillPartyMaster(pName) {
-  if(!pName) return;
-  try {
-    const doc = await partyMasterCol.doc(pName).get();
-    if(doc.exists) {
-      const d = doc.data();
-      if(d.partyContact !== undefined) document.getElementById('partyContact').value = d.partyContact;
-      if(d.partyGst !== undefined) document.getElementById('partyGst').value = d.partyGst;
-      if(d.partyAddress !== undefined) document.getElementById('partyAddress').value = d.partyAddress;
-    }
-  } catch(e) { console.error(e); }
-}
-
-document.getElementById('designNo').addEventListener('change', (e) => autoFillDesignMaster(e.target.value.trim()));
-document.getElementById('partyName').addEventListener('change', (e) => autoFillPartyMaster(e.target.value.trim()));
-
-document.getElementById('btnSaveDesignMaster').addEventListener('click', async () => {
-  const dNo = document.getElementById('designNo').value.trim();
-  if(!dNo) { alert('Pehla Design No. lakho.'); return; }
-  const data = {};
-  ['dno_pcs','dno_hed','pallu_pcs','pallu_hed','skt_pcs','skt_hed','blouse_pcs','blouse_hed'].forEach(k => {
-    data[k] = document.getElementById(k).value;
-  });
-  await designMasterCol.doc(dNo).set(data);
-  alert('Design ' + dNo + ' Master ma save thai gayu!');
-  refreshMasterDatalists();
-});
-
-document.getElementById('btnSavePartyMaster').addEventListener('click', async () => {
-  const pName = document.getElementById('partyName').value.trim();
-  if(!pName) { alert('Pehla Party Name lakho.'); return; }
-  const data = {
-    partyContact: document.getElementById('partyContact').value,
-    partyGst: document.getElementById('partyGst').value,
-    partyAddress: document.getElementById('partyAddress').value
-  };
-  await partyMasterCol.doc(pName).set(data);
-  alert('Party ' + pName + ' Master ma save thai gayu!');
-  refreshMasterDatalists();
-});
-
-const ids = ['partyName','avelDate','challanNo','pcsSaree','partyContact','partyGst','partyAddress','rateConst','designNo',
+const ids = ['partyName','avelDate','challanNo','pcsSaree','rateConst','designNo',
   'dno_pcs','dno_hed',
   'pallu_pcs','pallu_hed',
   'skt_pcs','skt_hed',
   'blouse_pcs','blouse_hed',
-  'emdRate','reniyu','overlock','diamond','extraExp','emdRemark',
+  'emdRate','reniyu','overlock','diamond','extraExp',
   'dateA','billNoA','creditPcsA','rateA','gstA'];
 
 let currentImages = [null, null, null];
@@ -576,52 +432,22 @@ function setSlotImage(idx, dataUrl){
   }
 }
 
-// Auto Compress Images to keep Base64 size well under Firestore 1MB limits
-function compressAndSetImage(idx, file) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const MAX_WIDTH = 800;
-      let width = img.width;
-      let height = img.height;
-
-      if (width > MAX_WIDTH) {
-        height = Math.round((height * MAX_WIDTH) / width);
-        width = MAX_WIDTH;
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-
-      // Compress JPEG quality to 0.6
-      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
-      setSlotImage(idx, compressedBase64);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-[1, 2, 3].forEach((idx) => {
-  document.getElementById('imgSlot' + idx).addEventListener('click', (e) => {
-    if (e.target.id === 'imgClear' + idx) return;
-    document.getElementById('imgFile' + idx).click();
+[1,2,3].forEach(idx=>{
+  document.getElementById('imgSlot'+idx).addEventListener('click', (e)=>{
+    if(e.target.id === 'imgClear'+idx) return;
+    document.getElementById('imgFile'+idx).click();
   });
-
-  document.getElementById('imgFile' + idx).addEventListener('change', (e) => {
+  document.getElementById('imgFile'+idx).addEventListener('change', (e)=>{
     const f = e.target.files[0];
-    if (!f) return;
-    compressAndSetImage(idx, f);
+    if(!f) return;
+    const reader = new FileReader();
+    reader.onload = ()=> setSlotImage(idx, reader.result);
+    reader.readAsDataURL(f);
   });
-
-  document.getElementById('imgClear' + idx).addEventListener('click', (e) => {
+  document.getElementById('imgClear'+idx).addEventListener('click', (e)=>{
     e.stopPropagation();
     setSlotImage(idx, null);
-    document.getElementById('imgFile' + idx).value = '';
+    document.getElementById('imgFile'+idx).value = '';
   });
 });
 
@@ -674,12 +500,9 @@ function clearForm(){
   recalc();
 }
 
-async function renderRecordList(filter){
+function renderRecordList(filter){
+  const recs = loadRecords();
   const body = document.getElementById('recBody');
-  body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#8a7d5f;">Loading...</td></tr>';
-  let recs;
-  try{ recs = await fetchAllRecords(); }
-  catch(err){ body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--thread-red);">Cloud thi data load na thayu — internet check karo.</td></tr>'; return; }
   body.innerHTML='';
   let keys = Object.keys(recs).sort((a,b)=> b-a || 0);
   if(filter){
@@ -695,45 +518,40 @@ async function renderRecordList(filter){
     body.appendChild(tr);
   });
   body.querySelectorAll('button').forEach(b=>{
-    b.addEventListener('click', async (ev)=>{
+    b.addEventListener('click',(ev)=>{
       ev.stopPropagation();
       const k = b.dataset.k;
       if(b.dataset.act==='load'){
         document.getElementById('srNo').value = k;
-        const data = await fetchOneRecord(k);
-        if(data) fillForm(data);
+        fillForm(loadRecords()[k]);
       } else if(b.dataset.act==='del'){
         if(confirm('Sr No '+k+' no record delete karvo chhe?')){
-          try{ await deleteOneRecord(k); renderRecordList(document.getElementById('recSearch').value); }
-          catch(err){ alert('Delete na thayu — internet check karo.'); }
+          const recs2 = loadRecords();
+          delete recs2[k];
+          saveRecords(recs2);
+          renderRecordList(document.getElementById('recSearch').value);
         }
       }
     });
   });
 }
 
-document.getElementById('btnSave').addEventListener('click', async ()=>{
+document.getElementById('btnSave').addEventListener('click', ()=>{
   const sr = document.getElementById('srNo').value.trim();
   if(!sr){ alert('Pehla Sr No lakho.'); return; }
-  try{
-    await saveOneRecord(sr, collectForm());
-    renderRecordList(document.getElementById('recSearch').value);
-    alert('Sr No '+sr+' save thai gayu.');
-  }catch(err){
-    alert('Save na thayu. Internet check karo. ('+err.message+')');
-  }
+  const recs = loadRecords();
+  recs[sr] = collectForm();
+  saveRecords(recs);
+  renderRecordList(document.getElementById('recSearch').value);
+  alert('Sr No '+sr+' save thai gayu.');
 });
 
-document.getElementById('btnFetch').addEventListener('click', async ()=>{
+document.getElementById('btnFetch').addEventListener('click', ()=>{
   const sr = document.getElementById('srNo').value.trim();
   if(!sr){ alert('Pehla Sr No lakho.'); return; }
-  try{
-    const data = await fetchOneRecord(sr);
-    if(!data){ alert('Sr No '+sr+' no record made nathi.'); return; }
-    fillForm(data);
-  }catch(err){
-    alert('Fetch na thayu — internet check karo.');
-  }
+  const recs = loadRecords();
+  if(!recs[sr]){ alert('Sr No '+sr+' no record made nathi.'); return; }
+  fillForm(recs[sr]);
 });
 
 document.getElementById('btnNew').addEventListener('click', ()=>{
@@ -741,19 +559,16 @@ document.getElementById('btnNew').addEventListener('click', ()=>{
   clearForm();
 });
 
-document.getElementById('btnDelete').addEventListener('click', async ()=>{
+document.getElementById('btnDelete').addEventListener('click', ()=>{
   const sr = document.getElementById('srNo').value.trim();
   if(!sr){ alert('Sr No lakho jena mate delete karvu chhe.'); return; }
-  try{
-    const data = await fetchOneRecord(sr);
-    if(!data){ alert('Aa Sr No no record nathi.'); return; }
-    if(confirm('Sr No '+sr+' delete karvu chhe?')){
-      await deleteOneRecord(sr);
-      renderRecordList('');
-      clearForm();
-    }
-  }catch(err){
-    alert('Delete na thayu — internet check karo.');
+  const recs = loadRecords();
+  if(!recs[sr]){ alert('Aa Sr No no record nathi.'); return; }
+  if(confirm('Sr No '+sr+' delete karvu chhe?')){
+    delete recs[sr];
+    saveRecords(recs);
+    renderRecordList('');
+    clearForm();
   }
 });
 
@@ -766,55 +581,8 @@ document.getElementById('btnPdf').addEventListener('click', ()=>{
   window.onafterprint = ()=>{ document.title = originalTitle; window.onafterprint = null; };
 });
 
-document.getElementById('btnWhatsApp').addEventListener('click', async () => {
-  const sr = document.getElementById('srNo').value.trim();
-  const party = document.getElementById('partyName').value.trim();
-  let contact = document.getElementById('partyContact').value.trim().replace(/\D/g, '');
-  if (contact.length === 10) contact = '91' + contact;
-
-  document.getElementById('printSrNoBox').textContent = sr;
-  document.body.classList.add('pdf-capture-mode');
-
-  try {
-    const element = document.querySelector('.wrap');
-    const canvas = await html2canvas(element, { scale: 2, useCORS: true });
-    document.body.classList.remove('pdf-capture-mode');
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgData = canvas.toDataURL('image/png');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-    const filename = `JobCard_${sr || 'Draft'}_${party || 'Client'}.pdf`;
-    const pdfBlob = pdf.output('blob');
-    const file = new File([pdfBlob], filename, { type: 'application/pdf' });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: `Job Card #${sr}`,
-        text: `Panchmukhi Art Job Card #${sr} for ${party}`
-      });
-    } else {
-      pdf.save(filename);
-      const text = encodeURIComponent(`Panchmukhi Art Job Card #${sr} for ${party}`);
-      const url = contact
-        ? `https://wa.me/${contact}?text=${text}`
-        : `https://api.whatsapp.com/send?text=${text}`;
-      window.open(url, '_blank');
-      alert('PDF saved to downloads. Select it manually when WhatsApp opens.');
-    }
-  } catch (err) {
-    document.body.classList.remove('pdf-capture-mode');
-    alert('PDF Generation failed: ' + err.message);
-  }
-});
-
-document.getElementById('btnBackup').addEventListener('click', async ()=>{
-  const recs = await fetchAllRecords();
-  const blob = new Blob([JSON.stringify(recs, null, 2)], {type:'application/json'});
+document.getElementById('btnBackup').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(loadRecords(), null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'panchmukhi_backup_'+new Date().toISOString().slice(0,10)+'.json';
@@ -826,14 +594,15 @@ document.getElementById('restoreFile').addEventListener('change', (e)=>{
   const f = e.target.files[0];
   if(!f) return;
   const reader = new FileReader();
-  reader.onload = async ()=>{
+  reader.onload = ()=>{
     try{
       const incoming = JSON.parse(reader.result);
-      const keys = Object.keys(incoming);
-      for(const k of keys){ await saveOneRecord(k, incoming[k]); }
+      const existing = loadRecords();
+      const merged = Object.assign(existing, incoming);
+      saveRecords(merged);
       renderRecordList('');
-      alert(keys.length + ' record(s) restore thai gaya.');
-    }catch(err){ alert('File valid JSON nathi athva save thai nathi shakyu.'); }
+      alert('Restore thai gayu.');
+    }catch(err){ alert('File valid JSON nathi.'); }
   };
   reader.readAsText(f);
 });
@@ -847,8 +616,8 @@ function csvEscape(v){
   return v;
 }
 
-document.getElementById('btnCsvExport').addEventListener('click', async ()=>{
-  const recs = await fetchAllRecords();
+document.getElementById('btnCsvExport').addEventListener('click', ()=>{
+  const recs = loadRecords();
   const rows = [CSV_COLS.join(',')];
   Object.keys(recs).sort((a,b)=> a-b).forEach(sr=>{
     const r = recs[sr];
@@ -885,10 +654,11 @@ document.getElementById('csvFile').addEventListener('change', (e)=>{
   const f = e.target.files[0];
   if(!f) return;
   const reader = new FileReader();
-  reader.onload = async ()=>{
+  reader.onload = ()=>{
     try{
       const lines = reader.result.split(/\r?\n/).filter(l=> l.trim()!=='');
       const header = parseCsvLine(lines[0]).map(h=> h.trim());
+      const recs = loadRecords();
       let count = 0;
       for(let i=1;i<lines.length;i++){
         const vals = parseCsvLine(lines[i]);
@@ -896,12 +666,13 @@ document.getElementById('csvFile').addEventListener('change', (e)=>{
         header.forEach((h,idx)=> row[h] = vals[idx] !== undefined ? vals[idx] : '');
         const sr = (row.srNo || '').trim();
         if(!sr) continue;
-        const existing = (await fetchOneRecord(sr)) || {};
-        ids.forEach(id=>{ if(row[id] !== undefined && row[id] !== '') existing[id] = row[id]; });
-        existing.savedOn = new Date().toLocaleString();
-        await saveOneRecord(sr, existing);
+        const rec = recs[sr] || {};
+        ids.forEach(id=>{ if(row[id] !== undefined && row[id] !== '') rec[id] = row[id]; });
+        rec.savedOn = new Date().toLocaleString();
+        recs[sr] = rec;
         count++;
       }
+      saveRecords(recs);
       renderRecordList('');
       alert(count + ' record(s) CSV thi import thai gaya.');
     }catch(err){ alert('CSV file valid nathi ('+err.message+')'); }
@@ -912,7 +683,57 @@ document.getElementById('csvFile').addEventListener('change', (e)=>{
 
 document.getElementById('recSearch').addEventListener('input', (e)=> renderRecordList(e.target.value));
 
+// ---- Party Master / Design Master ----
+function loadMaster(key){
+  try{ return JSON.parse(localStorage.getItem(key) || '[]'); }catch(e){ return []; }
+}
+function saveMaster(key, list){
+  localStorage.setItem(key, JSON.stringify(list));
+}
+function renderMaster(key, listElId, targetFieldId){
+  const list = loadMaster(key);
+  const el = document.getElementById(listElId);
+  el.innerHTML = '';
+  if(list.length === 0){
+    el.innerHTML = '<div class="master-empty">Koi entry nathi.</div>';
+    return;
+  }
+  list.forEach((val, idx)=>{
+    const row = document.createElement('div');
+    row.className = 'master-row';
+    row.innerHTML = `<span>${val}</span><span class="del" data-idx="${idx}">✕</span>`;
+    row.addEventListener('click', (ev)=>{
+      if(ev.target.classList.contains('del')){
+        const list2 = loadMaster(key);
+        list2.splice(parseInt(ev.target.dataset.idx),1);
+        saveMaster(key, list2);
+        renderMaster(key, listElId, targetFieldId);
+      } else {
+        document.getElementById(targetFieldId).value = val;
+      }
+    });
+    el.appendChild(row);
+  });
+}
+function addMasterEntry(key, inputId, listElId, targetFieldId){
+  const input = document.getElementById(inputId);
+  const val = input.value.trim();
+  if(!val) return;
+  const list = loadMaster(key);
+  if(!list.includes(val)) list.push(val);
+  saveMaster(key, list);
+  input.value = '';
+  renderMaster(key, listElId, targetFieldId);
+}
+document.getElementById('btnAddParty').addEventListener('click', ()=> addMasterEntry('panchmukhi_party_master','partyMasterInput','partyMasterList','partyName'));
+document.getElementById('partyMasterInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addMasterEntry('panchmukhi_party_master','partyMasterInput','partyMasterList','partyName'); });
+document.getElementById('btnAddDesign').addEventListener('click', ()=> addMasterEntry('panchmukhi_design_master','designMasterInput','designMasterList','designNo'));
+document.getElementById('designMasterInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addMasterEntry('panchmukhi_design_master','designMasterInput','designMasterList','designNo'); });
+renderMaster('panchmukhi_party_master','partyMasterList','partyName');
+renderMaster('panchmukhi_design_master','designMasterList','designNo');
+
 recalc();
+renderRecordList('');
 </script>
 </body>
 </html>
