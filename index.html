@@ -17,7 +17,7 @@
     <!-- Chart.js for Reporting -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- HTML2Canvas & jsPDF for PDF generation & WhatsApp Sharing -->
+    <!-- HTML2Canvas & jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -43,9 +43,8 @@
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-        /* Print / PDF Capture Specific Overrides for Exact A4 Page Fit */
+        /* Print & PDF Capture Overrides for Exact A4 Page Fit */
         .print-header { display: none; }
-        .print-srno-box { display: none; }
 
         body.pdf-capture-mode {
             background: #ffffff !important;
@@ -57,6 +56,7 @@
         body.pdf-capture-mode header,
         body.pdf-capture-mode nav,
         body.pdf-capture-mode .no-print,
+        body.pdf-capture-mode .bill-extra-field,
         body.pdf-capture-mode #toastMsg {
             display: none !important;
         }
@@ -64,37 +64,16 @@
             display: flex !important;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #a3352b;
+            border-bottom: 2px solid #991b1b;
             padding-bottom: 4px;
             margin-bottom: 6px;
         }
-        body.pdf-capture-mode .print-header h1 {
-            font-size: 24px !important;
-            text-align: center !important;
-        }
-        body.pdf-capture-mode .print-srno-box {
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-            position: absolute !important;
-            top: 0.00in !important;
-            right: 0.025in !important;
-            margin: 0 !important;
-            border: 2px solid #000;
-            border-radius: 6px;
-            padding: 2px 10px;
-            font-size: 70px !important;
-            font-weight: 800;
-            color: #000;
-            line-height: 0.9;
-            background: #ffffff !important;
-            z-index: 50;
-        }
+
         body.pdf-capture-mode .wrap-container {
             max-width: 210mm !important;
             width: 210mm !important;
             margin: 0 auto !important;
-            padding: 0.25in 0.20in 0.20in 0.20in !important;
+            padding: 0.20in !important;
             background: #ffffff !important;
             color: #000000 !important;
             box-sizing: border-box;
@@ -105,8 +84,8 @@
             border: 1px solid #000000 !important;
             color: #000000 !important;
             box-shadow: none !important;
-            padding: 5px 8px !important;
-            margin-bottom: 5px !important;
+            padding: 4px 8px !important;
+            margin-bottom: 4px !important;
             border-radius: 6px !important;
             page-break-inside: avoid;
         }
@@ -134,7 +113,7 @@
             font-size: 10px !important;
         }
         body.pdf-capture-mode .img-slot-print {
-            height: 105px !important;
+            height: 210px !important;
             background: #ffffff !important;
         }
         body.pdf-capture-mode .slot-ph {
@@ -144,12 +123,15 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0.75in 0.20in 0.20in 0.20in;
+                margin-top: 0.25in !important;
+                margin-right: 0.15in !important;
+                margin-bottom: 0.15in !important;
+                margin-left: 0.15in !important;
             }
-            header, nav, .no-print, #toastMsg { display: none !important; }
+            header, nav, .no-print, .bill-extra-field, #toastMsg { display: none !important; }
             body { 
-                background: #fff !important; 
-                color: #000 !important;
+                background: #ffffff !important; 
+                color: #000000 !important;
                 padding: 0 !important; 
                 margin: 0 !important;
                 -webkit-print-color-adjust: exact;
@@ -158,47 +140,27 @@
             .wrap-container {
                 max-width: 100% !important;
                 width: 100% !important;
-                padding: 0 !important;
+                padding: 0.10in 0.25in !important;
                 margin: 0 !important;
                 position: relative !important;
+                box-sizing: border-box !important;
             }
             .print-header { 
                 display: flex !important; 
                 justify-content: space-between;
                 align-items: center;
-                border-bottom: 2px solid #a3352b;
+                border-bottom: 2px solid #991b1b;
                 padding-bottom: 4px;
                 margin-bottom: 6px;
             }
-            .print-header h1 {
-                font-size: 24px !important;
-                text-align: center !important;
-            }
-            .print-srno-box { 
-                display: flex !important; 
-                align-items: center;
-                justify-content: center;
-                position: absolute !important;
-                top: 0.00in !important; 
-                right: 0.025in !important;
-                margin: 0 !important;
-                border: 2px solid #000; 
-                border-radius: 6px;
-                font-size: 70px !important; 
-                font-weight: 800; 
-                padding: 2px 10px; 
-                color: #000;
-                line-height: 0.9;
-                background: #ffffff !important;
-                z-index: 50;
-            }
+
             .card-box { 
-                border: 1px solid #000 !important; 
-                background: #fff !important; 
-                color: #000 !important; 
+                border: 1px solid #000000 !important; 
+                background: #ffffff !important; 
+                color: #000000 !important; 
                 box-shadow: none !important; 
-                padding: 5px 8px !important;
-                margin-bottom: 5px !important;
+                padding: 4px 8px !important;
+                margin-bottom: 4px !important;
                 page-break-inside: avoid;
             }
             .work-bill-container {
@@ -209,7 +171,7 @@
             input, select, table, th, td, div { 
                 background: #ffffff !important; 
                 background-color: #ffffff !important;
-                color: #000 !important; 
+                color: #000000 !important; 
             }
             input, select {
                 border: 1px solid #334155 !important; 
@@ -220,7 +182,7 @@
             table { font-size: 10px !important; }
             th, td { padding: 2px !important; }
             .img-slot-print {
-                height: 105px !important;
+                height: 210px !important;
                 background: #ffffff !important;
             }
             .slot-ph { display: none !important; }
@@ -229,7 +191,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 flex flex-col min-h-full font-sans antialiased selection:bg-amber-500/30 selection:text-amber-300">
 
-    <!-- LOGIN SCREEN MODAL -->
+    <!-- Login Modal -->
     <div id="loginScreen" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl shadow-amber-500/10 text-center space-y-6 relative overflow-hidden">
             <div class="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -270,10 +232,9 @@
         </div>
     </div>
 
-    <!-- MAIN APP CONTENT -->
+    <!-- Main Content Container -->
     <div id="appContent" class="hidden flex-col flex-1">
         
-        <!-- Top Navigation Header -->
         <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -292,20 +253,23 @@
 
                     <!-- Navigation Tabs -->
                     <div class="hidden md:flex items-center space-x-1 bg-slate-950/70 p-1 rounded-xl border border-slate-800">
-                        <button onclick="switchTab('jobcard')" id="tabBtn-jobcard" class="px-4 py-1.5 rounded-lg text-xs font-semibold transition bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/20">
+                        <button onclick="switchTab('jobcard')" id="tabBtn-jobcard" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/20">
                             <i class="fa-solid fa-file-invoice mr-1.5"></i> Job Card Entry
                         </button>
-                        <button onclick="switchTab('partymaster')" id="tabBtn-partymaster" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                        <button onclick="switchTab('partymaster')" id="tabBtn-partymaster" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
                             <i class="fa-solid fa-user-group mr-1.5"></i> Party Master
                         </button>
-                        <button onclick="switchTab('designmaster')" id="tabBtn-designmaster" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                        <button onclick="switchTab('designmaster')" id="tabBtn-designmaster" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
                             <i class="fa-solid fa-drafting-compass mr-1.5"></i> Design Master
                         </button>
-                        <button onclick="switchTab('reports')" id="tabBtn-reports" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
-                            <i class="fa-solid fa-chart-line mr-1.5"></i> Analytics & Reports
+                        <button onclick="switchTab('fabricmaster')" id="tabBtn-fabricmaster" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                            <i class="fa-solid fa-scroll mr-1.5"></i> Fabric Master
                         </button>
-                        <button onclick="switchTab('hosting')" id="tabBtn-hosting" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
-                            <i class="fa-brands fa-github mr-1.5"></i> Hosting Guide
+                        <button onclick="switchTab('reports')" id="tabBtn-reports" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                            <i class="fa-solid fa-chart-line mr-1.5"></i> Reports
+                        </button>
+                        <button onclick="switchTab('hosting')" id="tabBtn-hosting" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+                            <i class="fa-brands fa-github mr-1.5"></i> Guide
                         </button>
                     </div>
 
@@ -322,587 +286,743 @@
                 <div id="firebaseRuleBanner" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 my-2 text-xs text-amber-200 flex items-center justify-between flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
-                        <span><strong>Storage Notice:</strong> Running in <strong>Local Storage Fallback Mode</strong>. Data is fully saved on this device.</span>
+                        <span><strong>Storage Notice:</strong> Running in <strong>Local Storage Fallback Mode</strong>. Data is saved locally.</span>
                     </div>
-                    <button onclick="showRuleModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">
-                        Fix Firestore Rules
-                    </button>
                 </div>
 
                 <!-- Mobile Navigation Bar -->
-        <div class="flex md:hidden border-t border-slate-800 py-2 gap-1 overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('jobcard')" id="mobTabBtn-jobcard" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap bg-amber-600 text-white">Job Card</button>
-            <button onclick="switchTab('partymaster')" id="mobTabBtn-partymaster" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Party Master</button>
-            <button onclick="switchTab('designmaster')" id="mobTabBtn-designmaster" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Design Master</button>
-            <button onclick="switchTab('reports')" id="mobTabBtn-reports" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Reports</button>
-            <button onclick="switchTab('hosting')" id="mobTabBtn-hosting" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Guide</button>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Content Wrapper -->
-<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 w-full wrap-container">
-
-    <!-- Printable Sr No Box positioned at top-right corner of PDF/Print canvas -->
-    <span id="printSrNoBox" class="print-srno-box"></span>
-
-    <!-- Printable Header for PDF/Print matching exact sample format -->
-    <div class="print-header">
-        <div class="w-1/4">
-                    <span class="text-xs font-bold text-rose-800 block">જય શ્રી કષ્ટભંજન દેવ</span>
-                </div>
-                <div class="w-1/2 text-center">
-                    <h1 class="text-[24px] font-black text-rose-900 leading-tight text-center">Panchmukhi Art — Job Card</h1>
-                </div>
-                <div class="w-1/4 text-right">
-                    <span class="text-xs font-bold text-rose-800 block text-right">જય શ્રી સ્વામિનારાયણ</span>
+                <div class="flex md:hidden border-t border-slate-800 py-2 gap-1 overflow-x-auto no-scrollbar">
+                    <button onclick="switchTab('jobcard')" id="mobTabBtn-jobcard" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap bg-amber-600 text-white">Job Card</button>
+                    <button onclick="switchTab('partymaster')" id="mobTabBtn-partymaster" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Party Master</button>
+                    <button onclick="switchTab('designmaster')" id="mobTabBtn-designmaster" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Design Master</button>
+                    <button onclick="switchTab('fabricmaster')" id="mobTabBtn-fabricmaster" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Fabric Master</button>
+                    <button onclick="switchTab('reports')" id="mobTabBtn-reports" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Reports</button>
+                    <button onclick="switchTab('hosting')" id="mobTabBtn-hosting" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Guide</button>
                 </div>
             </div>
+        </nav>
 
-            <!-- TAB 1: JOB CARD ENTRY -->
-            <section id="tab-jobcard" class="space-y-4">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 w-full wrap-container">
 
-                <!-- Action Toolbar -->
-                <div class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-xl backdrop-blur-md flex items-center gap-2 overflow-x-auto">
-                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl shrink-0">
-                        <label class="text-xs font-bold text-amber-400 whitespace-nowrap uppercase tracking-wider">Sr No:</label>
-                        <input type="text" id="srNo" placeholder="195" class="w-16 bg-transparent text-xs font-black text-white focus:outline-none">
+            <!-- PART 1: SR NUMBER CONTAINER -->
+            <div id="printPart1_SrNo" class="print-part-1"></div>
+
+            <!-- PART 2: REST OF JOB CARD CONTENT -->
+            <div id="printPart2_Content" class="print-part-2">
+
+                <!-- Printable Header with Top-Right Large SR Number -->
+                <div class="print-header">
+                    <div class="w-1/3">
+                        <span class="text-xs font-bold text-rose-800 block">જય શ્રી કષ્ટભંજન દેવ</span>
+                        <span class="text-xs font-bold text-rose-800 block mt-0.5">જય શ્રી સ્વામિનારાયણ</span>
                     </div>
-
-                    <button onclick="saveRecord()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
-                        <i class="fa-solid fa-floppy-disk"></i> <span>Save</span>
-                    </button>
-                    <button onclick="fetchRecord()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white shadow-md shadow-sky-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
-                        <i class="fa-solid fa-magnifying-glass"></i> <span>Fetch</span>
-                    </button>
-                    <button onclick="clearForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0 active:scale-95">
-                        <i class="fa-solid fa-file-circle-plus"></i> <span>New</span>
-                    </button>
-                    <button onclick="deleteRecord()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
-                        <i class="fa-solid fa-trash-can"></i> <span>Delete</span>
-                    </button>
-                    
-                    <button onclick="printJobCard()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white shadow-md shadow-amber-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
-                        <i class="fa-solid fa-print"></i> <span>Print / PDF</span>
-                    </button>
-                    <button onclick="shareWhatsApp()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-white shadow-md shadow-emerald-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
-                        <i class="fa-brands fa-whatsapp text-sm"></i> <span>WhatsApp</span>
-                    </button>
-                    <button onclick="backupJSON()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0">
-                        <i class="fa-solid fa-download"></i> <span>Backup</span>
-                    </button>
-                    <button onclick="document.getElementById('restoreFile').click()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0">
-                        <i class="fa-solid fa-upload"></i> <span>Restore</span>
-                    </button>
-                    <button onclick="exportCSV()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-1.5 shrink-0">
-                        <i class="fa-solid fa-file-csv"></i> <span>Export CSV</span>
-                    </button>
-                    <button onclick="document.getElementById('csvFile').click()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0">
-                        <i class="fa-solid fa-file-import"></i> <span>Import CSV</span>
-                    </button>
-
-                    <input type="file" id="restoreFile" accept=".json" class="hidden" onchange="restoreJSON(event)">
-                    <input type="file" id="csvFile" accept=".csv" class="hidden" onchange="importCSV(event)">
-                </div>
-
-                <!-- CARD 1: PARTY DETAILS -->
-                <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-id-card"></i> Party Details
-                        </h2>
+                    <div class="w-1/3 text-center">
+                        <h1 class="text-[22px] font-black text-rose-900 leading-tight text-center">Panchmukhi Art</h1>
+                        <p class="text-xs font-extrabold text-slate-800 tracking-wider uppercase">Job Card</p>
                     </div>
-
-                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-                        <div class="col-span-2 sm:col-span-2 lg:col-span-2">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Name</label>
-                            <input id="partyName" list="partyNameList" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                            <datalist id="partyNameList"></datalist>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Contact No.</label>
-                            <input id="partyContact" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
-                            <input id="partyGst" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Arrival Date</label>
-                            <input type="date" id="avelDate" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">P. Challan No.</label>
-                            <input id="challanNo" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pcs</label>
-                            <input type="number" id="pcsSaree" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                        </div>
-                        <div class="col-span-2 sm:col-span-4 lg:col-span-7">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Address</label>
-                            <input id="partyAddress" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                        </div>
+                    <div class="w-1/3 text-right flex flex-col items-end justify-center">
+                        <span class="text-[10px] font-extrabold text-slate-700 uppercase tracking-widest block">SR NO.</span>
+                        <span id="printTopRightSrNo" class="text-5xl font-black text-black leading-none font-mono" style="font-size: 52px !important; font-weight: 900 !important; line-height: 0.9 !important; color: #000000 !important;">---</span>
                     </div>
                 </div>
 
-                <!-- WORK STITCH & BILLING SECTION -->
-                <div class="work-bill-container grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    
-                    <!-- WORK STITCH TABLE -->
+                <!-- TAB 1: JOB CARD ENTRY -->
+                <section id="tab-jobcard" class="space-y-4">
+
+                    <!-- Toolbar Actions -->
+                    <div class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-xl backdrop-blur-md flex items-center gap-2 overflow-x-auto">
+                        <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
+                            <span class="text-xs font-extrabold text-amber-400">Sr No:</span>
+                            <input id="srNo" type="text" placeholder="e.g. 101" class="w-20 bg-transparent text-xs font-bold text-white focus:outline-none">
+                        </div>
+
+                        <button onclick="saveRecord()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
+                            <i class="fa-solid fa-floppy-disk"></i> <span>Save</span>
+                        </button>
+                        <button onclick="fetchRecord()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white shadow-md shadow-sky-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
+                            <i class="fa-solid fa-magnifying-glass"></i> <span>Fetch</span>
+                        </button>
+                        <button onclick="clearForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0 active:scale-95">
+                            <i class="fa-solid fa-file-circle-plus"></i> <span>New</span>
+                        </button>
+                        <button onclick="deleteRecord()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
+                            <i class="fa-solid fa-trash-can"></i> <span>Delete</span>
+                        </button>
+                        
+                        <button onclick="printJobCard()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white shadow-md shadow-amber-900/30 transition flex items-center gap-1.5 shrink-0 active:scale-95">
+                            <i class="fa-solid fa-print"></i> <span>Print / PDF</span>
+                        </button>
+                        <button onclick="backupJSON()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-download"></i> <span>Backup</span>
+                        </button>
+                        <button onclick="document.getElementById('restoreFile').click()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-upload"></i> <span>Restore</span>
+                        </button>
+                        <button onclick="exportCSV()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-file-csv"></i> <span>Export CSV</span>
+                        </button>
+                        <button onclick="document.getElementById('csvFile').click()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition flex items-center gap-1.5 shrink-0">
+                            <i class="fa-solid fa-file-import"></i> <span>Import CSV</span>
+                        </button>
+
+                        <input type="file" id="restoreFile" accept=".json" class="hidden" onchange="restoreJSON(event)">
+                        <input type="file" id="csvFile" accept=".csv" class="hidden" onchange="importCSV(event)">
+                    </div>
+
+                    <!-- PARTY DETAILS CARD -->
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 flex-wrap gap-2">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
                             <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-calculator"></i> Work Stitch
+                                <i class="fa-solid fa-id-card"></i> Party Details
                             </h2>
-                            <div class="flex items-center gap-2 text-xs">
-                                <span class="text-slate-400 font-medium text-[11px]">Const:</span>
-                                <input type="number" id="rateConst" value="0.45" step="0.01" class="w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-0.5 text-xs text-center text-white font-bold">
-                                <span class="text-slate-400 font-medium text-[11px] ml-1">Design No:</span>
-                                <input type="text" id="designNo" placeholder="" list="designNoList" class="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-0.5 text-xs text-white font-bold">
-                                <datalist id="designNoList"></datalist>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-12 gap-3">
+                            <div class="col-span-2 sm:col-span-2 lg:col-span-4">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Name</label>
+                                <input id="partyName" list="partyNameList" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <datalist id="partyNameList"></datalist>
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-2">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Contact No.</label>
+                                <input id="partyContact" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-2">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
+                                <input id="partyGst" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-2">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Arrival Date</label>
+                                <input type="date" id="avelDate" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-1">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">P.Challan</label>
+                                <input id="challanNo" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-1">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pcs</label>
+                                <input type="number" id="pcsSaree" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+
+                            <div class="col-span-2 sm:col-span-2 lg:col-span-6">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Address</label>
+                                <input id="partyAddress" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-3">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party D.Number</label>
+                                <input id="partyDesignNo" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                            </div>
+                            <div class="col-span-1 sm:col-span-1 lg:col-span-3">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fabric Type</label>
+                                <input id="fabricType" list="fabricTypeList" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <datalist id="fabricTypeList"></datalist>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORK STITCH & BILL GRID CONTAINER -->
+                    <div class="work-bill-container grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        
+                        <!-- WORK STITCH TABLE CARD -->
+                        <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 flex-wrap gap-2">
+                                <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-calculator"></i> Work Stitch
+                                </h2>
+                                <div class="flex items-center gap-2 text-xs">
+                                    <span class="text-slate-400 font-medium text-[11px]">Const:</span>
+                                    <input type="number" id="rateConst" value="0.45" step="0.01" class="w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-0.5 text-xs text-center text-white font-bold">
+                                    <span class="text-slate-400 font-medium text-[11px] ml-1">Design No:</span>
+                                    <input type="text" id="designNo" placeholder="" list="designNoList" class="w-20 bg-slate-950 border border-slate-800 rounded-lg px-2 py-0.5 text-xs text-white font-bold">
+                                    <datalist id="designNoList"></datalist>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
+                                    <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
+                                        <tr>
+                                            <th class="p-2 border-b border-slate-800 w-2/12">Type</th>
+                                            <th class="p-2 border-b border-slate-800 w-4/12">Stitches</th>
+                                            <th class="p-2 border-b border-slate-800 w-3/12">Head</th>
+                                            <th class="p-2 border-b border-slate-800 w-3/12 text-right">Total Rate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-800/60">
+                                        <tr class="hover:bg-slate-800/30 transition">
+                                            <td class="p-2 font-bold text-slate-200">C</td>
+                                            <td class="p-1"><input type="number" id="dno_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-1"><input type="number" id="dno_hed" step="0.01" value="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="dno_amt">0.00</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-800/30 transition">
+                                            <td class="p-2 font-bold text-slate-200">Pallu</td>
+                                            <td class="p-1"><input type="number" id="pallu_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-1"><input type="number" id="pallu_hed" step="0.01" value="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="pallu_amt">0.00</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-800/30 transition">
+                                            <td class="p-2 font-bold text-slate-200">Skt</td>
+                                            <td class="p-1"><input type="number" id="skt_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-1"><input type="number" id="skt_hed" step="0.01" value="12" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="skt_amt">0.00</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-800/30 transition">
+                                            <td class="p-2 font-bold text-slate-200">Blouse</td>
+                                            <td class="p-1"><input type="number" id="blouse_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-1"><input type="number" id="blouse_hed" step="0.01" value="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
+                                            <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="blouse_amt">0.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="flex justify-between items-center pt-2 font-bold text-xs border-t border-slate-800">
+                                <span class="text-slate-400">Stitch Total (Total Rate):</span>
+                                <span id="stitchTotal" class="text-amber-400 text-sm font-black tracking-wide">0.00</span>
                             </div>
                         </div>
 
+                        <!-- BILL DETAILS CARD -->
+                        <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                            <div class="border-b border-slate-800 pb-2.5">
+                                <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-receipt"></i> Bill
+                                </h2>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <div>
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Credit Date</label>
+                                    <input type="date" id="dateA" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Bill No</label>
+                                    <input id="billNoA" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Credit Pcs</label>
+                                    <input type="number" id="creditPcsA" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
+                                
+                                <div class="bill-extra-field no-print">
+                                    <label class="block text-[9px] font-bold text-amber-400/90 uppercase mb-1">Short Pcs</label>
+                                    <input type="number" id="shortPcsA" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
+
+                                <div class="bill-extra-field no-print">
+                                    <label class="block text-[9px] font-bold text-rose-400 uppercase mb-1">Pending Pcs</label>
+                                    <input type="number" id="pendingPcsA" readonly placeholder="0" class="w-full bg-slate-950 border border-rose-500/30 rounded-xl px-2.5 py-1 text-xs font-black text-rose-400 focus:outline-none">
+                                </div>
+
+                                <div>
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Bill Rate</label>
+                                    <input type="number" id="rateA" placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">GST %</label>
+                                    <input type="number" id="gstA" step="0.01" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-bold text-emerald-400 uppercase mb-1">Amount</label>
+                                    <input type="number" id="amountA" readonly placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs font-black text-emerald-400 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EMD WORK RATE CARD -->
+                    <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 flex-wrap gap-2">
+                            <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group"></i> Emd. Work Rate
+                            </h2>
+                            <input type="text" id="emdRemark" placeholder="Remark / Special notes..." class="flex-1 max-w-sm bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Emd.Work Rate</label>
+                                <input type="number" id="emdRate" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Reniyu</label>
+                                <input type="number" id="reniyu" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">OverLock</label>
+                                <input type="number" id="overlock" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Diamond</label>
+                                <input type="number" id="diamond" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Extra Exp</label>
+                                <input type="number" id="extraExp" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-amber-400 uppercase mb-1">Final Rate</label>
+                                <input type="number" id="emdFinalRate" readonly value="0.00" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl px-3 py-1.5 text-xs font-black text-amber-300">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ATTACHED IMAGES (3) CARD -->
+                    <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2.5">
+                            <i class="fa-solid fa-camera"></i> Attached Images (3)
+                        </h2>
+
+                        <div class="grid grid-cols-3 gap-3">
+                            <div onclick="triggerImageUpload(1)" class="img-slot-print relative h-72 sm:h-80 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition duration-200">
+                                <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-2 py-0.5 rounded-md shadow">1</span>
+                                <button id="imgClear1" onclick="clearImage(event, 1)" class="hidden absolute top-2 right-2 bg-rose-600 hover:bg-rose-500 text-white w-6 h-6 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
+                                <div id="imgPlaceholder1" class="slot-ph text-center p-2">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-600 mb-1.5 group-hover:text-amber-400 transition"></i>
+                                    <p class="text-[11px] text-slate-500 font-medium">Click / tap - photo 1</p>
+                                </div>
+                                <img id="imgPreview1" class="hidden w-full h-full object-cover">
+                            </div>
+
+                            <div onclick="triggerImageUpload(2)" class="img-slot-print relative h-72 sm:h-80 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition duration-200">
+                                <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-2 py-0.5 rounded-md shadow">2</span>
+                                <button id="imgClear2" onclick="clearImage(event, 2)" class="hidden absolute top-2 right-2 bg-rose-600 hover:bg-rose-500 text-white w-6 h-6 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
+                                <div id="imgPlaceholder2" class="slot-ph text-center p-2">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-600 mb-1.5 group-hover:text-amber-400 transition"></i>
+                                    <p class="text-[11px] text-slate-500 font-medium">Click / tap - photo 2</p>
+                                </div>
+                                <img id="imgPreview2" class="hidden w-full h-full object-cover">
+                            </div>
+
+                            <div onclick="triggerImageUpload(3)" class="img-slot-print relative h-72 sm:h-80 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition duration-200">
+                                <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-2 py-0.5 rounded-md shadow">3</span>
+                                <button id="imgClear3" onclick="clearImage(event, 3)" class="hidden absolute top-2 right-2 bg-rose-600 hover:bg-rose-500 text-white w-6 h-6 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
+                                <div id="imgPlaceholder3" class="slot-ph text-center p-2">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-600 mb-1.5 group-hover:text-amber-400 transition"></i>
+                                    <p class="text-[11px] text-slate-500 font-medium">Click / tap - photo 3</p>
+                                </div>
+                                <img id="imgPreview3" class="hidden w-full h-full object-cover">
+                            </div>
+                        </div>
+
+                        <input type="file" id="imgFile1" accept="image/*" class="hidden" onchange="handleImageFile(1, event)">
+                        <input type="file" id="imgFile2" accept="image/*" class="hidden" onchange="handleImageFile(2, event)">
+                        <input type="file" id="imgFile3" accept="image/*" class="hidden" onchange="handleImageFile(3, event)">
+                    </div>
+
+                    <!-- SAVED RECORDS DIRECTORY TABLE -->
+                    <div class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-database"></i> Saved Job Cards (<span id="recCount">0</span>)
+                            </h2>
+                            <input type="text" id="recSearch" placeholder="Search by Sr No, Party, Design..." oninput="renderRecordsTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
+                        </div>
+
+                        <div class="overflow-x-auto max-h-72 overflow-y-auto border border-slate-800 rounded-xl">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3">Sr No</th>
+                                        <th class="p-3">Party Name</th>
+                                        <th class="p-3">Design No.</th>
+                                        <th class="p-3">Arrival Date</th>
+                                        <th class="p-3">Pcs</th>
+                                        <th class="p-3">Short Pcs</th>
+                                        <th class="p-3">Pending Pcs</th>
+                                        <th class="p-3">Saved On</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recBody" class="divide-y divide-slate-800/60">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- TAB 2: PARTY MASTER -->
+                <section id="tab-partymaster" class="hidden space-y-4">
+                    <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                                <h2 class="text-sm sm:text-base font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-user-gear"></i> Party Master Entry
+                                </h2>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Manage reusable party profiles to auto-fill Job Cards</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="clearPartyMasterTabForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">
+                                    <i class="fa-solid fa-file-circle-plus mr-1"></i> New
+                                </button>
+                                <button onclick="savePartyMasterTab()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save Party
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                            <div class="col-span-1 sm:col-span-2">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Name</label>
+                                <input id="pm_partyName" placeholder="Enter party name..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Contact No.</label>
+                                <input id="pm_partyContact" placeholder="e.g. 9825012345" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
+                                <input id="pm_partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div class="col-span-1 sm:col-span-2 lg:col-span-4">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Address</label>
+                                <input id="pm_partyAddress" placeholder="Enter party address..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Party Master Registry Table -->
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-address-book"></i> Party Master Directory (<span id="pm_recCount">0</span>)
+                            </h2>
+                            <input type="text" id="pm_recSearch" placeholder="Search party by name, contact, address..." oninput="renderPartyMasterTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
+                        </div>
+
+                        <div class="overflow-x-auto max-h-80 overflow-y-auto border border-slate-800 rounded-xl">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3">Party Name</th>
+                                        <th class="p-3">Contact No.</th>
+                                        <th class="p-3">GST No.</th>
+                                        <th class="p-3">Address</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pm_recBody" class="divide-y divide-slate-800/60">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 3: DESIGN MASTER -->
+                <section id="tab-designmaster" class="hidden space-y-4">
+                    <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
+                            <div>
+                                <h2 class="text-sm sm:text-base font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-drafting-compass"></i> Design Master Entry & Presets
+                                </h2>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Preset stitch parameters & attach up to 3 photos per Design Number</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="clearDesignMasterTabForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">
+                                    <i class="fa-solid fa-file-circle-plus mr-1"></i> New
+                                </button>
+                                <button onclick="saveDesignMasterTab()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save Design Preset
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 flex-wrap">
+                            <div class="w-48">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Design No.</label>
+                                <input id="dm_designNo" placeholder="e.g. 1222" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-bold focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div class="w-32">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Const Rate</label>
+                                <input type="number" id="dm_rateConst" value="0.45" step="0.01" oninput="recalcDesignMaster()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold text-center focus:border-amber-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Work Stitch Calculation Table inside Design Master -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
                                 <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
                                     <tr>
-                                        <th class="p-2 border-b border-slate-800 w-2/12">Type</th>
-                                        <th class="p-2 border-b border-slate-800 w-4/12">Stitches</th>
-                                        <th class="p-2 border-b border-slate-800 w-3/12">Head</th>
-                                        <th class="p-2 border-b border-slate-800 w-3/12 text-right">Total Rate</th>
+                                        <th class="p-2.5 border-b border-slate-800 w-2/12">Type</th>
+                                        <th class="p-2.5 border-b border-slate-800 w-4/12">Default Stitches</th>
+                                        <th class="p-2.5 border-b border-slate-800 w-3/12">Head Multiplier</th>
+                                        <th class="p-2.5 border-b border-slate-800 w-3/12 text-right">Total Rate</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-800/60">
                                     <tr class="hover:bg-slate-800/30 transition">
-                                        <td class="p-2 font-bold text-slate-200">C</td>
-                                        <td class="p-1"><input type="number" id="dno_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-1"><input type="number" id="dno_hed" step="0.01" value="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="dno_amt">0.00</td>
+                                        <td class="p-2.5 font-bold text-slate-200">C</td>
+                                        <td class="p-1.5"><input type="number" id="dm_dno_pcs" value="0" oninput="recalcDesignMaster()" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-1.5"><input type="number" id="dm_dno_hed" step="0.01" value="1.5" oninput="recalcDesignMaster()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-2.5 text-right font-extrabold text-amber-300 bg-slate-950/40" id="dm_dno_amt">0.00</td>
                                     </tr>
                                     <tr class="hover:bg-slate-800/30 transition">
-                                        <td class="p-2 font-bold text-slate-200">Pallu</td>
-                                        <td class="p-1"><input type="number" id="pallu_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-1"><input type="number" id="pallu_hed" step="0.01" value="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="pallu_amt">0.00</td>
+                                        <td class="p-2.5 font-bold text-slate-200">Pallu</td>
+                                        <td class="p-1.5"><input type="number" id="dm_pallu_pcs" value="0" oninput="recalcDesignMaster()" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-1.5"><input type="number" id="dm_pallu_hed" step="0.01" value="7" oninput="recalcDesignMaster()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-2.5 text-right font-extrabold text-amber-300 bg-slate-950/40" id="dm_pallu_amt">0.00</td>
                                     </tr>
                                     <tr class="hover:bg-slate-800/30 transition">
-                                        <td class="p-2 font-bold text-slate-200">Skt</td>
-                                        <td class="p-1"><input type="number" id="skt_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-1"><input type="number" id="skt_hed" step="0.01" value="12" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="skt_amt">0.00</td>
+                                        <td class="p-2.5 font-bold text-slate-200">Skt</td>
+                                        <td class="p-1.5"><input type="number" id="dm_skt_pcs" value="0" oninput="recalcDesignMaster()" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-1.5"><input type="number" id="dm_skt_hed" step="0.01" value="12" oninput="recalcDesignMaster()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-2.5 text-right font-extrabold text-amber-300 bg-slate-950/40" id="dm_skt_amt">0.00</td>
                                     </tr>
                                     <tr class="hover:bg-slate-800/30 transition">
-                                        <td class="p-2 font-bold text-slate-200">Blouse</td>
-                                        <td class="p-1"><input type="number" id="blouse_pcs" value="0" placeholder="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-1"><input type="number" id="blouse_hed" step="0.01" value="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs font-semibold text-white focus:border-amber-500 focus:outline-none"></td>
-                                        <td class="p-2 text-right font-extrabold text-amber-300 bg-slate-950/40" id="blouse_amt">0.00</td>
+                                        <td class="p-2.5 font-bold text-slate-200">Blouse</td>
+                                        <td class="p-1.5"><input type="number" id="dm_blouse_pcs" value="0" oninput="recalcDesignMaster()" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-1.5"><input type="number" id="dm_blouse_hed" step="0.01" value="1.5" oninput="recalcDesignMaster()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
+                                        <td class="p-2.5 text-right font-extrabold text-amber-300 bg-slate-950/40" id="dm_blouse_amt">0.00</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="flex justify-between items-center pt-2 font-bold text-xs border-t border-slate-800">
-                            <span class="text-slate-400">Stitch Total (Total Rate):</span>
-                            <span id="stitchTotal" class="text-amber-400 text-sm font-black tracking-wide">0.00</span>
+                            <span class="text-slate-400">Design Stitch Total (Total Rate):</span>
+                            <span id="dm_stitchTotal" class="text-amber-400 text-sm font-black tracking-wide">0.00</span>
+                        </div>
+
+                        <!-- Design Master Attached Images (3) -->
+                        <div class="pt-3 border-t border-slate-800 space-y-2">
+                            <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-camera"></i> Preset Attached Photos (3) - Auto-loads in Job Card
+                            </label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div onclick="triggerDmImageUpload(1)" class="relative h-28 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition">
+                                    <span class="absolute top-1.5 left-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-1.5 py-0.5 rounded">1</span>
+                                    <button id="dm_imgClear1" onclick="clearDmImage(event, 1)" class="hidden absolute top-1.5 right-1.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
+                                    <div id="dm_imgPlaceholder1" class="text-center p-2">
+                                        <i class="fa-solid fa-cloud-arrow-up text-lg text-slate-600 mb-1 group-hover:text-amber-400 transition"></i>
+                                        <p class="text-[10px] text-slate-500 font-medium">Photo 1</p>
+                                    </div>
+                                    <img id="dm_imgPreview1" class="hidden w-full h-full object-cover">
+                                </div>
+
+                                <div onclick="triggerDmImageUpload(2)" class="relative h-28 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition">
+                                    <span class="absolute top-1.5 left-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-1.5 py-0.5 rounded">2</span>
+                                    <button id="dm_imgClear2" onclick="clearDmImage(event, 2)" class="hidden absolute top-1.5 right-1.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
+                                    <div id="dm_imgPlaceholder2" class="text-center p-2">
+                                        <i class="fa-solid fa-cloud-arrow-up text-lg text-slate-600 mb-1 group-hover:text-amber-400 transition"></i>
+                                        <p class="text-[10px] text-slate-500 font-medium">Photo 2</p>
+                                    </div>
+                                    <img id="dm_imgPreview2" class="hidden w-full h-full object-cover">
+                                </div>
+
+                                <div onclick="triggerDmImageUpload(3)" class="relative h-28 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition">
+                                    <span class="absolute top-1.5 left-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-1.5 py-0.5 rounded">3</span>
+                                    <button id="dm_imgClear3" onclick="clearDmImage(event, 3)" class="hidden absolute top-1.5 right-1.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
+                                    <div id="dm_imgPlaceholder3" class="text-center p-2">
+                                        <i class="fa-solid fa-cloud-arrow-up text-lg text-slate-600 mb-1 group-hover:text-amber-400 transition"></i>
+                                        <p class="text-[10px] text-slate-500 font-medium">Photo 3</p>
+                                    </div>
+                                    <img id="dm_imgPreview3" class="hidden w-full h-full object-cover">
+                                </div>
+                            </div>
+
+                            <input type="file" id="dm_imgFile1" accept="image/*" class="hidden" onchange="handleDmImageFile(1, event)">
+                            <input type="file" id="dm_imgFile2" accept="image/*" class="hidden" onchange="handleDmImageFile(2, event)">
+                            <input type="file" id="dm_imgFile3" accept="image/*" class="hidden" onchange="handleDmImageFile(3, event)">
                         </div>
                     </div>
 
-                    <!-- BILL DETAILS -->
-                    <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                        <div class="border-b border-slate-800 pb-2.5">
+                    <!-- Design Master Registry Table -->
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
                             <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-receipt"></i> Bill
+                                <i class="fa-solid fa-list-ol"></i> Saved Design Presets (<span id="dm_recCount">0</span>)
                             </h2>
+                            <input type="text" id="dm_recSearch" placeholder="Search design number..." oninput="renderDesignMasterTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-2.5">
+                        <div class="overflow-x-auto max-h-80 overflow-y-auto border border-slate-800 rounded-xl">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3">Design No.</th>
+                                        <th class="p-3">C (Stitch / Head)</th>
+                                        <th class="p-3">Pallu (Stitch / Head)</th>
+                                        <th class="p-3">Skt (Stitch / Head)</th>
+                                        <th class="p-3">Blouse (Stitch / Head)</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dm_recBody" class="divide-y divide-slate-800/60">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: FABRIC MASTER -->
+                <section id="tab-fabricmaster" class="hidden space-y-4">
+                    <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Credit Date</label>
-                                <input type="date" id="dateA" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <h2 class="text-sm sm:text-base font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-scroll"></i> Fabric Master Entry
+                                </h2>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Manage reusable fabric specifications for Job Cards</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="clearFabricMasterTabForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">
+                                    <i class="fa-solid fa-file-circle-plus mr-1"></i> New
+                                </button>
+                                <button onclick="saveFabricMasterTab()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Save Fabric
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fabric Name</label>
+                                <input id="fm_fabricName" placeholder="e.g. Georgette Silk" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bill No</label>
-                                <input id="billNoA" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fabric Type</label>
+                                <input id="fm_fabricType" placeholder="e.g. 60 Gram Pure" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Credit Pcs</label>
-                                <input type="number" id="creditPcsA" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fabric Size</label>
+                                <input id="fm_fabricSize" placeholder="e.g. Standard 44" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Bill Rate</label>
-                                <input type="number" id="rateA" placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fabric Length</label>
+                                <input id="fm_fabricLength" placeholder="e.g. 6.30 Mtr" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST %</label>
-                                <input type="number" id="gstA" step="0.01" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-amber-400 uppercase mb-1">Amount</label>
-                                <input type="number" id="amountA" readonly placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs font-black text-emerald-400 focus:outline-none">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Fabric Width</label>
+                                <input id="fm_fabricWidth" placeholder="e.g. 44 Inch" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- EMBROIDERED WORK RATES BREAKDOWN -->
-                <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 flex-wrap gap-2">
-                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-layer-group"></i> Emd. Work Rate
-                        </h2>
-                        <input type="text" id="emdRemark" placeholder="Remark / Special notes..." class="flex-1 max-w-sm bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
-                    </div>
-
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Emd.Work Rate</label>
-                            <input type="number" id="emdRate" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Reniyu</label>
-                            <input type="number" id="reniyu" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">OverLock</label>
-                            <input type="number" id="overlock" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Diamond</label>
-                            <input type="number" id="diamond" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Extra Exp</label>
-                            <input type="number" id="extraExp" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-semibold focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-amber-400 uppercase mb-1">Final Rate</label>
-                            <input type="number" id="emdFinalRate" readonly value="0.00" class="w-full bg-slate-950 border border-amber-500/40 rounded-xl px-3 py-1.5 text-xs font-black text-amber-300">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ATTACHED IMAGES (3) -->
-                <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                    <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2.5">
-                        <i class="fa-solid fa-camera"></i> Attached Images (3)
-                    </h2>
-
-                    <div class="grid grid-cols-3 gap-3">
-                        <div onclick="triggerImageUpload(1)" class="img-slot-print relative h-36 sm:h-44 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition duration-200">
-                            <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-2 py-0.5 rounded-md shadow">1</span>
-                            <button id="imgClear1" onclick="clearImage(event, 1)" class="hidden absolute top-2 right-2 bg-rose-600 hover:bg-rose-500 text-white w-6 h-6 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
-                            <div id="imgPlaceholder1" class="slot-ph text-center p-2">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-600 mb-1.5 group-hover:text-amber-400 transition"></i>
-                                <p class="text-[11px] text-slate-500 font-medium">Click / tap - photo 1</p>
-                            </div>
-                            <img id="imgPreview1" class="hidden w-full h-full object-cover">
-                        </div>
-
-                        <div onclick="triggerImageUpload(2)" class="img-slot-print relative h-36 sm:h-44 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition duration-200">
-                            <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-2 py-0.5 rounded-md shadow">2</span>
-                            <button id="imgClear2" onclick="clearImage(event, 2)" class="hidden absolute top-2 right-2 bg-rose-600 hover:bg-rose-500 text-white w-6 h-6 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
-                            <div id="imgPlaceholder2" class="slot-ph text-center p-2">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-600 mb-1.5 group-hover:text-amber-400 transition"></i>
-                                <p class="text-[11px] text-slate-500 font-medium">Click / tap - photo 2</p>
-                            </div>
-                            <img id="imgPreview2" class="hidden w-full h-full object-cover">
-                        </div>
-
-                        <div onclick="triggerImageUpload(3)" class="img-slot-print relative h-36 sm:h-44 border-2 border-dashed border-slate-800 hover:border-amber-500/80 rounded-2xl bg-slate-950/70 flex flex-col items-center justify-center cursor-pointer overflow-hidden group transition duration-200">
-                            <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold text-[10px] px-2 py-0.5 rounded-md shadow">3</span>
-                            <button id="imgClear3" onclick="clearImage(event, 3)" class="hidden absolute top-2 right-2 bg-rose-600 hover:bg-rose-500 text-white w-6 h-6 rounded-full text-xs items-center justify-center z-10 shadow transition">✕</button>
-                            <div id="imgPlaceholder3" class="slot-ph text-center p-2">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-600 mb-1.5 group-hover:text-amber-400 transition"></i>
-                                <p class="text-[11px] text-slate-500 font-medium">Click / tap - photo 3</p>
-                            </div>
-                            <img id="imgPreview3" class="hidden w-full h-full object-cover">
-                        </div>
-                    </div>
-
-                    <input type="file" id="imgFile1" accept="image/*" class="hidden" onchange="handleImageFile(1, event)">
-                    <input type="file" id="imgFile2" accept="image/*" class="hidden" onchange="handleImageFile(2, event)">
-                    <input type="file" id="imgFile3" accept="image/*" class="hidden" onchange="handleImageFile(3, event)">
-                </div>
-
-                <!-- SAVED RECORDS REGISTRY -->
-                <div class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-database"></i> Saved Job Cards (<span id="recCount">0</span>)
-                        </h2>
-                        <input type="text" id="recSearch" placeholder="Search by Sr No, Party, Design..." oninput="renderRecordsTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
-                    </div>
-
-                    <div class="overflow-x-auto max-h-72 overflow-y-auto border border-slate-800 rounded-xl">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3">Sr No</th>
-                                    <th class="p-3">Party Name</th>
-                                    <th class="p-3">Design No.</th>
-                                    <th class="p-3">Arrival Date</th>
-                                    <th class="p-3">Pcs</th>
-                                    <th class="p-3">Saved On</th>
-                                    <th class="p-3 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recBody" class="divide-y divide-slate-800/60">
-                                <!-- Dynamic rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- TAB: PARTY MASTER -->
-            <section id="tab-partymaster" class="hidden space-y-4">
-                <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <div>
-                            <h2 class="text-sm sm:text-base font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-user-gear"></i> Party Master Entry
+                    <!-- Fabric Master Directory Table -->
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-scroll"></i> Fabric Master Directory (<span id="fm_recCount">0</span>)
                             </h2>
-                            <p class="text-[11px] text-slate-400 mt-0.5">Manage reusable party profiles to auto-fill Job Cards</p>
+                            <input type="text" id="fm_recSearch" placeholder="Search fabric by name or type..." oninput="renderFabricMasterTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="clearPartyMasterTabForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">
-                                <i class="fa-solid fa-file-circle-plus mr-1"></i> New
-                            </button>
-                            <button onclick="savePartyMasterTab()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Party
-                            </button>
+
+                        <div class="overflow-x-auto max-h-80 overflow-y-auto border border-slate-800 rounded-xl">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3">Fabric Name</th>
+                                        <th class="p-3">Fabric Type</th>
+                                        <th class="p-3">Fabric Size</th>
+                                        <th class="p-3">Length</th>
+                                        <th class="p-3">Width</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fm_recBody" class="divide-y divide-slate-800/60">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </section>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-                        <div class="col-span-1 sm:col-span-2">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Name</label>
-                            <input id="pm_partyName" placeholder="Enter party name..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
-                        </div>
+                <!-- TAB 5: REPORTS & ANALYTICS -->
+                <section id="tab-reports" class="hidden space-y-6">
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md flex items-center justify-between flex-wrap gap-4">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Contact No.</label>
-                            <input id="pm_partyContact" placeholder="e.g. 9825012345" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
-                            <input id="pm_partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
-                        </div>
-                        <div class="col-span-1 sm:col-span-2 lg:col-span-4">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Address</label>
-                            <input id="pm_partyAddress" placeholder="Enter party address..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Party Master Registry Table -->
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-address-book"></i> Party Master Directory (<span id="pm_recCount">0</span>)
-                        </h2>
-                        <input type="text" id="pm_recSearch" placeholder="Search party by name, contact, address..." oninput="renderPartyMasterTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
-                    </div>
-
-                    <div class="overflow-x-auto max-h-80 overflow-y-auto border border-slate-800 rounded-xl">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3">Party Name</th>
-                                    <th class="p-3">Contact No.</th>
-                                    <th class="p-3">GST No.</th>
-                                    <th class="p-3">Address</th>
-                                    <th class="p-3 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="pm_recBody" class="divide-y divide-slate-800/60">
-                                <!-- Dynamic rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB: DESIGN MASTER -->
-            <section id="tab-designmaster" class="hidden space-y-4">
-                <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
-                        <div>
-                            <h2 class="text-sm sm:text-base font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-drafting-compass"></i> Design Master Entry
+                            <h2 class="text-base font-extrabold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line text-amber-400"></i> Production Analytics & Metrics
                             </h2>
-                            <p class="text-[11px] text-slate-400 mt-0.5">Preset stitch parameters for C, Pallu, Skt, and Blouse per Design Number</p>
+                            <p class="text-xs text-slate-400 mt-0.5">Real-time stats across pieces, billing total, and average stitch rates.</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button onclick="clearDesignMasterTabForm()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">
-                                <i class="fa-solid fa-file-circle-plus mr-1"></i> New
-                            </button>
-                            <button onclick="saveDesignMasterTab()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Design Preset
-                            </button>
+                        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 transition flex items-center gap-2">
+                            <i class="fa-solid fa-print text-amber-400"></i> Print Summary
+                        </button>
+                    </div>
+
+                    <!-- Analytics Cards -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+                            <p class="text-xs text-slate-400 font-medium">Total Job Cards</p>
+                            <h3 id="metricTotalJobs" class="text-2xl font-black text-amber-400 mt-1">0</h3>
                         </div>
-                    </div>
-
-                    <div class="max-w-xs">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Design No.</label>
-                        <input id="dm_designNo" placeholder="e.g. 1222" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white font-bold focus:border-amber-500 focus:outline-none">
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
-                            <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
-                                <tr>
-                                    <th class="p-2.5 border-b border-slate-800 w-2/12">Type</th>
-                                    <th class="p-2.5 border-b border-slate-800 w-5/12">Default Stitches</th>
-                                    <th class="p-2.5 border-b border-slate-800 w-5/12">Default Head Multiplier</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800/60">
-                                <tr>
-                                    <td class="p-2.5 font-bold text-slate-200">C</td>
-                                    <td class="p-1.5"><input type="number" id="dm_dno_pcs" value="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                    <td class="p-1.5"><input type="number" id="dm_dno_hed" step="0.01" value="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2.5 font-bold text-slate-200">Pallu</td>
-                                    <td class="p-1.5"><input type="number" id="dm_pallu_pcs" value="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                    <td class="p-1.5"><input type="number" id="dm_pallu_hed" step="0.01" value="7" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2.5 font-bold text-slate-200">Skt</td>
-                                    <td class="p-1.5"><input type="number" id="dm_skt_pcs" value="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                    <td class="p-1.5"><input type="number" id="dm_skt_hed" step="0.01" value="12" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2.5 font-bold text-slate-200">Blouse</td>
-                                    <td class="p-1.5"><input type="number" id="dm_blouse_pcs" value="0" onfocus="this.select()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                    <td class="p-1.5"><input type="number" id="dm_blouse_hed" step="0.01" value="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1 text-xs text-white"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Design Master Registry Table -->
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-list-ol"></i> Saved Design Presets (<span id="dm_recCount">0</span>)
-                        </h2>
-                        <input type="text" id="dm_recSearch" placeholder="Search design number..." oninput="renderDesignMasterTable(this.value)" class="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none w-full sm:w-72">
-                    </div>
-
-                    <div class="overflow-x-auto max-h-80 overflow-y-auto border border-slate-800 rounded-xl">
-                        <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3">Design No.</th>
-                                    <th class="p-3">C (Stitch / Head)</th>
-                                    <th class="p-3">Pallu (Stitch / Head)</th>
-                                    <th class="p-3">Skt (Stitch / Head)</th>
-                                    <th class="p-3">Blouse (Stitch / Head)</th>
-                                    <th class="p-3 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dm_recBody" class="divide-y divide-slate-800/60">
-                                <!-- Dynamic rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB 4: REPORTS & ANALYTICS -->
-            <section id="tab-reports" class="hidden space-y-6">
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md flex items-center justify-between flex-wrap gap-4">
-                    <div>
-                        <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-chart-line text-amber-400"></i> Production Analytics & Metrics
-                        </h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Real-time stats across pieces, billing total, and average stitch rates.</p>
-                    </div>
-                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 transition flex items-center gap-2">
-                        <i class="fa-solid fa-print text-amber-400"></i> Print Summary
-                    </button>
-                </div>
-
-                <!-- Analytics Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-                        <p class="text-xs text-slate-400 font-medium">Total Job Cards</p>
-                        <h3 id="metricTotalJobs" class="text-2xl font-black text-amber-400 mt-1">0</h3>
-                    </div>
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-                        <p class="text-xs text-slate-400 font-medium">Total Pieces (Saree)</p>
-                        <h3 id="metricTotalPcs" class="text-2xl font-black text-emerald-400 mt-1">0</h3>
-                    </div>
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-                        <p class="text-xs text-slate-400 font-medium">Total Billing Value</p>
-                        <h3 id="metricTotalBilled" class="text-2xl font-black text-sky-400 mt-1">₹0.00</h3>
-                    </div>
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-                        <p class="text-xs text-slate-400 font-medium">Avg Stitch Rate</p>
-                        <h3 id="metricAvgStitch" class="text-2xl font-black text-rose-400 mt-1">0.00</h3>
-                    </div>
-                </div>
-
-                <!-- Charts -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
-                        <h3 class="text-xs font-bold text-slate-200 mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-amber-400"></i> Pieces Volume by Top Parties
-                        </h3>
-                        <div class="relative min-h-[250px] flex items-center justify-center">
-                            <canvas id="partyChart"></canvas>
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+                            <p class="text-xs text-slate-400 font-medium">Total Pieces (Saree)</p>
+                            <h3 id="metricTotalPcs" class="text-2xl font-black text-emerald-400 mt-1">0</h3>
                         </div>
-                    </div>
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
-                        <h3 class="text-xs font-bold text-slate-200 mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-bar text-emerald-400"></i> Job Cards per Design No.
-                        </h3>
-                        <div class="relative min-h-[250px] flex items-center justify-center">
-                            <canvas id="designChart"></canvas>
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+                            <p class="text-xs text-slate-400 font-medium">Total Billing Value</p>
+                            <h3 id="metricTotalBilled" class="text-2xl font-black text-sky-400 mt-1">₹0.00</h3>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB: HOSTING GUIDE -->
-            <section id="tab-hosting" class="hidden space-y-6">
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md space-y-4">
-                    <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-amber-400 shadow-inner">
-                            <i class="fa-brands fa-github text-2xl"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-base font-extrabold text-white">Deploying Panchmukhi Job Card Pro</h2>
-                            <p class="text-xs text-slate-400">Host on GitHub Pages with Cloud Firestore persistence</p>
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+                            <p class="text-xs text-slate-400 font-medium">Avg Stitch Rate</p>
+                            <h3 id="metricAvgStitch" class="text-2xl font-black text-rose-400 mt-1">0.00</h3>
                         </div>
                     </div>
 
-                    <ol class="space-y-3 text-xs text-slate-300 list-decimal list-inside leading-relaxed">
-                        <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
-                            Create a public repository on GitHub named <code class="text-amber-400 font-mono">jobcard-app</code>.
-                        </li>
-                        <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
-                            Upload this single file as <code class="text-amber-400 font-mono">index.html</code> to the root directory.
-                        </li>
-                        <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
-                            Navigate to <strong>Settings</strong> &rarr; <strong>Pages</strong> &rarr; Source: <strong>Deploy from main branch</strong>.
-                        </li>
-                        <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
-                            Your app is live with automatic offline persistence and Cloud Firestore sync!
-                        </li>
-                    </ol>
-                </div>
-            </section>
+                    <!-- Charts -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                            <h3 class="text-xs font-bold text-slate-200 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-pie text-amber-400"></i> Pieces Volume by Top Parties
+                            </h3>
+                            <div class="relative min-h-[250px] flex items-center justify-center">
+                                <canvas id="partyChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                            <h3 class="text-xs font-bold text-slate-200 mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-bar text-emerald-400"></i> Job Cards per Design No.
+                            </h3>
+                            <div class="relative min-h-[250px] flex items-center justify-center">
+                                <canvas id="designChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 6: HOSTING GUIDE -->
+                <section id="tab-hosting" class="hidden space-y-6">
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md space-y-4">
+                        <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-amber-400 shadow-inner">
+                                <i class="fa-brands fa-github text-2xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-base font-extrabold text-white">Deploying Panchmukhi Job Card Pro</h2>
+                                <p class="text-xs text-slate-400">Host on GitHub Pages with Cloud Firestore persistence</p>
+                            </div>
+                        </div>
+
+                        <ol class="space-y-3 text-xs text-slate-300 list-decimal list-inside leading-relaxed">
+                            <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                                Create a public repository on GitHub named <code class="text-amber-400 font-mono">jobcard-app</code>.
+                            </li>
+                            <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                                Upload this single file as <code class="text-amber-400 font-mono">index.html</code> to the root directory.
+                            </li>
+                            <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                                Navigate to <strong>Settings</strong> &rarr; <strong>Pages</strong> &rarr; Source: <strong>Deploy from main branch</strong>.
+                            </li>
+                            <li class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                                Your app is live with automatic offline persistence and Cloud Firestore sync!
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+            </div> <!-- END OF PART 2: REST OF JOB CARD CONTENT -->
 
         </main>
     </div>
 
-    <!-- FIREBASE & CORE LOGIC -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
@@ -922,12 +1042,15 @@
         const recordsCol = db.collection('records');
         const designMasterCol = db.collection('designMaster');
         const partyMasterCol = db.collection('partyMaster');
+        const fabricMasterCol = db.collection('fabricMaster');
 
         let isLocalStorageMode = false;
         let cachedRecords = {};
         let cachedPartyMasters = {};
         let cachedDesignMasters = {};
+        let cachedFabricMasters = {};
         let currentImages = [null, null, null];
+        let dm_currentImages = [null, null, null];
 
         let partyChartInstance = null;
         let designChartInstance = null;
@@ -937,13 +1060,14 @@
 
         const ids = [
             'partyName','avelDate','challanNo','pcsSaree','partyContact','partyGst','partyAddress',
+            'partyDesignNo','fabricType',
             'rateConst','designNo',
             'dno_pcs','dno_hed',
             'pallu_pcs','pallu_hed',
             'skt_pcs','skt_hed',
             'blouse_pcs','blouse_hed',
             'emdRate','reniyu','overlock','diamond','extraExp','emdRemark',
-            'dateA','billNoA','creditPcsA','rateA','gstA'
+            'dateA','billNoA','creditPcsA','shortPcsA','pendingPcsA','rateA','gstA'
         ];
 
         function tryLogin() {
@@ -1062,8 +1186,22 @@
                     }
                 });
 
+                const fSnap = await fabricMasterCol.get();
+                cachedFabricMasters = {};
+                const fList = document.getElementById('fabricTypeList');
+                if (fList) fList.innerHTML = '';
+                fSnap.forEach(doc => {
+                    cachedFabricMasters[doc.id] = doc.data();
+                    if (fList) {
+                        const opt = document.createElement('option');
+                        opt.value = doc.data().fabricType || doc.id;
+                        fList.appendChild(opt);
+                    }
+                });
+
                 renderPartyMasterTable(document.getElementById('pm_recSearch')?.value || '');
                 renderDesignMasterTable(document.getElementById('dm_recSearch')?.value || '');
+                renderFabricMasterTable(document.getElementById('fm_recSearch')?.value || '');
             } catch (e) {
                 enableLocalStorageMode(e);
                 refreshMasterDatalistsLocal();
@@ -1093,8 +1231,20 @@
                 });
             }
 
+            cachedFabricMasters = JSON.parse(localStorage.getItem('panchmukhi_fabric_master') || '{}');
+            const fList = document.getElementById('fabricTypeList');
+            if (fList) {
+                fList.innerHTML = '';
+                Object.keys(cachedFabricMasters).forEach(k => {
+                    const opt = document.createElement('option');
+                    opt.value = cachedFabricMasters[k].fabricType || k;
+                    fList.appendChild(opt);
+                });
+            }
+
             renderPartyMasterTable(document.getElementById('pm_recSearch')?.value || '');
             renderDesignMasterTable(document.getElementById('dm_recSearch')?.value || '');
+            renderFabricMasterTable(document.getElementById('fm_recSearch')?.value || '');
         }
 
         function num(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
@@ -1123,12 +1273,34 @@
             const creditPcsA = num(document.getElementById('creditPcsA').value);
             const rateA = num(document.getElementById('rateA').value);
             document.getElementById('amountA').value = (rateA * creditPcsA).toFixed(2);
+
+            const pcsSaree = num(document.getElementById('pcsSaree').value);
+            const shortPcsA = num(document.getElementById('shortPcsA').value);
+            const pendingPcs = pcsSaree - creditPcsA - shortPcsA;
+            document.getElementById('pendingPcsA').value = pendingPcs;
+
+            const srVal = document.getElementById('srNo')?.value.trim() || '';
+
+            // Update page title for browser print header
+            if (srVal) {
+                document.title = srVal;
+            } else {
+                document.title = 'Panchmukhi Art - Job Card & Production System';
+            }
+
+            // Update top-right print header SR number display
+            const printSrEl = document.getElementById('printTopRightSrNo');
+            if (printSrEl) {
+                printSrEl.textContent = srVal || '---';
+            }
         }
 
         ids.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('input', recalc);
         });
+
+        document.getElementById('srNo')?.addEventListener('input', recalc);
 
         const handleDesignChange = (e) => {
             const dNo = e.target.value.trim();
@@ -1143,6 +1315,10 @@
                 document.getElementById('skt_hed').value = d.skt_hed || '12';
                 document.getElementById('blouse_pcs').value = d.blouse_pcs || '0';
                 document.getElementById('blouse_hed').value = d.blouse_hed || '1.5';
+
+                if (d.images && Array.isArray(d.images)) {
+                    [1, 2, 3].forEach(idx => setSlotImage(idx, d.images[idx - 1] || null));
+                }
                 recalc();
             }
         };
@@ -1155,6 +1331,10 @@
                 document.getElementById('partyContact').value = d.partyContact || '';
                 document.getElementById('partyGst').value = d.partyGst || '';
                 document.getElementById('partyAddress').value = d.partyAddress || '';
+            } else {
+                document.getElementById('partyContact').value = '';
+                document.getElementById('partyGst').value = '';
+                document.getElementById('partyAddress').value = '';
             }
         };
 
@@ -1184,43 +1364,7 @@
 
         attachDatalistAutoShow('partyName');
         attachDatalistAutoShow('designNo');
-
-        async function saveDesignMaster() {
-            const dNo = document.getElementById('designNo').value.trim();
-            if (!dNo) { showToast('Please enter a Design No.'); return; }
-            const data = {};
-            ['dno_pcs','dno_hed','pallu_pcs','pallu_hed','skt_pcs','skt_hed','blouse_pcs','blouse_hed'].forEach(k => {
-                data[k] = document.getElementById(k).value;
-            });
-
-            cachedDesignMasters[dNo] = data;
-            localStorage.setItem('panchmukhi_design_master', JSON.stringify(cachedDesignMasters));
-
-            if (!isLocalStorageMode) {
-                try { await designMasterCol.doc(dNo).set(data); } catch (e) { enableLocalStorageMode(e); }
-            }
-            showToast(`Design #${dNo} saved to master!`);
-            refreshMasterDatalists();
-        }
-
-        async function savePartyMaster() {
-            const pName = document.getElementById('partyName').value.trim();
-            if (!pName) { showToast('Please enter Party Name.'); return; }
-            const data = {
-                partyContact: document.getElementById('partyContact').value,
-                partyGst: document.getElementById('partyGst').value,
-                partyAddress: document.getElementById('partyAddress').value
-            };
-
-            cachedPartyMasters[pName] = data;
-            localStorage.setItem('panchmukhi_party_master', JSON.stringify(cachedPartyMasters));
-
-            if (!isLocalStorageMode) {
-                try { await partyMasterCol.doc(pName).set(data); } catch (e) { enableLocalStorageMode(e); }
-            }
-            showToast(`Party '${pName}' saved to master!`);
-            refreshMasterDatalists();
-        }
+        attachDatalistAutoShow('fabricType');
 
         function triggerImageUpload(idx) {
             document.getElementById(`imgFile${idx}`).click();
@@ -1288,6 +1432,72 @@
             }
         }
 
+        function triggerDmImageUpload(idx) {
+            document.getElementById(`dm_imgFile${idx}`).click();
+        }
+
+        function clearDmImage(e, idx) {
+            e.stopPropagation();
+            dm_currentImages[idx - 1] = null;
+            document.getElementById(`dm_imgPreview${idx}`).src = '';
+            document.getElementById(`dm_imgPreview${idx}`).classList.add('hidden');
+            document.getElementById(`dm_imgPlaceholder${idx}`).classList.remove('hidden');
+            document.getElementById(`dm_imgClear${idx}`).classList.add('hidden');
+            document.getElementById(`dm_imgClear${idx}`).classList.remove('flex');
+            document.getElementById(`dm_imgFile${idx}`).value = '';
+        }
+
+        function handleDmImageFile(idx, e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height * MAX_WIDTH) / width);
+                        width = MAX_WIDTH;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                    setDmSlotImage(idx, compressedDataUrl);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function setDmSlotImage(idx, dataUrl) {
+            dm_currentImages[idx - 1] = dataUrl;
+            const preview = document.getElementById(`dm_imgPreview${idx}`);
+            const placeholder = document.getElementById(`dm_imgPlaceholder${idx}`);
+            const clearBtn = document.getElementById(`dm_imgClear${idx}`);
+
+            if (dataUrl) {
+                preview.src = dataUrl;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                clearBtn.classList.remove('hidden');
+                clearBtn.classList.add('flex');
+            } else {
+                preview.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                clearBtn.classList.add('hidden');
+                clearBtn.classList.remove('flex');
+            }
+        }
+
         function collectForm() {
             const data = {};
             ids.forEach(id => data[id] = document.getElementById(id).value);
@@ -1333,7 +1543,9 @@
                 reniyu: '0',
                 overlock: '0',
                 diamond: '0',
-                extraExp: '0'
+                extraExp: '0',
+                shortPcsA: '0',
+                pendingPcsA: '0'
             };
             ids.forEach(id => {
                 const el = document.getElementById(id);
@@ -1415,26 +1627,33 @@
                 const f = filter.toLowerCase();
                 keys = keys.filter(k => k.toLowerCase().includes(f) ||
                     (cachedRecords[k].partyName || '').toLowerCase().includes(f) ||
-                    (cachedRecords[k].designNo || '').toLowerCase().includes(f)
+                    (cachedRecords[k].designNo || '').toLowerCase().includes(f) ||
+                    (cachedRecords[k].fabricType || '').toLowerCase().includes(f)
                 );
             }
 
             if (count) count.textContent = Object.keys(cachedRecords).length;
 
             if (keys.length === 0) {
-                body.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No matching job cards found.</td></tr>`;
+                body.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-500">No matching job cards found.</td></tr>`;
                 return;
             }
 
             body.innerHTML = keys.map(k => {
                 const r = cachedRecords[k];
+                const pcs = num(r.pcsSaree);
+                const credit = num(r.creditPcsA);
+                const shortPcs = num(r.shortPcsA);
+                const pending = pcs - credit - shortPcs;
                 return `
                     <tr class="hover:bg-slate-800/40 transition">
                         <td class="p-3 font-bold text-amber-400">#${escapeHtml(k)}</td>
                         <td class="p-3 font-semibold text-slate-200">${escapeHtml(r.partyName || '-')}</td>
                         <td class="p-3 text-slate-300 font-bold">${escapeHtml(r.designNo || '-')}</td>
                         <td class="p-3 text-slate-400 font-mono">${escapeHtml(r.avelDate || '-')}</td>
-                        <td class="p-3 text-emerald-400 font-bold">${escapeHtml(r.pcsSaree || '0')}</td>
+                        <td class="p-3 text-emerald-400 font-bold">${pcs}</td>
+                        <td class="p-3 text-amber-400 font-bold">${shortPcs}</td>
+                        <td class="p-3 text-rose-400 font-black">${pending}</td>
                         <td class="p-3 text-slate-500 text-[11px]">${escapeHtml(r.savedOn || '-')}</td>
                         <td class="p-3 text-right space-x-1">
                             <button onclick="loadRecordById('${k}')" class="px-2.5 py-1 rounded-lg bg-sky-600/20 text-sky-300 hover:bg-sky-600 hover:text-white transition text-[11px] font-semibold">Load</button>
@@ -1548,8 +1767,24 @@
             }).join('');
         }
 
+        function recalcDesignMaster() {
+            const rc = num(document.getElementById('dm_rateConst').value || 0.45);
+            ['dno','pallu','skt','blouse'].forEach(p => {
+                const pcs = num(document.getElementById('dm_' + p + '_pcs').value);
+                const hed = num(document.getElementById('dm_' + p + '_hed').value);
+                const amt = (pcs * hed * rc) / 1000;
+                document.getElementById('dm_' + p + '_amt').textContent = amt.toFixed(2);
+            });
+
+            const total = ['dno','pallu','skt','blouse'].reduce((s, p) => {
+                return s + parseFloat(document.getElementById('dm_' + p + '_amt').textContent || 0);
+            }, 0);
+            document.getElementById('dm_stitchTotal').textContent = total.toFixed(2);
+        }
+
         function clearDesignMasterTabForm() {
             document.getElementById('dm_designNo').value = '';
+            document.getElementById('dm_rateConst').value = '0.45';
             document.getElementById('dm_dno_pcs').value = '0';
             document.getElementById('dm_dno_hed').value = '1.5';
             document.getElementById('dm_pallu_pcs').value = '0';
@@ -1558,12 +1793,15 @@
             document.getElementById('dm_skt_hed').value = '12';
             document.getElementById('dm_blouse_pcs').value = '0';
             document.getElementById('dm_blouse_hed').value = '1.5';
+            [1, 2, 3].forEach(idx => setDmSlotImage(idx, null));
+            recalcDesignMaster();
         }
 
         async function saveDesignMasterTab() {
             const dNo = document.getElementById('dm_designNo').value.trim();
             if (!dNo) { showToast('Please enter Design No.'); return; }
             const data = {
+                rateConst: document.getElementById('dm_rateConst').value,
                 dno_pcs: document.getElementById('dm_dno_pcs').value,
                 dno_hed: document.getElementById('dm_dno_hed').value,
                 pallu_pcs: document.getElementById('dm_pallu_pcs').value,
@@ -1571,7 +1809,8 @@
                 skt_pcs: document.getElementById('dm_skt_pcs').value,
                 skt_hed: document.getElementById('dm_skt_hed').value,
                 blouse_pcs: document.getElementById('dm_blouse_pcs').value,
-                blouse_hed: document.getElementById('dm_blouse_hed').value
+                blouse_hed: document.getElementById('dm_blouse_hed').value,
+                images: dm_currentImages.slice()
             };
 
             cachedDesignMasters[dNo] = data;
@@ -1589,6 +1828,7 @@
             if (cachedDesignMasters[dNo]) {
                 const d = cachedDesignMasters[dNo];
                 document.getElementById('dm_designNo').value = dNo;
+                document.getElementById('dm_rateConst').value = d.rateConst || '0.45';
                 document.getElementById('dm_dno_pcs').value = d.dno_pcs || '0';
                 document.getElementById('dm_dno_hed').value = d.dno_hed || '1.5';
                 document.getElementById('dm_pallu_pcs').value = d.pallu_pcs || '0';
@@ -1597,6 +1837,10 @@
                 document.getElementById('dm_skt_hed').value = d.skt_hed || '12';
                 document.getElementById('dm_blouse_pcs').value = d.blouse_pcs || '0';
                 document.getElementById('dm_blouse_hed').value = d.blouse_hed || '1.5';
+
+                const imgs = d.images || [null, null, null];
+                [1, 2, 3].forEach(idx => setDmSlotImage(idx, imgs[idx - 1] || null));
+                recalcDesignMaster();
             }
         }
 
@@ -1647,19 +1891,109 @@
             }).join('');
         }
 
+        function clearFabricMasterTabForm() {
+            document.getElementById('fm_fabricName').value = '';
+            document.getElementById('fm_fabricType').value = '';
+            document.getElementById('fm_fabricSize').value = '';
+            document.getElementById('fm_fabricLength').value = '';
+            document.getElementById('fm_fabricWidth').value = '';
+        }
+
+        async function saveFabricMasterTab() {
+            const fName = document.getElementById('fm_fabricName').value.trim();
+            if (!fName) { showToast('Please enter Fabric Name.'); return; }
+            const data = {
+                fabricName: fName,
+                fabricType: document.getElementById('fm_fabricType').value.trim(),
+                fabricSize: document.getElementById('fm_fabricSize').value.trim(),
+                fabricLength: document.getElementById('fm_fabricLength').value.trim(),
+                fabricWidth: document.getElementById('fm_fabricWidth').value.trim()
+            };
+
+            cachedFabricMasters[fName] = data;
+            localStorage.setItem('panchmukhi_fabric_master', JSON.stringify(cachedFabricMasters));
+
+            if (!isLocalStorageMode) {
+                try { await fabricMasterCol.doc(fName).set(data); } catch (e) { enableLocalStorageMode(e); }
+            }
+            showToast(`Fabric '${fName}' saved to master!`);
+            refreshMasterDatalists();
+            clearFabricMasterTabForm();
+        }
+
+        function loadFabricMasterToForm(fName) {
+            if (cachedFabricMasters[fName]) {
+                const f = cachedFabricMasters[fName];
+                document.getElementById('fm_fabricName').value = fName;
+                document.getElementById('fm_fabricType').value = f.fabricType || '';
+                document.getElementById('fm_fabricSize').value = f.fabricSize || '';
+                document.getElementById('fm_fabricLength').value = f.fabricLength || '';
+                document.getElementById('fm_fabricWidth').value = f.fabricWidth || '';
+            }
+        }
+
+        async function deleteFabricMaster(fName) {
+            delete cachedFabricMasters[fName];
+            localStorage.setItem('panchmukhi_fabric_master', JSON.stringify(cachedFabricMasters));
+
+            if (!isLocalStorageMode) {
+                try { await fabricMasterCol.doc(fName).delete(); } catch (e) { enableLocalStorageMode(e); }
+            }
+            showToast(`Fabric '${fName}' deleted.`);
+            refreshMasterDatalists();
+        }
+
+        function renderFabricMasterTable(filter = '') {
+            const body = document.getElementById('fm_recBody');
+            const count = document.getElementById('fm_recCount');
+            if (!body) return;
+
+            let keys = Object.keys(cachedFabricMasters).sort();
+            if (filter) {
+                const f = filter.toLowerCase();
+                keys = keys.filter(k => k.toLowerCase().includes(f) ||
+                    (cachedFabricMasters[k].fabricType || '').toLowerCase().includes(f)
+                );
+            }
+
+            if (count) count.textContent = Object.keys(cachedFabricMasters).length;
+
+            if (keys.length === 0) {
+                body.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No fabric specs saved yet.</td></tr>`;
+                return;
+            }
+
+            body.innerHTML = keys.map(k => {
+                const f = cachedFabricMasters[k];
+                return `
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <td class="p-3 font-bold text-amber-400">${escapeHtml(k)}</td>
+                        <td class="p-3 text-slate-300 font-semibold">${escapeHtml(f.fabricType || '-')}</td>
+                        <td class="p-3 text-slate-300 font-mono">${escapeHtml(f.fabricSize || '-')}</td>
+                        <td class="p-3 text-slate-300 font-mono">${escapeHtml(f.fabricLength || '-')}</td>
+                        <td class="p-3 text-slate-300 font-mono">${escapeHtml(f.fabricWidth || '-')}</td>
+                        <td class="p-3 text-right space-x-1">
+                            <button onclick="loadFabricMasterToForm('${escapeHtml(k)}')" class="px-2.5 py-1 rounded-lg bg-sky-600/20 text-sky-300 hover:bg-sky-600 hover:text-white transition text-[11px] font-semibold">Load</button>
+                            <button onclick="deleteFabricMaster('${escapeHtml(k)}')" class="px-2.5 py-1 rounded-lg bg-rose-600/20 text-rose-300 hover:bg-rose-600 hover:text-white transition text-[11px] font-semibold">Del</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         function switchTab(tabName) {
-            ['jobcard', 'partymaster', 'designmaster', 'reports', 'hosting'].forEach(t => {
+            ['jobcard', 'partymaster', 'designmaster', 'fabricmaster', 'reports', 'hosting'].forEach(t => {
                 const sec = document.getElementById(`tab-${t}`);
                 const btn = document.getElementById(`tabBtn-${t}`);
                 const mobBtn = document.getElementById(`mobTabBtn-${t}`);
 
                 if (t === tabName) {
                     if (sec) sec.classList.remove('hidden');
-                    if (btn) btn.className = "px-4 py-1.5 rounded-lg text-xs font-semibold transition bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/20";
+                    if (btn) btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/20";
                     if (mobBtn) mobBtn.className = "px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap bg-amber-600 text-white";
                 } else {
                     if (sec) sec.classList.add('hidden');
-                    if (btn) btn.className = "px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition";
+                    if (btn) btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 transition";
                     if (mobBtn) mobBtn.className = "px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400";
                 }
             });
@@ -1667,58 +2001,13 @@
             if (tabName === 'reports') renderAnalytics();
             if (tabName === 'partymaster') renderPartyMasterTable();
             if (tabName === 'designmaster') renderDesignMasterTable();
+            if (tabName === 'fabricmaster') renderFabricMasterTable();
         }
 
         function printJobCard() {
             const sr = document.getElementById('srNo').value.trim();
-            document.title = sr ? (`JobCard_No_${sr}`) : 'Panchmukhi_JobCard';
-            document.getElementById('printSrNoBox').textContent = sr ? `${sr}` : '';
+            document.title = sr ? sr : 'Panchmukhi Art - Job Card & Production System';
             window.print();
-        }
-
-        async function shareWhatsApp() {
-            const sr = document.getElementById('srNo').value.trim();
-            const party = document.getElementById('partyName').value.trim();
-            let contact = document.getElementById('partyContact').value.trim().replace(/\D/g, '');
-            if (contact.length === 10) contact = '91' + contact;
-
-            document.getElementById('printSrNoBox').textContent = sr ? `${sr}` : '';
-            document.body.classList.add('pdf-capture-mode');
-
-            try {
-                const container = document.querySelector('.wrap-container');
-                const canvas = await html2canvas(container, { scale: 2, useCORS: true });
-                document.body.classList.remove('pdf-capture-mode');
-
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgData = canvas.toDataURL('image/png');
-                const pdfWidth = 210;
-                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-                
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight > 297 ? 297 : pdfHeight);
-
-                const filename = `JobCard_${sr || 'Draft'}_${party || 'Client'}.pdf`;
-                const pdfBlob = pdf.output('blob');
-                const file = new File([pdfBlob], filename, { type: 'application/pdf' });
-
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: `Job Card #${sr}`,
-                        text: `Panchmukhi Art Job Card #${sr} for ${party}`
-                    });
-                } else {
-                    pdf.save(filename);
-                    const text = encodeURIComponent(`Panchmukhi Art Job Card #${sr} for ${party}`);
-                    const url = contact ? `https://wa.me/${contact}?text=${text}` : `https://api.whatsapp.com/send?text=${text}`;
-                    window.open(url, '_blank');
-                    showToast('PDF downloaded. Share via WhatsApp manually if needed.');
-                }
-            } catch (err) {
-                document.body.classList.remove('pdf-capture-mode');
-                showToast(`PDF error: ${err.message}`);
-            }
         }
 
         async function backupJSON() {
@@ -1755,165 +2044,147 @@
         }
 
         function exportCSV() {
-            const cols = ['srNo', ...ids];
-            const rows = [cols.join(',')];
+            const keys = Object.keys(cachedRecords);
+            if (keys.length === 0) { showToast('No data to export.'); return; }
 
-            Object.keys(cachedRecords).sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).forEach(sr => {
-                const r = cachedRecords[sr];
-                const line = cols.map(c => c === 'srNo' ? sr : csvEscape(r[c]));
-                rows.push(line.join(','));
+            const headers = ['SrNo', 'PartyName', 'DesignNo', 'ArrivalDate', 'Pcs', 'RateA', 'AmountA', 'SavedOn'];
+            const rows = [headers.join(',')];
+
+            keys.forEach(k => {
+                const r = cachedRecords[k];
+                const row = [
+                    `"${k}"`,
+                    `"${r.partyName || ''}"`,
+                    `"${r.designNo || ''}"`,
+                    `"${r.avelDate || ''}"`,
+                    `"${r.pcsSaree || '0'}"`,
+                    `"${r.rateA || '0'}"`,
+                    `"${r.amountA || '0'}"`,
+                    `"${r.savedOn || ''}"`
+                ];
+                rows.push(row.join(','));
             });
 
             const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `panchmukhi_jobcards_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.download = `panchmukhi_export_${new Date().toISOString().slice(0, 10)}.csv`;
             a.click();
-        }
-
-        function csvEscape(val) {
-            val = val === undefined || val === null ? '' : String(val);
-            if (/[",\n]/.test(val)) return '"' + val.replace(/"/g, '""') + '"';
-            return val;
         }
 
         function importCSV(e) {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = async () => {
+            reader.onload = () => {
                 try {
-                    const lines = reader.result.split(/\r?\n/).filter(l => l.trim() !== '');
-                    if (lines.length < 2) return;
-                    const headers = parseCsvLine(lines[0]);
+                    const lines = reader.result.split('\n');
                     let imported = 0;
-
                     for (let i = 1; i < lines.length; i++) {
-                        const vals = parseCsvLine(lines[i]);
-                        const row = {};
-                        headers.forEach((h, idx) => row[h.trim()] = vals[idx] !== undefined ? vals[idx] : '');
-                        const sr = (row.srNo || '').trim();
-                        if (!sr) continue;
-
-                        const existing = (cachedRecords[sr]) || {};
-                        ids.forEach(id => { if (row[id] !== undefined) existing[id] = row[id]; });
-                        existing.savedOn = new Date().toLocaleString();
-                        cachedRecords[sr] = existing;
-
-                        if (!isLocalStorageMode) {
-                            try { await recordsCol.doc(sr).set(existing); } catch (err) {}
+                        const line = lines[i].trim();
+                        if (!line) continue;
+                        const parts = line.split(',').map(p => p.replace(/^"|"$/g, ''));
+                        if (parts[0]) {
+                            const sr = parts[0];
+                            cachedRecords[sr] = {
+                                partyName: parts[1] || '',
+                                designNo: parts[2] || '',
+                                avelDate: parts[3] || '',
+                                pcsSaree: parts[4] || '0',
+                                rateA: parts[5] || '0',
+                                amountA: parts[6] || '0',
+                                savedOn: parts[7] || new Date().toLocaleString()
+                            };
+                            imported++;
                         }
-                        imported++;
                     }
                     saveRecordsToLocalStorage();
                     renderRecordsTable(document.getElementById('recSearch')?.value || '');
                     renderAnalytics();
-                    showToast(`Imported ${imported} CSV job cards!`);
+                    showToast(`Imported ${imported} CSV record(s)!`);
                 } catch (err) {
-                    showToast(`CSV error: ${err.message}`);
+                    showToast('Failed to parse CSV.');
                 }
             };
             reader.readAsText(file);
         }
 
-        function parseCsvLine(line) {
-            const out = []; let cur = ''; let inQ = false;
-            for (let i = 0; i < line.length; i++) {
-                const c = line[i];
-                if (inQ) {
-                    if (c === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else { inQ = false; } }
-                    else cur += c;
-                } else {
-                    if (c === '"') inQ = true;
-                    else if (c === ',') { out.push(cur); cur = ''; }
-                    else cur += c;
-                }
-            }
-            out.push(cur);
-            return out;
-        }
-
         function renderAnalytics() {
-            const items = Object.values(cachedRecords);
-            const totalJobs = items.length;
-            const totalPcs = items.reduce((s, r) => s + num(r.pcsSaree), 0);
-            const totalBilled = items.reduce((s, r) => s + num(r.amountA), 0);
-            
-            const stitchTotals = items.map(r => {
-                const rc = num(r.rateConst || 0.45);
-                const d = num(r.dno_pcs) * num(r.dno_hed) * rc / 1000;
-                const p = num(r.pallu_pcs) * num(r.pallu_hed) * rc / 1000;
-                const s = num(r.skt_pcs) * num(r.skt_hed) * rc / 1000;
-                const b = num(r.blouse_pcs) * num(r.blouse_hed) * rc / 1000;
-                return d + p + s + b;
-            });
-            const avgStitch = totalJobs > 0 ? (stitchTotals.reduce((a, b) => a + b, 0) / totalJobs) : 0;
-
-            const elJobs = document.getElementById('metricTotalJobs');
-            const elPcs = document.getElementById('metricTotalPcs');
-            const elBilled = document.getElementById('metricTotalBilled');
-            const elStitch = document.getElementById('metricAvgStitch');
-
-            if (elJobs) elJobs.textContent = totalJobs;
-            if (elPcs) elPcs.textContent = totalPcs;
-            if (elBilled) elBilled.textContent = `₹${totalBilled.toFixed(2)}`;
-            if (elStitch) elStitch.textContent = avgStitch.toFixed(2);
+            const keys = Object.keys(cachedRecords);
+            let totalPcs = 0;
+            let totalBilled = 0;
+            let totalStitchRates = 0;
+            let stitchCount = 0;
 
             const partyMap = {};
-            items.forEach(r => {
-                const p = r.partyName || 'Unassigned';
-                partyMap[p] = (partyMap[p] || 0) + num(r.pcsSaree);
-            });
-            const topParties = Object.keys(partyMap).slice(0, 5);
-            const partyPcs = topParties.map(p => partyMap[p]);
+            const designMap = {};
 
-            const ctxParty = document.getElementById('partyChart')?.getContext('2d');
-            if (ctxParty) {
+            keys.forEach(k => {
+                const r = cachedRecords[k];
+                const pcs = num(r.pcsSaree);
+                const amt = num(r.amountA);
+                const pName = r.partyName || 'Unknown';
+                const dNo = r.designNo || 'Unknown';
+
+                totalPcs += pcs;
+                totalBilled += amt;
+
+                partyMap[pName] = (partyMap[pName] || 0) + pcs;
+                designMap[dNo] = (designMap[dNo] || 0) + 1;
+
+                const rc = num(r.rateConst || 0.45);
+                ['dno','pallu','skt','blouse'].forEach(p => {
+                    const cPcs = num(r[p + '_pcs']);
+                    const cHed = num(r[p + '_hed']);
+                    if (cPcs > 0) {
+                        totalStitchRates += (cPcs * cHed * rc) / 1000;
+                        stitchCount++;
+                    }
+                });
+            });
+
+            document.getElementById('metricTotalJobs').textContent = keys.length;
+            document.getElementById('metricTotalPcs').textContent = totalPcs;
+            document.getElementById('metricTotalBilled').textContent = `₹${totalBilled.toFixed(2)}`;
+            document.getElementById('metricAvgStitch').textContent = stitchCount > 0 ? (totalStitchRates / stitchCount).toFixed(2) : '0.00';
+
+            const partyCtx = document.getElementById('partyChart')?.getContext('2d');
+            const designCtx = document.getElementById('designChart')?.getContext('2d');
+
+            if (partyCtx) {
                 if (partyChartInstance) partyChartInstance.destroy();
-                partyChartInstance = new Chart(ctxParty, {
+                const partyLabels = Object.keys(partyMap).slice(0, 5);
+                const partyData = partyLabels.map(l => partyMap[l]);
+
+                partyChartInstance = new Chart(partyCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: topParties.length > 0 ? topParties : ['No Data'],
+                        labels: partyLabels,
                         datasets: [{
-                            data: partyPcs.length > 0 ? partyPcs : [1],
-                            backgroundColor: ['#f59e0b', '#10b981', '#0284c7', '#f43f5e', '#8b5cf6'],
-                            borderColor: '#0f172a'
+                            data: partyData,
+                            backgroundColor: ['#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#ec4899']
                         }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
                 });
             }
 
-            const designMap = {};
-            items.forEach(r => {
-                const d = r.designNo || 'Standard';
-                designMap[d] = (designMap[d] || 0) + 1;
-            });
-            const topDesigns = Object.keys(designMap).slice(0, 6);
-            const designCounts = topDesigns.map(d => designMap[d]);
-
-            const ctxDesign = document.getElementById('designChart')?.getContext('2d');
-            if (ctxDesign) {
+            if (designCtx) {
                 if (designChartInstance) designChartInstance.destroy();
-                designChartInstance = new Chart(ctxDesign, {
+                const designLabels = Object.keys(designMap).slice(0, 8);
+                const designData = designLabels.map(l => designMap[l]);
+
+                designChartInstance = new Chart(designCtx, {
                     type: 'bar',
                     data: {
-                        labels: topDesigns.length > 0 ? topDesigns : ['None'],
+                        labels: designLabels,
                         datasets: [{
                             label: 'Job Cards Count',
-                            data: designCounts.length > 0 ? designCounts : [0],
-                            backgroundColor: '#10b981',
-                            borderRadius: 8
+                            data: designData,
+                            backgroundColor: '#10b981'
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: { ticks: { stepSize: 1, color: '#94a3b8' }, grid: { color: '#1e293b' } },
-                            x: { ticks: { color: '#94a3b8' } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } }, plugins: { legend: { labels: { color: '#94a3b8' } } } }
                 });
             }
         }
@@ -1923,57 +2194,19 @@
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'toastMsg';
-                toast.className = "no-print fixed bottom-5 right-5 z-50 bg-slate-900 border border-amber-500/50 text-slate-100 text-xs px-4 py-3 rounded-2xl shadow-2xl transition-all duration-300 transform opacity-0 translate-y-2 flex items-center gap-2";
+                toast.className = 'fixed bottom-5 right-5 bg-amber-500 text-slate-950 px-4 py-2.5 rounded-xl font-bold text-xs shadow-2xl z-50 transition-all duration-300 transform translate-y-10 opacity-0 pointer-events-none flex items-center gap-2';
                 document.body.appendChild(toast);
             }
-            toast.innerHTML = `<i class="fa-solid fa-circle-info text-amber-400"></i> <span>${msg}</span>`;
-            toast.classList.remove('opacity-0', 'translate-y-2');
-            toast.classList.add('opacity-100', 'translate-y-0');
-
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-slate-950"></i> <span>${escapeHtml(msg)}</span>`;
+            toast.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
             setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'translate-y-2');
+                toast.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
 
-        function showRuleModal() {
-            let modal = document.getElementById('ruleModal');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'ruleModal';
-                modal.className = "fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4";
-                modal.innerHTML = `
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4 text-xs text-slate-200">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
-                            <h3 class="text-sm font-bold text-amber-400"><i class="fa-solid fa-key mr-1.5"></i> Fix Firestore Rules</h3>
-                            <button onclick="document.getElementById('ruleModal').classList.add('hidden')" class="text-slate-400 hover:text-white text-base">✕</button>
-                        </div>
-                        <p>Your app is currently operating in <strong>Local Storage Fallback Mode</strong>.</p>
-                        <p class="font-bold text-slate-100">Steps to unlock live sync across devices:</p>
-                        <ol class="list-decimal list-inside space-y-1.5 text-slate-300 bg-slate-950 p-3 rounded-xl font-mono text-[11px]">
-                            <li>Go to <a href="https://console.firebase.google.com/" target="_blank" class="text-amber-400 underline">Firebase Console</a></li>
-                            <li>Select project: <strong>panchmukhiart1</strong></li>
-                            <li>Go to <strong>Firestore Database</strong> &rarr; <strong>Rules</strong></li>
-                            <li>Replace with rule below and click <strong>Publish</strong>:</li>
-                        </ol>
-                        <pre class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-emerald-400 font-mono text-[10px] overflow-x-auto">rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
-    }
-  }
-}</pre>
-                        <button onclick="document.getElementById('ruleModal').classList.add('hidden')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition">Close</button>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-            }
-            modal.classList.remove('hidden');
-        }
-
         function escapeHtml(str) {
-            return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     </script>
 </body>
