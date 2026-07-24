@@ -17,10 +17,6 @@
     <!-- Chart.js for Reporting -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- HTML2Canvas & jsPDF for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <style>
         body { font-family: 'Inter', sans-serif; }
         
@@ -43,7 +39,21 @@
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-        /* Print & PDF Capture Overrides for Exact A4 Page Fit */
+        /* Calendar Picker styling */
+        input[type="date"] {
+            color-scheme: dark;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8) sepia(100%) saturate(500%) hue-rotate(350deg);
+            cursor: pointer;
+            opacity: 0.9;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Print & PDF Capture Overrides */
         .print-header { display: none; }
 
         body.pdf-capture-mode {
@@ -67,6 +77,15 @@
             border-bottom: 2px solid #991b1b;
             padding-bottom: 4px;
             margin-bottom: 6px;
+        }
+        body.pdf-capture-mode .text-amber-400,
+        body.pdf-capture-mode .text-amber-300,
+        body.pdf-capture-mode .text-yellow-400,
+        body.pdf-capture-mode .text-yellow-300,
+        body.pdf-capture-mode h1,
+        body.pdf-capture-mode h2,
+        body.pdf-capture-mode h3 {
+            color: #05002e !important;
         }
 
         body.pdf-capture-mode .wrap-container {
@@ -126,7 +145,7 @@
                 margin-top: 0.25in !important;
                 margin-right: 0.15in !important;
                 margin-bottom: 0.15in !important;
-                margin-left: 0.15in !important;
+                margin-left: 0.45in !important;
             }
             header, nav, .no-print, .bill-extra-field, #toastMsg { display: none !important; }
             body { 
@@ -137,6 +156,14 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+            .text-amber-400,
+            .text-amber-300,
+            .text-yellow-400,
+            .text-yellow-300,
+            h1, h2, h3 {
+                color: #05002e !important;
+            }
+
             .wrap-container {
                 max-width: 100% !important;
                 width: 100% !important;
@@ -191,7 +218,6 @@
 </head>
 <body class="bg-slate-950 text-slate-100 flex flex-col min-h-full font-sans antialiased selection:bg-amber-500/30 selection:text-amber-300">
 
-    <!-- Login Modal -->
     <div id="loginScreen" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl shadow-amber-500/10 text-center space-y-6 relative overflow-hidden">
             <div class="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -232,13 +258,11 @@
         </div>
     </div>
 
-    <!-- Main Content Container -->
     <div id="appContent" class="hidden flex-col flex-1">
         
         <nav class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <!-- Brand Title -->
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-600 to-rose-600 flex items-center justify-center text-white shadow-lg shadow-amber-500/20 ring-1 ring-white/10">
                             <i class="fa-solid fa-gem text-lg"></i>
@@ -282,7 +306,7 @@
                     </div>
                 </div>
 
-                <!-- Firebase Permission Notice -->
+                <!-- Firebase Rule Notice -->
                 <div id="firebaseRuleBanner" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 my-2 text-xs text-amber-200 flex items-center justify-between flex-wrap gap-2">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
@@ -290,7 +314,7 @@
                     </div>
                 </div>
 
-                <!-- Mobile Navigation Bar -->
+                <!-- Mobile Nav Bar -->
                 <div class="flex md:hidden border-t border-slate-800 py-2 gap-1 overflow-x-auto no-scrollbar">
                     <button onclick="switchTab('jobcard')" id="mobTabBtn-jobcard" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap bg-amber-600 text-white">Job Card</button>
                     <button onclick="switchTab('partymaster')" id="mobTabBtn-partymaster" class="px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap text-slate-400">Party Master</button>
@@ -304,13 +328,11 @@
 
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 w-full wrap-container">
 
-            <!-- PART 1: SR NUMBER CONTAINER -->
             <div id="printPart1_SrNo" class="print-part-1"></div>
 
-            <!-- PART 2: REST OF JOB CARD CONTENT -->
             <div id="printPart2_Content" class="print-part-2">
 
-                <!-- Printable Header with Top-Right Large SR Number -->
+                <!-- Printable Header -->
                 <div class="print-header">
                     <div class="w-1/3">
                         <span class="text-xs font-bold text-rose-800 block">જય શ્રી કષ્ટભંજન દેવ</span>
@@ -326,7 +348,6 @@
                     </div>
                 </div>
 
-                <!-- TAB 1: JOB CARD ENTRY -->
                 <section id="tab-jobcard" class="space-y-4">
 
                     <!-- Toolbar Actions -->
@@ -369,7 +390,7 @@
                         <input type="file" id="csvFile" accept=".csv" class="hidden" onchange="importCSV(event)">
                     </div>
 
-                    <!-- PARTY DETAILS CARD -->
+                    <!-- Party Details Form -->
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
                             <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
@@ -389,7 +410,8 @@
                             </div>
                             <div class="col-span-1 sm:col-span-1 lg:col-span-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
-                                <input id="partyGst" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                <input id="partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition uppercase">
+                                <p id="partyGstErr" class="text-[9px] font-semibold mt-0.5 min-h-[14px]"></p>
                             </div>
                             <div class="col-span-1 sm:col-span-1 lg:col-span-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Arrival Date</label>
@@ -420,7 +442,7 @@
                         </div>
                     </div>
 
-                    <!-- WORK STITCH & BILL GRID CONTAINER -->
+                    <!-- Work Stitch & Bill Grid -->
                     <div class="work-bill-container grid grid-cols-1 sm:grid-cols-2 gap-3">
                         
                         <!-- WORK STITCH TABLE CARD -->
@@ -483,11 +505,11 @@
                             </div>
                         </div>
 
-                        <!-- BILL DETAILS CARD -->
+                        <!-- BILL DETAILS CARD (WITH REMARK BOX) -->
                         <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
                             <div class="border-b border-slate-800 pb-2.5">
                                 <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                    <i class="fa-solid fa-receipt"></i> Bill
+                                    <i class="fa-solid fa-receipt"></i> Bill Details
                                 </h2>
                             </div>
 
@@ -527,11 +549,16 @@
                                     <label class="block text-[9px] font-bold text-emerald-400 uppercase mb-1">Amount</label>
                                     <input type="number" id="amountA" readonly placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs font-black text-emerald-400 focus:outline-none">
                                 </div>
+
+                                <div class="col-span-2 sm:col-span-4 mt-1">
+                                    <label class="block text-[9px] font-bold text-amber-400 uppercase mb-1">Bill Remark</label>
+                                    <input id="billRemark" placeholder="Enter bill notes or instructions..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- EMD WORK RATE CARD -->
+                    <!-- Emd. Work Rate Card -->
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 flex-wrap gap-2">
                             <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
@@ -568,7 +595,7 @@
                         </div>
                     </div>
 
-                    <!-- ATTACHED IMAGES (3) CARD -->
+                    <!-- Images Card -->
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
                         <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2.5">
                             <i class="fa-solid fa-camera"></i> Attached Images (3)
@@ -611,7 +638,6 @@
                         <input type="file" id="imgFile3" accept="image/*" class="hidden" onchange="handleImageFile(3, event)">
                     </div>
 
-                    <!-- SAVED RECORDS DIRECTORY TABLE -->
                     <div class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
                         <div class="flex items-center justify-between flex-wrap gap-2">
                             <h2 class="text-xs sm:text-sm font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
@@ -644,10 +670,9 @@
 
                 </section>
 
-                <!-- TAB 2: PARTY MASTER -->
                 <section id="tab-partymaster" class="hidden space-y-4">
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
                             <div>
                                 <h2 class="text-sm sm:text-base font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-2">
                                     <i class="fa-solid fa-user-gear"></i> Party Master Entry
@@ -664,10 +689,17 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
                             <div class="col-span-1 sm:col-span-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Name</label>
                                 <input id="pm_partyName" placeholder="Enter party name..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Type</label>
+                                <select id="pm_partyType" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                    <option value="regular">Regular</option>
+                                    <option value="irregular">Irregular</option>
+                                </select>
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Contact No.</label>
@@ -675,9 +707,10 @@
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
-                                <input id="pm_partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                <input id="pm_partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none uppercase">
+                                <p id="pm_partyGstErr" class="text-[9px] font-semibold mt-0.5 min-h-[14px]"></p>
                             </div>
-                            <div class="col-span-1 sm:col-span-2 lg:col-span-4">
+                            <div class="col-span-1 sm:col-span-2 lg:col-span-5">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Address</label>
                                 <input id="pm_partyAddress" placeholder="Enter party address..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
@@ -698,6 +731,7 @@
                                 <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
                                     <tr>
                                         <th class="p-3">Party Name</th>
+                                        <th class="p-3">Party Type</th>
                                         <th class="p-3">Contact No.</th>
                                         <th class="p-3">GST No.</th>
                                         <th class="p-3">Address</th>
@@ -712,7 +746,6 @@
                     </div>
                 </section>
 
-                <!-- TAB 3: DESIGN MASTER -->
                 <section id="tab-designmaster" class="hidden space-y-4">
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
@@ -743,7 +776,6 @@
                             </div>
                         </div>
 
-                        <!-- Work Stitch Calculation Table inside Design Master -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
                                 <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
@@ -788,7 +820,6 @@
                             <span id="dm_stitchTotal" class="text-amber-400 text-sm font-black tracking-wide">0.00</span>
                         </div>
 
-                        <!-- Design Master Attached Images (3) -->
                         <div class="pt-3 border-t border-slate-800 space-y-2">
                             <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
                                 <i class="fa-solid fa-camera"></i> Preset Attached Photos (3) - Auto-loads in Job Card
@@ -860,7 +891,6 @@
                     </div>
                 </section>
 
-                <!-- TAB 4: FABRIC MASTER -->
                 <section id="tab-fabricmaster" class="hidden space-y-4">
                     <div class="card-box bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3 flex-wrap gap-2">
@@ -933,21 +963,67 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: REPORTS & ANALYTICS -->
                 <section id="tab-reports" class="hidden space-y-6">
-                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md flex items-center justify-between flex-wrap gap-4">
-                        <div>
-                            <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-chart-line text-amber-400"></i> Production Analytics & Metrics
-                            </h2>
-                            <p class="text-xs text-slate-400 mt-0.5">Real-time stats across pieces, billing total, and average stitch rates.</p>
+                    
+                    <!-- Filter Controls Header -->
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-4">
+                        <div class="flex items-center justify-between flex-wrap gap-4 border-b border-slate-800 pb-3">
+                            <div>
+                                <h2 class="text-base font-extrabold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-line text-amber-400"></i> Production Reports & Analytics
+                                </h2>
+                                <p class="text-xs text-slate-400 mt-0.5">Filter production data Month-Wise, Party-Wise, and Pending Pcs Wise</p>
+                            </div>
+                            <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 transition flex items-center gap-2">
+                                <i class="fa-solid fa-print text-amber-400"></i> Print Filtered Report
+                            </button>
                         </div>
-                        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-700 transition flex items-center gap-2">
-                            <i class="fa-solid fa-print text-amber-400"></i> Print Summary
-                        </button>
+
+                        <!-- Report Filters Grid -->
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-[10px] font-extrabold uppercase text-amber-400 tracking-wider"><i class="fa-solid fa-calendar-days mr-1"></i> Quick Date Ranges:</span>
+                                <button type="button" onclick="setDatePreset('today')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">Today</button>
+                                <button type="button" onclick="setDatePreset('thisMonth')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">This Month</button>
+                                <button type="button" onclick="setDatePreset('lastMonth')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">Last Month</button>
+                                <button type="button" onclick="setDatePreset('thisYear')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition">This Year</button>
+                                <button type="button" onclick="setDatePreset('all')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/30 transition">All Time</button>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center justify-between">
+                                        <span>From Date</span>
+                                        <i class="fa-solid fa-calendar-day text-amber-400/80"></i>
+                                    </label>
+                                    <input type="date" id="rpt_fromDate" onchange="renderAnalytics()" onclick="try{this.showPicker()}catch(e){}" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none cursor-pointer">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center justify-between">
+                                        <span>To Date</span>
+                                        <i class="fa-solid fa-calendar-day text-amber-400/80"></i>
+                                    </label>
+                                    <input type="date" id="rpt_toDate" onchange="renderAnalytics()" onclick="try{this.showPicker()}catch(e){}" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none cursor-pointer">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Filter</label>
+                                    <select id="rpt_partySelect" onchange="renderAnalytics()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                        <option value="">All Parties</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pending Pcs Wise</label>
+                                    <select id="rpt_pendingSelect" onchange="renderAnalytics()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                        <option value="all">All Records</option>
+                                        <option value="pending">Pending Only (Pending > 0)</option>
+                                        <option value="completed">Completed (Pending = 0)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Analytics Cards -->
+                    <!-- Filtered Summary Metrics Cards -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
                             <p class="text-xs text-slate-400 font-medium">Total Job Cards</p>
@@ -958,22 +1034,22 @@
                             <h3 id="metricTotalPcs" class="text-2xl font-black text-emerald-400 mt-1">0</h3>
                         </div>
                         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+                            <p class="text-xs text-slate-400 font-medium">Total Pending Pcs</p>
+                            <h3 id="metricTotalPending" class="text-2xl font-black text-rose-400 mt-1">0</h3>
+                        </div>
+                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
                             <p class="text-xs text-slate-400 font-medium">Total Billing Value</p>
                             <h3 id="metricTotalBilled" class="text-2xl font-black text-sky-400 mt-1">₹0.00</h3>
                         </div>
-                        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
-                            <p class="text-xs text-slate-400 font-medium">Avg Stitch Rate</p>
-                            <h3 id="metricAvgStitch" class="text-2xl font-black text-rose-400 mt-1">0.00</h3>
-                        </div>
                     </div>
 
-                    <!-- Charts -->
+                    <!-- Charts Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl">
                             <h3 class="text-xs font-bold text-slate-200 mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-amber-400"></i> Pieces Volume by Top Parties
+                                <i class="fa-solid fa-chart-pie text-amber-400"></i> Volume Share by Top Parties
                             </h3>
-                            <div class="relative min-h-[250px] flex items-center justify-center">
+                            <div class="relative min-h-[240px] flex items-center justify-center">
                                 <canvas id="partyChart"></canvas>
                             </div>
                         </div>
@@ -981,14 +1057,40 @@
                             <h3 class="text-xs font-bold text-slate-200 mb-4 flex items-center gap-2">
                                 <i class="fa-solid fa-chart-bar text-emerald-400"></i> Job Cards per Design No.
                             </h3>
-                            <div class="relative min-h-[250px] flex items-center justify-center">
+                            <div class="relative min-h-[240px] flex items-center justify-center">
                                 <canvas id="designChart"></canvas>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Filtered Report Table -->
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl backdrop-blur-md space-y-3">
+                        <h3 class="text-xs font-bold text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-sky-400"></i> Filtered Production Statement
+                        </h3>
+                        <div class="overflow-x-auto max-h-80 overflow-y-auto border border-slate-800 rounded-xl">
+                            <table class="w-full text-left text-xs text-slate-300">
+                                <thead class="bg-slate-950 text-slate-400 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-3">Sr No</th>
+                                        <th class="p-3">Party Name</th>
+                                        <th class="p-3">Design No.</th>
+                                        <th class="p-3">Arrival Date</th>
+                                        <th class="p-3">Pcs</th>
+                                        <th class="p-3">Credit Pcs</th>
+                                        <th class="p-3">Pending Pcs</th>
+                                        <th class="p-3">Bill Amt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rpt_tableBody" class="divide-y divide-slate-800/60">
+                                    <!-- Filtered report rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </section>
 
-                <!-- TAB 6: HOSTING GUIDE -->
                 <section id="tab-hosting" class="hidden space-y-6">
                     <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md space-y-4">
                         <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
@@ -1018,11 +1120,12 @@
                     </div>
                 </section>
 
-            </div> <!-- END OF PART 2: REST OF JOB CARD CONTENT -->
+            </div>
 
         </main>
     </div>
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
@@ -1051,12 +1154,76 @@
         let cachedFabricMasters = {};
         let currentImages = [null, null, null];
         let dm_currentImages = [null, null, null];
+        let loadedSrNo = null;
 
         let partyChartInstance = null;
         let designChartInstance = null;
 
         const LOGIN_ID = 'JENISH';
         const LOGIN_PASSWORD = '1254';
+
+        /* GSTIN Validation Logic */
+        function validateGSTIN(gst) {
+            if (!gst || gst.trim() === '') return { valid: true, msg: '' };
+            const val = gst.trim().toUpperCase();
+
+            if (val.length !== 15) {
+                return { valid: false, msg: 'GSTIN must be exactly 15 characters.' };
+            }
+
+            const stateCode = parseInt(val.substring(0, 2), 10);
+            if (isNaN(stateCode) || stateCode < 1 || (stateCode > 38 && stateCode !== 97 && stateCode !== 99)) {
+                return { valid: false, msg: 'Invalid State Code (First 2 digits must be 01-38).' };
+            }
+
+            const panPart = val.substring(2, 12);
+            const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+            if (!panRegex.test(panPart)) {
+                return { valid: false, msg: 'Chars 3-12 must be valid PAN (e.g. ABCDE1234F).' };
+            }
+
+            const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[A-Z0-9]{1}[A-Z0-9]{1}$/;
+            if (!gstinRegex.test(val)) {
+                return { valid: false, msg: 'Invalid GSTIN format structure.' };
+            }
+
+            return { valid: true, msg: 'Valid GSTIN format' };
+        }
+
+        function setupGSTValidation(inputId, errId) {
+            const input = document.getElementById(inputId);
+            const errEl = document.getElementById(errId);
+            if (!input || !errEl) return;
+
+            const handler = () => {
+                input.value = input.value.toUpperCase();
+                const res = validateGSTIN(input.value);
+                if (input.value.trim() === '') {
+                    errEl.textContent = '';
+                    input.classList.remove('border-rose-500', 'border-emerald-500');
+                    input.classList.add('border-slate-800');
+                } else if (res.valid) {
+                    errEl.textContent = '✓ ' + res.msg;
+                    errEl.className = 'text-[9px] font-semibold mt-0.5 min-h-[14px] text-emerald-400';
+                    input.classList.remove('border-rose-500', 'border-slate-800');
+                    input.classList.add('border-emerald-500');
+                } else {
+                    errEl.textContent = '✕ ' + res.msg;
+                    errEl.className = 'text-[9px] font-semibold mt-0.5 min-h-[14px] text-rose-400';
+                    input.classList.remove('border-emerald-500', 'border-slate-800');
+                    input.classList.add('border-rose-500');
+                }
+            };
+
+            input.addEventListener('input', handler);
+            input.addEventListener('blur', handler);
+        }
+
+        // Initialize GST real-time validators
+        setTimeout(() => {
+            setupGSTValidation('partyGst', 'partyGstErr');
+            setupGSTValidation('pm_partyGst', 'pm_partyGstErr');
+        }, 100);
 
         const ids = [
             'partyName','avelDate','challanNo','pcsSaree','partyContact','partyGst','partyAddress',
@@ -1067,7 +1234,7 @@
             'skt_pcs','skt_hed',
             'blouse_pcs','blouse_hed',
             'emdRate','reniyu','overlock','diamond','extraExp','emdRemark',
-            'dateA','billNoA','creditPcsA','shortPcsA','pendingPcsA','rateA','gstA'
+            'dateA','billNoA','creditPcsA','shortPcsA','pendingPcsA','rateA','gstA','billRemark'
         ];
 
         function tryLogin() {
@@ -1131,6 +1298,7 @@
             } catch (e) { cachedRecords = {}; }
             renderRecordsTable(document.getElementById('recSearch')?.value || '');
             renderAnalytics();
+            suggestNextSrNoIfEmpty();
         }
 
         function saveRecordsToLocalStorage() {
@@ -1148,6 +1316,7 @@
                 saveRecordsToLocalStorage();
                 renderRecordsTable(document.getElementById('recSearch')?.value || '');
                 renderAnalytics();
+                suggestNextSrNoIfEmpty();
             }, (err) => {
                 console.warn("Firestore sync notice, using local storage:", err.message);
                 enableLocalStorageMode(err);
@@ -1176,13 +1345,21 @@
                 const pSnap = await partyMasterCol.get();
                 cachedPartyMasters = {};
                 const pList = document.getElementById('partyNameList');
+                const rptPList = document.getElementById('rpt_partySelect');
                 if (pList) pList.innerHTML = '';
+                if (rptPList) rptPList.innerHTML = '<option value="">All Parties</option>';
                 pSnap.forEach(doc => {
                     cachedPartyMasters[doc.id] = doc.data();
                     if (pList) {
                         const opt = document.createElement('option');
                         opt.value = doc.id;
                         pList.appendChild(opt);
+                    }
+                    if (rptPList) {
+                        const opt = document.createElement('option');
+                        opt.value = doc.id;
+                        opt.textContent = doc.id;
+                        rptPList.appendChild(opt);
                     }
                 });
 
@@ -1222,14 +1399,22 @@
 
             cachedPartyMasters = JSON.parse(localStorage.getItem('panchmukhi_party_master') || '{}');
             const pList = document.getElementById('partyNameList');
-            if (pList) {
-                pList.innerHTML = '';
-                Object.keys(cachedPartyMasters).forEach(k => {
+            const rptPList = document.getElementById('rpt_partySelect');
+            if (pList) pList.innerHTML = '';
+            if (rptPList) rptPList.innerHTML = '<option value="">All Parties</option>';
+            Object.keys(cachedPartyMasters).forEach(k => {
+                if (pList) {
                     const opt = document.createElement('option');
                     opt.value = k;
                     pList.appendChild(opt);
-                });
-            }
+                }
+                if (rptPList) {
+                    const opt = document.createElement('option');
+                    opt.value = k;
+                    opt.textContent = k;
+                    rptPList.appendChild(opt);
+                }
+            });
 
             cachedFabricMasters = JSON.parse(localStorage.getItem('panchmukhi_fabric_master') || '{}');
             const fList = document.getElementById('fabricTypeList');
@@ -1245,6 +1430,26 @@
             renderPartyMasterTable(document.getElementById('pm_recSearch')?.value || '');
             renderDesignMasterTable(document.getElementById('dm_recSearch')?.value || '');
             renderFabricMasterTable(document.getElementById('fm_recSearch')?.value || '');
+        }
+
+        function getNextSrNo() {
+            const keys = Object.keys(cachedRecords);
+            let maxNum = 0;
+            keys.forEach(k => {
+                const val = parseInt(k, 10);
+                if (!isNaN(val) && val > maxNum) {
+                    maxNum = val;
+                }
+            });
+            return maxNum > 0 ? (maxNum + 1).toString() : '1';
+        }
+
+        function suggestNextSrNoIfEmpty() {
+            const srInput = document.getElementById('srNo');
+            if (srInput && (!srInput.value || srInput.value.trim() === '' || loadedSrNo === null)) {
+                srInput.value = getNextSrNo();
+                recalc();
+            }
         }
 
         function num(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
@@ -1281,14 +1486,12 @@
 
             const srVal = document.getElementById('srNo')?.value.trim() || '';
 
-            // Update page title for browser print header
             if (srVal) {
                 document.title = srVal;
             } else {
                 document.title = 'Panchmukhi Art - Job Card & Production System';
             }
 
-            // Update top-right print header SR number display
             const printSrEl = document.getElementById('printTopRightSrNo');
             if (printSrEl) {
                 printSrEl.textContent = srVal || '---';
@@ -1527,7 +1730,13 @@
         }
 
         function clearForm() {
-            document.getElementById('srNo').value = '';
+            loadedSrNo = null;
+            document.getElementById('srNo').value = getNextSrNo();
+            const errEl = document.getElementById('partyGstErr');
+            if (errEl) errEl.textContent = '';
+            const partyGstEl = document.getElementById('partyGst');
+            if (partyGstEl) partyGstEl.classList.remove('border-rose-500', 'border-emerald-500');
+
             const defaults = { 
                 avelDate: getTodayDate(),
                 rateConst: '0.45', 
@@ -1545,7 +1754,8 @@
                 diamond: '0',
                 extraExp: '0',
                 shortPcsA: '0',
-                pendingPcsA: '0'
+                pendingPcsA: '0',
+                billRemark: ''
             };
             ids.forEach(id => {
                 const el = document.getElementById(id);
@@ -1562,9 +1772,25 @@
         async function saveRecord() {
             const sr = document.getElementById('srNo').value.trim();
             if (!sr) { showToast('Please enter Sr No.'); return; }
+
+            const gstVal = document.getElementById('partyGst')?.value.trim();
+            const gstRes = validateGSTIN(gstVal);
+            if (!gstRes.valid) {
+                showToast(`GST Error: ${gstRes.msg}`);
+                document.getElementById('partyGst')?.focus();
+                return;
+            }
+
+            /* Check if SR Number exists and isn't currently loaded for edit */
+            if (cachedRecords[sr] && loadedSrNo !== sr) {
+                showToast(`Sr Number #${sr} already exists! Cannot overwrite.`);
+                return;
+            }
+
             const formData = collectForm();
 
             cachedRecords[sr] = formData;
+            loadedSrNo = sr;
             saveRecordsToLocalStorage();
 
             if (!isLocalStorageMode) {
@@ -1581,6 +1807,7 @@
             if (!sr) { showToast('Please enter Sr No.'); return; }
 
             if (cachedRecords[sr]) {
+                loadedSrNo = sr;
                 fillForm(cachedRecords[sr]);
                 showToast(`Loaded Job Card #${sr}`);
                 return;
@@ -1590,6 +1817,7 @@
                 try {
                     const doc = await recordsCol.doc(sr).get();
                     if (doc.exists) {
+                        loadedSrNo = sr;
                         fillForm(doc.data());
                         showToast(`Loaded Job Card #${sr}`);
                         return;
@@ -1666,6 +1894,7 @@
 
         function loadRecordById(id) {
             document.getElementById('srNo').value = id;
+            loadedSrNo = id;
             if (cachedRecords[id]) fillForm(cachedRecords[id]);
         }
 
@@ -1683,15 +1912,31 @@
 
         function clearPartyMasterTabForm() {
             document.getElementById('pm_partyName').value = '';
+            document.getElementById('pm_partyType').value = 'regular';
             document.getElementById('pm_partyContact').value = '';
             document.getElementById('pm_partyGst').value = '';
             document.getElementById('pm_partyAddress').value = '';
+
+            const errEl = document.getElementById('pm_partyGstErr');
+            if (errEl) errEl.textContent = '';
+            const pmGstEl = document.getElementById('pm_partyGst');
+            if (pmGstEl) pmGstEl.classList.remove('border-rose-500', 'border-emerald-500');
         }
 
         async function savePartyMasterTab() {
             const pName = document.getElementById('pm_partyName').value.trim();
             if (!pName) { showToast('Please enter Party Name.'); return; }
+
+            const gstVal = document.getElementById('pm_partyGst')?.value.trim();
+            const gstRes = validateGSTIN(gstVal);
+            if (!gstRes.valid) {
+                showToast(`GST Error: ${gstRes.msg}`);
+                document.getElementById('pm_partyGst')?.focus();
+                return;
+            }
+
             const data = {
+                partyType: document.getElementById('pm_partyType').value,
                 partyContact: document.getElementById('pm_partyContact').value.trim(),
                 partyGst: document.getElementById('pm_partyGst').value.trim(),
                 partyAddress: document.getElementById('pm_partyAddress').value.trim()
@@ -1712,6 +1957,7 @@
             if (cachedPartyMasters[pName]) {
                 const p = cachedPartyMasters[pName];
                 document.getElementById('pm_partyName').value = pName;
+                document.getElementById('pm_partyType').value = p.partyType || 'regular';
                 document.getElementById('pm_partyContact').value = p.partyContact || '';
                 document.getElementById('pm_partyGst').value = p.partyGst || '';
                 document.getElementById('pm_partyAddress').value = p.partyAddress || '';
@@ -1738,6 +1984,7 @@
             if (filter) {
                 const f = filter.toLowerCase();
                 keys = keys.filter(k => k.toLowerCase().includes(f) ||
+                    (cachedPartyMasters[k].partyType || '').toLowerCase().includes(f) ||
                     (cachedPartyMasters[k].partyContact || '').toLowerCase().includes(f) ||
                     (cachedPartyMasters[k].partyAddress || '').toLowerCase().includes(f)
                 );
@@ -1746,15 +1993,18 @@
             if (count) count.textContent = Object.keys(cachedPartyMasters).length;
 
             if (keys.length === 0) {
-                body.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">No party masters saved yet.</td></tr>`;
+                body.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No party masters saved yet.</td></tr>`;
                 return;
             }
 
             body.innerHTML = keys.map(k => {
                 const p = cachedPartyMasters[k];
+                const pType = (p.partyType || 'regular').toUpperCase();
+                const badgeClass = pType === 'REGULAR' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30';
                 return `
                     <tr class="hover:bg-slate-800/40 transition">
                         <td class="p-3 font-bold text-amber-400">${escapeHtml(k)}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${pType}</span></td>
                         <td class="p-3 text-slate-300 font-mono">${escapeHtml(p.partyContact || '-')}</td>
                         <td class="p-3 text-slate-300 font-mono">${escapeHtml(p.partyGst || '-')}</td>
                         <td class="p-3 text-slate-400">${escapeHtml(p.partyAddress || '-')}</td>
@@ -2035,6 +2285,7 @@
                     saveRecordsToLocalStorage();
                     renderRecordsTable(document.getElementById('recSearch')?.value || '');
                     renderAnalytics();
+                    suggestNextSrNoIfEmpty();
                     showToast(`Restored ${keys.length} record(s)!`);
                 } catch (err) {
                     showToast(`Restore error: ${err.message}`);
@@ -2043,33 +2294,78 @@
             reader.readAsText(file);
         }
 
+        const csvFields = [
+            'SrNo', 'partyName', 'avelDate', 'challanNo', 'pcsSaree', 'partyContact', 
+            'partyGst', 'partyAddress', 'rateConst', 'designNo', 'dno_pcs', 'dno_hed', 
+            'pallu_pcs', 'pallu_hed', 'skt_pcs', 'skt_hed', 'blouse_pcs', 'blouse_hed', 
+            'emdRate', 'reniyu', 'overlock', 'diamond', 'extraExp', 'emdRemark', 
+            'dateA', 'billNoA', 'creditPcsA', 'rateA', 'gstA', 'shortPcsA', 'amountA', 'billRemark', 'savedOn'
+        ];
+
         function exportCSV() {
             const keys = Object.keys(cachedRecords);
             if (keys.length === 0) { showToast('No data to export.'); return; }
 
-            const headers = ['SrNo', 'PartyName', 'DesignNo', 'ArrivalDate', 'Pcs', 'RateA', 'AmountA', 'SavedOn'];
-            const rows = [headers.join(',')];
+            const rows = [csvFields.join(',')];
 
             keys.forEach(k => {
                 const r = cachedRecords[k];
-                const row = [
-                    `"${k}"`,
-                    `"${r.partyName || ''}"`,
-                    `"${r.designNo || ''}"`,
-                    `"${r.avelDate || ''}"`,
-                    `"${r.pcsSaree || '0'}"`,
-                    `"${r.rateA || '0'}"`,
-                    `"${r.amountA || '0'}"`,
-                    `"${r.savedOn || ''}"`
-                ];
+                const row = csvFields.map(field => {
+                    if (field === 'SrNo') return `"${k}"`;
+                    const val = r[field] !== undefined ? r[field] : '';
+                    return `"${String(val).replace(/"/g, '""')}"`;
+                });
                 rows.push(row.join(','));
             });
 
-            const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+            const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `panchmukhi_export_${new Date().toISOString().slice(0, 10)}.csv`;
             a.click();
+        }
+
+        /* Robust state-machine CSV parser supporting empty cells, quotes, and commas */
+        function parseCSVText(csvText) {
+            const cleanText = csvText.replace(/^\uFEFF/, '');
+            const rows = [];
+            let currentRow = [];
+            let currentVal = '';
+            let insideQuotes = false;
+
+            for (let i = 0; i < cleanText.length; i++) {
+                const char = cleanText[i];
+                const nextChar = cleanText[i + 1];
+
+                if (char === '"') {
+                    if (insideQuotes && nextChar === '"') {
+                        currentVal += '"';
+                        i++; // Skip escaped quote
+                    } else {
+                        insideQuotes = !insideQuotes;
+                    }
+                } else if (char === ',' && !insideQuotes) {
+                    currentRow.push(currentVal.trim());
+                    currentVal = '';
+                } else if ((char === '\r' || char === '\n') && !insideQuotes) {
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                    currentRow.push(currentVal.trim());
+                    if (currentRow.length > 1 || (currentRow.length === 1 && currentRow[0] !== '')) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentVal = '';
+                } else {
+                    currentVal += char;
+                }
+            }
+            if (currentVal !== '' || currentRow.length > 0) {
+                currentRow.push(currentVal.trim());
+                rows.push(currentRow);
+            }
+            return rows;
         }
 
         function importCSV(e) {
@@ -2078,76 +2374,173 @@
             const reader = new FileReader();
             reader.onload = () => {
                 try {
-                    const lines = reader.result.split('\n');
+                    const rows = parseCSVText(reader.result);
+                    if (rows.length < 2) { showToast('CSV file is empty or invalid.'); return; }
+
+                    const headers = rows[0].map(h => h.replace(/^"|"$/g, '').trim());
+                    const srIdx = headers.indexOf('SrNo');
+                    
                     let imported = 0;
-                    for (let i = 1; i < lines.length; i++) {
-                        const line = lines[i].trim();
-                        if (!line) continue;
-                        const parts = line.split(',').map(p => p.replace(/^"|"$/g, ''));
-                        if (parts[0]) {
-                            const sr = parts[0];
-                            cachedRecords[sr] = {
-                                partyName: parts[1] || '',
-                                designNo: parts[2] || '',
-                                avelDate: parts[3] || '',
-                                pcsSaree: parts[4] || '0',
-                                rateA: parts[5] || '0',
-                                amountA: parts[6] || '0',
-                                savedOn: parts[7] || new Date().toLocaleString()
-                            };
+
+                    for (let i = 1; i < rows.length; i++) {
+                        const rowData = rows[i];
+                        if (!rowData || rowData.length === 0) continue;
+
+                        const sr = srIdx !== -1 ? rowData[srIdx] : rowData[0];
+
+                        if (sr) {
+                            const recObj = {};
+                            headers.forEach((h, idx) => {
+                                if (h !== 'SrNo' && rowData[idx] !== undefined) {
+                                    recObj[h] = rowData[idx];
+                                }
+                            });
+                            if (!recObj.savedOn) recObj.savedOn = new Date().toLocaleString();
+                            cachedRecords[sr] = recObj;
                             imported++;
                         }
                     }
                     saveRecordsToLocalStorage();
                     renderRecordsTable(document.getElementById('recSearch')?.value || '');
                     renderAnalytics();
-                    showToast(`Imported ${imported} CSV record(s)!`);
+                    suggestNextSrNoIfEmpty();
+                    showToast(`Successfully imported ${imported} record(s)!`);
                 } catch (err) {
-                    showToast('Failed to parse CSV.');
+                    console.error('Import error:', err);
+                    showToast('Failed to parse CSV file.');
                 }
             };
             reader.readAsText(file);
         }
 
+        function setDatePreset(type) {
+            const fromEl = document.getElementById('rpt_fromDate');
+            const toEl = document.getElementById('rpt_toDate');
+            if (!fromEl || !toEl) return;
+
+            const now = new Date();
+            const formatDate = (d) => {
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                return `${yyyy}-${mm}-${dd}`;
+            };
+
+            if (type === 'today') {
+                const todayStr = formatDate(now);
+                fromEl.value = todayStr;
+                toEl.value = todayStr;
+            } else if (type === 'thisMonth') {
+                const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+                fromEl.value = formatDate(firstDay);
+                toEl.value = formatDate(now);
+            } else if (type === 'lastMonth') {
+                const firstDay = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const lastDay = new Date(now.getFullYear(), now.getMonth(), 0);
+                fromEl.value = formatDate(firstDay);
+                toEl.value = formatDate(lastDay);
+            } else if (type === 'thisYear') {
+                const firstDay = new Date(now.getFullYear(), 0, 1);
+                fromEl.value = formatDate(firstDay);
+                toEl.value = formatDate(now);
+            } else if (type === 'all') {
+                fromEl.value = '';
+                toEl.value = '';
+            }
+
+            renderAnalytics();
+        }
+
         function renderAnalytics() {
             const keys = Object.keys(cachedRecords);
+            
+            const fromDate = document.getElementById('rpt_fromDate')?.value || '';
+            const toDate = document.getElementById('rpt_toDate')?.value || '';
+            const selParty = document.getElementById('rpt_partySelect')?.value || '';
+            const pendingFilter = document.getElementById('rpt_pendingSelect')?.value || 'all';
+
+            let filteredKeys = keys.filter(k => {
+                const r = cachedRecords[k];
+                const arrDate = r.avelDate || '';
+
+                if (fromDate && arrDate < fromDate) return false;
+                if (toDate && arrDate > toDate) return false;
+
+                if (selParty && (r.partyName || '').trim().toLowerCase() !== selParty.trim().toLowerCase()) return false;
+
+                const pcs = num(r.pcsSaree);
+                const credit = num(r.creditPcsA);
+                const shortPcs = num(r.shortPcsA);
+                const pending = pcs - credit - shortPcs;
+
+                if (pendingFilter === 'pending' && pending <= 0) return false;
+                if (pendingFilter === 'completed' && pending > 0) return false;
+
+                return true;
+            });
+
             let totalPcs = 0;
+            let totalPendingPcs = 0;
             let totalBilled = 0;
-            let totalStitchRates = 0;
-            let stitchCount = 0;
 
             const partyMap = {};
             const designMap = {};
 
-            keys.forEach(k => {
+            filteredKeys.forEach(k => {
                 const r = cachedRecords[k];
                 const pcs = num(r.pcsSaree);
+                const credit = num(r.creditPcsA);
+                const shortPcs = num(r.shortPcsA);
+                const pending = pcs - credit - shortPcs;
                 const amt = num(r.amountA);
+
                 const pName = r.partyName || 'Unknown';
                 const dNo = r.designNo || 'Unknown';
 
                 totalPcs += pcs;
+                totalPendingPcs += pending;
                 totalBilled += amt;
 
                 partyMap[pName] = (partyMap[pName] || 0) + pcs;
                 designMap[dNo] = (designMap[dNo] || 0) + 1;
-
-                const rc = num(r.rateConst || 0.45);
-                ['dno','pallu','skt','blouse'].forEach(p => {
-                    const cPcs = num(r[p + '_pcs']);
-                    const cHed = num(r[p + '_hed']);
-                    if (cPcs > 0) {
-                        totalStitchRates += (cPcs * cHed * rc) / 1000;
-                        stitchCount++;
-                    }
-                });
             });
 
-            document.getElementById('metricTotalJobs').textContent = keys.length;
+            document.getElementById('metricTotalJobs').textContent = filteredKeys.length;
             document.getElementById('metricTotalPcs').textContent = totalPcs;
+            document.getElementById('metricTotalPending').textContent = totalPendingPcs;
             document.getElementById('metricTotalBilled').textContent = `₹${totalBilled.toFixed(2)}`;
-            document.getElementById('metricAvgStitch').textContent = stitchCount > 0 ? (totalStitchRates / stitchCount).toFixed(2) : '0.00';
 
+            /* Render Filtered Statement Table */
+            const rptBody = document.getElementById('rpt_tableBody');
+            if (rptBody) {
+                if (filteredKeys.length === 0) {
+                    rptBody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-500">No records matching selected report filters.</td></tr>`;
+                } else {
+                    rptBody.innerHTML = filteredKeys.map(k => {
+                        const r = cachedRecords[k];
+                        const pcs = num(r.pcsSaree);
+                        const credit = num(r.creditPcsA);
+                        const shortPcs = num(r.shortPcsA);
+                        const pending = pcs - credit - shortPcs;
+                        const amt = num(r.amountA);
+
+                        return `
+                            <tr class="hover:bg-slate-800/40 transition">
+                                <td class="p-3 font-bold text-amber-400">#${escapeHtml(k)}</td>
+                                <td class="p-3 font-semibold text-slate-200">${escapeHtml(r.partyName || '-')}</td>
+                                <td class="p-3 text-slate-300 font-bold">${escapeHtml(r.designNo || '-')}</td>
+                                <td class="p-3 text-slate-400 font-mono">${escapeHtml(r.avelDate || '-')}</td>
+                                <td class="p-3 text-emerald-400 font-bold">${pcs}</td>
+                                <td class="p-3 text-sky-400 font-bold">${credit}</td>
+                                <td class="p-3 text-rose-400 font-black">${pending}</td>
+                                <td class="p-3 text-emerald-300 font-bold font-mono">₹${amt.toFixed(2)}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            /* Render Charts */
             const partyCtx = document.getElementById('partyChart')?.getContext('2d');
             const designCtx = document.getElementById('designChart')?.getContext('2d');
 
