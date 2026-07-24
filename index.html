@@ -145,7 +145,7 @@
                 margin-top: 0.25in !important;
                 margin-right: 0.15in !important;
                 margin-bottom: 0.15in !important;
-                margin-left: 0.45in !important;
+                margin-left: 0.15in !important;
             }
             header, nav, .no-print, .bill-extra-field, #toastMsg { display: none !important; }
             body { 
@@ -410,8 +410,7 @@
                             </div>
                             <div class="col-span-1 sm:col-span-1 lg:col-span-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
-                                <input id="partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition uppercase">
-                                <p id="partyGstErr" class="text-[9px] font-semibold mt-0.5 min-h-[14px]"></p>
+                                <input id="partyGst" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition">
                             </div>
                             <div class="col-span-1 sm:col-span-1 lg:col-span-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Arrival Date</label>
@@ -707,8 +706,7 @@
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">GST No.</label>
-                                <input id="pm_partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none uppercase">
-                                <p id="pm_partyGstErr" class="text-[9px] font-semibold mt-0.5 min-h-[14px]"></p>
+                                <input id="pm_partyGst" placeholder="e.g. 24AAAAA0000A1Z5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                             <div class="col-span-1 sm:col-span-2 lg:col-span-5">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Address</label>
@@ -1161,69 +1159,6 @@
 
         const LOGIN_ID = 'JENISH';
         const LOGIN_PASSWORD = '1254';
-
-        /* GSTIN Validation Logic */
-        function validateGSTIN(gst) {
-            if (!gst || gst.trim() === '') return { valid: true, msg: '' };
-            const val = gst.trim().toUpperCase();
-
-            if (val.length !== 15) {
-                return { valid: false, msg: 'GSTIN must be exactly 15 characters.' };
-            }
-
-            const stateCode = parseInt(val.substring(0, 2), 10);
-            if (isNaN(stateCode) || stateCode < 1 || (stateCode > 38 && stateCode !== 97 && stateCode !== 99)) {
-                return { valid: false, msg: 'Invalid State Code (First 2 digits must be 01-38).' };
-            }
-
-            const panPart = val.substring(2, 12);
-            const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-            if (!panRegex.test(panPart)) {
-                return { valid: false, msg: 'Chars 3-12 must be valid PAN (e.g. ABCDE1234F).' };
-            }
-
-            const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[A-Z0-9]{1}[A-Z0-9]{1}$/;
-            if (!gstinRegex.test(val)) {
-                return { valid: false, msg: 'Invalid GSTIN format structure.' };
-            }
-
-            return { valid: true, msg: 'Valid GSTIN format' };
-        }
-
-        function setupGSTValidation(inputId, errId) {
-            const input = document.getElementById(inputId);
-            const errEl = document.getElementById(errId);
-            if (!input || !errEl) return;
-
-            const handler = () => {
-                input.value = input.value.toUpperCase();
-                const res = validateGSTIN(input.value);
-                if (input.value.trim() === '') {
-                    errEl.textContent = '';
-                    input.classList.remove('border-rose-500', 'border-emerald-500');
-                    input.classList.add('border-slate-800');
-                } else if (res.valid) {
-                    errEl.textContent = '✓ ' + res.msg;
-                    errEl.className = 'text-[9px] font-semibold mt-0.5 min-h-[14px] text-emerald-400';
-                    input.classList.remove('border-rose-500', 'border-slate-800');
-                    input.classList.add('border-emerald-500');
-                } else {
-                    errEl.textContent = '✕ ' + res.msg;
-                    errEl.className = 'text-[9px] font-semibold mt-0.5 min-h-[14px] text-rose-400';
-                    input.classList.remove('border-emerald-500', 'border-slate-800');
-                    input.classList.add('border-rose-500');
-                }
-            };
-
-            input.addEventListener('input', handler);
-            input.addEventListener('blur', handler);
-        }
-
-        // Initialize GST real-time validators
-        setTimeout(() => {
-            setupGSTValidation('partyGst', 'partyGstErr');
-            setupGSTValidation('pm_partyGst', 'pm_partyGstErr');
-        }, 100);
 
         const ids = [
             'partyName','avelDate','challanNo','pcsSaree','partyContact','partyGst','partyAddress',
@@ -1732,11 +1667,6 @@
         function clearForm() {
             loadedSrNo = null;
             document.getElementById('srNo').value = getNextSrNo();
-            const errEl = document.getElementById('partyGstErr');
-            if (errEl) errEl.textContent = '';
-            const partyGstEl = document.getElementById('partyGst');
-            if (partyGstEl) partyGstEl.classList.remove('border-rose-500', 'border-emerald-500');
-
             const defaults = { 
                 avelDate: getTodayDate(),
                 rateConst: '0.45', 
@@ -1772,14 +1702,6 @@
         async function saveRecord() {
             const sr = document.getElementById('srNo').value.trim();
             if (!sr) { showToast('Please enter Sr No.'); return; }
-
-            const gstVal = document.getElementById('partyGst')?.value.trim();
-            const gstRes = validateGSTIN(gstVal);
-            if (!gstRes.valid) {
-                showToast(`GST Error: ${gstRes.msg}`);
-                document.getElementById('partyGst')?.focus();
-                return;
-            }
 
             /* Check if SR Number exists and isn't currently loaded for edit */
             if (cachedRecords[sr] && loadedSrNo !== sr) {
@@ -1916,25 +1838,11 @@
             document.getElementById('pm_partyContact').value = '';
             document.getElementById('pm_partyGst').value = '';
             document.getElementById('pm_partyAddress').value = '';
-
-            const errEl = document.getElementById('pm_partyGstErr');
-            if (errEl) errEl.textContent = '';
-            const pmGstEl = document.getElementById('pm_partyGst');
-            if (pmGstEl) pmGstEl.classList.remove('border-rose-500', 'border-emerald-500');
         }
 
         async function savePartyMasterTab() {
             const pName = document.getElementById('pm_partyName').value.trim();
             if (!pName) { showToast('Please enter Party Name.'); return; }
-
-            const gstVal = document.getElementById('pm_partyGst')?.value.trim();
-            const gstRes = validateGSTIN(gstVal);
-            if (!gstRes.valid) {
-                showToast(`GST Error: ${gstRes.msg}`);
-                document.getElementById('pm_partyGst')?.focus();
-                return;
-            }
-
             const data = {
                 partyType: document.getElementById('pm_partyType').value,
                 partyContact: document.getElementById('pm_partyContact').value.trim(),
@@ -2294,6 +2202,7 @@
             reader.readAsText(file);
         }
 
+        /* 1) CSV Export & Import with EXACT requested fields */
         const csvFields = [
             'SrNo', 'partyName', 'avelDate', 'challanNo', 'pcsSaree', 'partyContact', 
             'partyGst', 'partyAddress', 'rateConst', 'designNo', 'dno_pcs', 'dno_hed', 
@@ -2318,54 +2227,11 @@
                 rows.push(row.join(','));
             });
 
-            const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `panchmukhi_export_${new Date().toISOString().slice(0, 10)}.csv`;
             a.click();
-        }
-
-        /* Robust state-machine CSV parser supporting empty cells, quotes, and commas */
-        function parseCSVText(csvText) {
-            const cleanText = csvText.replace(/^\uFEFF/, '');
-            const rows = [];
-            let currentRow = [];
-            let currentVal = '';
-            let insideQuotes = false;
-
-            for (let i = 0; i < cleanText.length; i++) {
-                const char = cleanText[i];
-                const nextChar = cleanText[i + 1];
-
-                if (char === '"') {
-                    if (insideQuotes && nextChar === '"') {
-                        currentVal += '"';
-                        i++; // Skip escaped quote
-                    } else {
-                        insideQuotes = !insideQuotes;
-                    }
-                } else if (char === ',' && !insideQuotes) {
-                    currentRow.push(currentVal.trim());
-                    currentVal = '';
-                } else if ((char === '\r' || char === '\n') && !insideQuotes) {
-                    if (char === '\r' && nextChar === '\n') {
-                        i++;
-                    }
-                    currentRow.push(currentVal.trim());
-                    if (currentRow.length > 1 || (currentRow.length === 1 && currentRow[0] !== '')) {
-                        rows.push(currentRow);
-                    }
-                    currentRow = [];
-                    currentVal = '';
-                } else {
-                    currentVal += char;
-                }
-            }
-            if (currentVal !== '' || currentRow.length > 0) {
-                currentRow.push(currentVal.trim());
-                rows.push(currentRow);
-            }
-            return rows;
         }
 
         function importCSV(e) {
@@ -2374,25 +2240,28 @@
             const reader = new FileReader();
             reader.onload = () => {
                 try {
-                    const rows = parseCSVText(reader.result);
-                    if (rows.length < 2) { showToast('CSV file is empty or invalid.'); return; }
-
-                    const headers = rows[0].map(h => h.replace(/^"|"$/g, '').trim());
-                    const srIdx = headers.indexOf('SrNo');
+                    const lines = reader.result.split('\n');
+                    if (lines.length < 2) { showToast('CSV file is empty.'); return; }
                     
+                    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
                     let imported = 0;
 
-                    for (let i = 1; i < rows.length; i++) {
-                        const rowData = rows[i];
-                        if (!rowData || rowData.length === 0) continue;
-
-                        const sr = srIdx !== -1 ? rowData[srIdx] : rowData[0];
+                    for (let i = 1; i < lines.length; i++) {
+                        const line = lines[i].trim();
+                        if (!line) continue;
+                        
+                        // Parse CSV regex handling quotes
+                        const parts = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
+                        const cleanParts = parts.map(p => p.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
+                        
+                        const srIdx = headers.indexOf('SrNo');
+                        const sr = srIdx !== -1 ? cleanParts[srIdx] : cleanParts[0];
 
                         if (sr) {
                             const recObj = {};
                             headers.forEach((h, idx) => {
-                                if (h !== 'SrNo' && rowData[idx] !== undefined) {
-                                    recObj[h] = rowData[idx];
+                                if (h !== 'SrNo' && cleanParts[idx] !== undefined) {
+                                    recObj[h] = cleanParts[idx];
                                 }
                             });
                             if (!recObj.savedOn) recObj.savedOn = new Date().toLocaleString();
@@ -2404,9 +2273,8 @@
                     renderRecordsTable(document.getElementById('recSearch')?.value || '');
                     renderAnalytics();
                     suggestNextSrNoIfEmpty();
-                    showToast(`Successfully imported ${imported} record(s)!`);
+                    showToast(`Imported ${imported} CSV record(s)!`);
                 } catch (err) {
-                    console.error('Import error:', err);
                     showToast('Failed to parse CSV file.');
                 }
             };
