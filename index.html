@@ -362,6 +362,7 @@
                     </div>
                 </div>
 
+                <!-- 1. JOB CARD ENTRY TAB -->
                 <section id="tab-jobcard" class="space-y-4">
                     <!-- Toolbar Actions -->
                     <div class="no-print bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-xl backdrop-blur-md flex items-center gap-2 overflow-x-auto">
@@ -713,7 +714,7 @@
 
                             <div class="border-t border-slate-800 pt-3">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Process Type</label>
-                                <div class="w-full flex items-center gap-4 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 h-[34px]">
+                                <div class="w-full flex items-center gap-4 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2">
                                     <label class="flex items-center gap-2 text-xs font-semibold text-slate-300 cursor-pointer">
                                         <input type="radio" name="pt_procType" value="factory" checked class="accent-amber-500" onchange="updateProcessDropdowns()"> In Factory
                                     </label>
@@ -817,7 +818,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3.5">
                             <div class="col-span-1 sm:col-span-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Party Name</label>
-                                <input id="pm_partyName" placeholder="Enter party name..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none h-[34px]">
+                                <input id="pm_partyName" placeholder="Enter party name..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs text-white focus:border-amber-500 focus:outline-none">
                             </div>
                             
                             <!-- Party Category (Merchant vs JobWork) -->
@@ -2364,6 +2365,26 @@
         }
 
         // ================= DESIGN MASTER LOGIC =================
+        
+        function recalcDesignMaster() {
+            const rc = num(document.getElementById('dm_rateConst').value);
+            
+            ['dno','pallu','skt','blouse'].forEach(p => {
+                const pcs = num(document.getElementById('dm_' + p + '_pcs').value);
+                const hed = num(document.getElementById('dm_' + p + '_hed').value);
+                const amt = (pcs * hed * rc) / 1000;
+                const amtEl = document.getElementById('dm_' + p + '_amt');
+                if (amtEl) amtEl.textContent = amt.toFixed(2);
+            });
+
+            const stitchTotal = ['dno','pallu','skt','blouse'].reduce((s, p) => {
+                const amtEl = document.getElementById('dm_' + p + '_amt');
+                return s + parseFloat(amtEl ? (amtEl.textContent || 0) : 0);
+            }, 0);
+            
+            const totalEl = document.getElementById('dm_stitchTotal');
+            if (totalEl) totalEl.textContent = stitchTotal.toFixed(2);
+        }
 
         function clearDesignMasterTabForm() {
             loadedDesignNo = null;
@@ -2865,11 +2886,12 @@
             }).join('');
         }
 
+        // ================= FIX APPLIED HERE: STRICT LATEST-ONLY COUNTING =================
         function renderProcessDashboard() {
             const grid = document.getElementById('processDashboardGrid');
             if(!grid) return;
 
-            // Initialize counters
+            // Initialize counters for all active process masters
             const processCounts = {};
             const processTypes = {};
             Object.keys(cachedProcessMasters).forEach(k => {
@@ -2877,7 +2899,7 @@
                 processTypes[k] = cachedProcessMasters[k].type;
             });
 
-            // Calculate current standing of all valid job cards
+            // Count STRICTLY the LATEST process for each job card
             Object.keys(cachedRecords).forEach(jcNo => {
                 const latest = getLatestProcess(jcNo);
                 if(latest && latest.processName && processCounts[latest.processName] !== undefined) {
